@@ -1,0 +1,1314 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Magical Northern Lights Tour | Iceland Transfer</title>
+
+<style>
+    :root {
+        --green: #465b45;
+        --deep-green: #293c2e;
+        --beige: #f5f1e8;
+        --gold: #b99b61;
+        --white: #fffdf9;
+        --text: #3d4239;
+        --muted: #777a70;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--white);
+        color: var(--text);
+        line-height: 1.7;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+        font: inherit;
+    }
+
+    button,
+    .button {
+        cursor: pointer;
+    }
+
+    .top-bar {
+        background: var(--deep-green);
+        color: white;
+        text-align: center;
+        padding: 9px 15px;
+        font-size: 13px;
+        letter-spacing: 0.4px;
+    }
+
+    header {
+        background: var(--white);
+        border-bottom: 1px solid #e9e3d7;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .navbar {
+        max-width: 1200px;
+        margin: auto;
+        padding: 18px 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .logo {
+        color: var(--deep-green);
+        font-size: 23px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .logo span {
+        color: var(--gold);
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 23px;
+        font-size: 14px;
+    }
+
+    .nav-links a {
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+        color: var(--gold);
+    }
+
+    .nav-book {
+        background: var(--green);
+        color: white !important;
+        padding: 11px 18px;
+        border-radius: 4px;
+    }
+
+    .breadcrumb {
+        max-width: 1150px;
+        margin: auto;
+        padding: 22px 25px 8px;
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    .breadcrumb a:hover {
+        color: var(--green);
+    }
+
+    .hero {
+        max-width: 1150px;
+        margin: 12px auto 45px;
+        padding: 0 25px;
+    }
+
+    .hero-image {
+        min-height: 430px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px;
+        background: var(--deep-green);
+    }
+
+    .hero-image img {
+        width: 100%;
+        height: 470px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 45px;
+        color: white;
+        background: linear-gradient(
+            to top,
+            rgba(20, 34, 25, 0.88),
+            rgba(20, 34, 25, 0.18) 75%,
+            rgba(20, 34, 25, 0.04)
+        );
+    }
+
+    .eyebrow {
+        color: #e4c88f;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+    }
+
+    .hero h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(34px, 5vw, 57px);
+        font-weight: normal;
+        line-height: 1.15;
+        max-width: 700px;
+        margin: 12px 0;
+    }
+
+    .hero p {
+        max-width: 650px;
+        font-size: 16px;
+        margin: 0;
+        color: #f3f0e9;
+    }
+
+    .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .badge {
+        padding: 7px 13px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 30px;
+        font-size: 12px;
+        background: rgba(255, 255, 255, 0.09);
+    }
+
+    .main-layout {
+        max-width: 1150px;
+        margin: 0 auto 75px;
+        padding: 0 25px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+        gap: 35px;
+        align-items: start;
+    }
+
+    .section-label {
+        color: var(--gold);
+        text-transform: uppercase;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 32px;
+        line-height: 1.25;
+        color: var(--deep-green);
+        font-weight: normal;
+        margin: 8px 0 18px;
+    }
+
+    .description {
+        color: #666b61;
+        font-size: 15px;
+        margin-bottom: 27px;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 25px 0 30px;
+    }
+
+    .feature {
+        background: var(--beige);
+        padding: 19px;
+        border-radius: 8px;
+    }
+
+    .feature-icon {
+        font-size: 23px;
+        margin-bottom: 7px;
+    }
+
+    .feature h3 {
+        color: var(--deep-green);
+        font-size: 15px;
+        margin: 0 0 5px;
+    }
+
+    .feature p {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .info-box {
+        border-left: 4px solid var(--gold);
+        background: #f8f5ee;
+        padding: 17px 20px;
+        margin: 25px 0;
+        font-size: 14px;
+        color: #65685e;
+        border-radius: 0 7px 7px 0;
+    }
+
+    .info-box strong {
+        color: var(--deep-green);
+    }
+
+    .booking-card {
+        background: white;
+        border: 1px solid #e7e1d5;
+        border-radius: 12px;
+        padding: 28px;
+        box-shadow: 0 12px 35px rgba(41, 60, 46, 0.08);
+    }
+
+    .booking-card h2 {
+        font-size: 27px;
+        margin-bottom: 7px;
+    }
+
+    .booking-subtitle {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0 0 22px;
+    }
+
+    .price-display {
+        background: var(--beige);
+        padding: 17px;
+        border-radius: 8px;
+        margin-bottom: 22px;
+    }
+
+    .price-label {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .price-value {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--deep-green);
+        font-size: 30px;
+        font-weight: bold;
+        line-height: 1.4;
+    }
+
+    .price-note {
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .form-group {
+        margin-bottom: 17px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        color: var(--deep-green);
+        font-size: 13px;
+        margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #dcd7cc;
+        border-radius: 5px;
+        background: #fffefa;
+        color: var(--text);
+        outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 2px rgba(70, 91, 69, 0.1);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 13px;
+    }
+
+    .extra-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        border: 1px solid #e8e2d7;
+        border-radius: 7px;
+        padding: 13px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .extra-option input {
+        margin-top: 5px;
+        accent-color: var(--green);
+    }
+
+    .extra-option span {
+        flex: 1;
+        font-size: 13px;
+    }
+
+    .extra-option strong {
+        display: block;
+        color: var(--deep-green);
+        font-size: 13px;
+    }
+
+    .extra-option small {
+        display: block;
+        color: var(--muted);
+        margin-top: 3px;
+    }
+
+    .total-box {
+        border-top: 1px solid #e5dfd3;
+        margin-top: 20px;
+        padding-top: 18px;
+    }
+
+    .total-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 9px;
+        font-size: 14px;
+    }
+
+    .total-line.final {
+        font-size: 19px;
+        font-weight: bold;
+        color: var(--deep-green);
+        padding-top: 10px;
+        border-top: 1px dashed #d9d2c5;
+    }
+
+    .submit-button {
+        display: block;
+        width: 100%;
+        background: var(--green);
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-top: 20px;
+        transition: background 0.2s;
+    }
+
+    .submit-button:hover {
+        background: var(--deep-green);
+    }
+
+    .secure-note {
+        text-align: center;
+        font-size: 11px;
+        color: var(--muted);
+        margin: 13px 0 0;
+    }
+
+    .why-section {
+        background: var(--beige);
+        padding: 65px 25px;
+    }
+
+    .why-inner {
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .why-heading {
+        max-width: 650px;
+        margin-bottom: 30px;
+    }
+
+    .why-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .why-card {
+        background: var(--white);
+        padding: 24px;
+        border-radius: 8px;
+    }
+
+    .why-card h3 {
+        color: var(--deep-green);
+        font-size: 17px;
+        margin: 8px 0;
+    }
+
+    .why-card p {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .other-tours {
+        max-width: 1100px;
+        margin: 65px auto;
+        padding: 0 25px;
+        text-align: center;
+    }
+
+    .other-tours p {
+        color: var(--muted);
+    }
+
+    .tour-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 22px;
+    }
+
+    .tour-link {
+        display: inline-block;
+        border: 1px solid #d8d1c4;
+        border-radius: 5px;
+        padding: 12px 20px;
+        color: var(--deep-green);
+        background: white;
+        font-size: 14px;
+    }
+
+    .tour-link:hover {
+        background: var(--beige);
+    }
+
+    footer {
+        background: var(--deep-green);
+        color: white;
+        padding: 38px 25px;
+    }
+
+    .footer-inner {
+        max-width: 1100px;
+        margin: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-logo {
+        font-size: 21px;
+        font-weight: bold;
+    }
+
+    .footer-logo span {
+        color: #d9bd82;
+    }
+
+    footer p {
+        color: #d8dfd5;
+        font-size: 13px;
+        margin: 5px 0 0;
+    }
+
+    .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        font-size: 13px;
+    }
+
+    .footer-links a:hover {
+        color: #d9bd82;
+    }
+
+    .whatsapp-button {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 200;
+        background: #278b58;
+        color: white;
+        border-radius: 30px;
+        padding: 12px 17px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .whatsapp-button:hover {
+        background: #206d45;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    @media (max-width: 850px) {
+        .navbar {
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        .nav-links {
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 13px;
+        }
+
+        .main-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-image img {
+            height: 420px;
+        }
+
+        .hero-overlay {
+            padding: 28px;
+        }
+
+        .why-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .nav-links {
+            font-size: 12px;
+            gap: 10px;
+        }
+
+        .nav-book {
+            padding: 8px 11px;
+        }
+
+        .hero {
+            padding: 0 14px;
+        }
+
+        .hero-image {
+            min-height: 380px;
+        }
+
+        .hero-image img {
+            height: 400px;
+        }
+
+        .hero-overlay {
+            padding: 22px;
+        }
+
+        .hero p {
+            font-size: 14px;
+        }
+
+        .main-layout {
+            padding: 0 14px;
+            gap: 25px;
+        }
+
+        .booking-card {
+            padding: 20px;
+        }
+
+        .form-row,
+        .feature-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .breadcrumb {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .why-section {
+            padding: 45px 15px;
+        }
+    }
+</style>
+
+</head><body><div class="top-bar">
+    PRIVATE TRANSFERS & TOURS IN ICELAND
+</div>
+
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">ICELAND <span>TRANSFER</span></a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="airport-transportation.html">Airport Transfers</a>
+            <a href="transfers.html">Transfers</a>
+            <a href="golden-circle-tour.html">Golden Circle</a>
+            <a href="about.html">About</a>
+            <a href="#booking" class="nav-book">Book Your Tour</a>
+        </div>
+    </nav>
+</header>
+
+<div class="breadcrumb">
+    <a href="index.html">Home</a>
+    &nbsp; / &nbsp;
+    <a href="transfers.html">Tours</a>
+    &nbsp; / &nbsp;
+    Magical Northern Lights Tour
+</div>
+
+<section class="hero">
+    <div class="hero-image">
+
+        <img
+            src="images2/aurora2.jpg"
+            alt="Magical Northern Lights dancing over Iceland"
+            onerror="this.onerror=null; this.src='images2/aurora-transfer.jpg';"
+        >
+
+        <div class="hero-overlay">
+            <div class="eyebrow">Discover Iceland After Dark</div>
+
+            <h1>Magical Northern Lights Tour</h1>
+
+            <p>
+                Escape the city lights and explore Iceland's beautiful winter
+                landscapes on a private journey in search of the magical
+                Northern Lights.
+            </p>
+
+            <div class="hero-badges">
+                <span class="badge">✦ Private Experience</span>
+                <span class="badge">✦ Flexible Pickup</span>
+                <span class="badge">✦ Winter Adventure</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<main class="main-layout">
+
+    <section>
+        <div class="section-label">A Night to Remember</div>
+
+        <h2>Chase the Northern Lights in Iceland</h2>
+
+        <p class="description">
+            Experience one of Iceland's most extraordinary natural wonders.
+            Your private driver will take you away from bright city lights
+            toward suitable viewing locations, depending on the weather,
+            road conditions and aurora forecast.
+        </p>
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <div class="feature-icon">🌌</div>
+                <h3>Search for the Aurora</h3>
+                <p>
+                    Explore suitable viewing areas away from city lights
+                    whenever conditions allow.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🚘</div>
+                <h3>Private Transportation</h3>
+                <p>
+                    Enjoy a private journey with pickup arranged around
+                    your chosen location.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">📍</div>
+                <h3>Flexible Route</h3>
+                <p>
+                    The route can adapt to the forecast and local weather
+                    conditions on the evening.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">📸</div>
+                <h3>Photo Stops</h3>
+                <p>
+                    Take time to enjoy the scenery and capture memories
+                    when it is safe to stop.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="section-label">Before You Go</div>
+
+        <h2>Make the Most of Your Night</h2>
+
+        <p class="description">
+            The Northern Lights are a natural phenomenon, so sightings
+            depend on solar activity, darkness, cloud cover and weather.
+            We will do our best to choose a suitable route, but an aurora
+            sighting cannot be guaranteed.
+        </p>
+
+        <div class="info-box">
+            <strong>Important information</strong><br>
+            This tour is weather-dependent. If conditions are unsuitable,
+            your driver may need to adjust the route or discuss alternative
+            arrangements with you. Please dress warmly and bring winter
+            clothing suitable for Icelandic conditions.
+        </div>
+
+        <div class="info-box">
+            <strong>Pickup and destination</strong><br>
+            Choose your pickup and drop-off locations in the booking form.
+            If your location is not listed, select “Other location” and
+            enter the address or place name.
+        </div>
+
+    </section>
+
+    <aside id="booking" class="booking-card">
+
+        <div class="section-label">Reserve Your Experience</div>
+
+        <h2>Book Your Tour</h2>
+
+        <p class="booking-subtitle">
+            Choose your package and trip details below.
+        </p>
+
+        <div class="price-display">
+            <div class="price-label">Starting from</div>
+            <div class="price-value" id="startingPrice">89,900 ISK</div>
+            <div class="price-note">Per vehicle · Final estimate shown below</div>
+        </div>
+
+        <form id="tourBookingForm">
+
+            <div class="form-group">
+                <label for="tourPackage">Choose Your Experience *</label>
+
+                <select id="tourPackage" required>
+                    <option value="classic">Classic Aurora Chase — up to 3 passengers</option>
+                    <option value="comfort">Comfort Private Tour — up to 7 passengers</option>
+                    <option value="premium">Premium Group Tour — up to 20 passengers</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label for="tourDate">Tour Date *</label>
+                    <input type="date" id="tourDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tourTime">Pickup Time *</label>
+                    <select id="tourTime" required>
+                        <option value="">Choose time</option>
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="19:30">19:30</option>
+                        <option value="20:00">20:00</option>
+                        <option value="20:30">20:30</option>
+                        <option value="21:00">21:00</option>
+                        <option value="21:30">21:30</option>
+                        <option value="22:00">22:00</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="pickup">Pickup Location *</label>
+
+                <select id="pickup" required>
+                    <option value="">Choose pickup location</option>
+                    <option>Reykjavik City Centre</option>
+                    <option>Keflavik International Airport (KEF)</option>
+                    <option>Keflavik Town</option>
+                    <option>Reykjanesbær</option>
+                    <option>Hafnarfjordur</option>
+                    <option>Gardabaer</option>
+                    <option>Kopavogur</option>
+                    <option>Mosfellsbaer</option>
+                    <option>Selfoss</option>
+                    <option>Hveragerdi</option>
+                    <option>Grindavik</option>
+                    <option>Blue Lagoon</option>
+                    <option>Other location</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="pickupOtherGroup">
+                <label for="pickupOther">Enter Your Pickup Location *</label>
+                <input
+                    type="text"
+                    id="pickupOther"
+                    placeholder="Enter address or place name"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="destination">Drop-off Location *</label>
+
+                <select id="destination" required>
+                    <option value="">Choose drop-off location</option>
+                    <option>Reykjavik City Centre</option>
+                    <option>Keflavik International Airport (KEF)</option>
+                    <option>Keflavik Town</option>
+                    <option>Reykjanesbær</option>
+                    <option>Hafnarfjordur</option>
+                    <option>Gardabaer</option>
+                    <option>Kopavogur</option>
+                    <option>Mosfellsbaer</option>
+                    <option>Selfoss</option>
+                    <option>Hveragerdi</option>
+                    <option>Grindavik</option>
+                    <option>Blue Lagoon</option>
+                    <option>Same as pickup location</option>
+                    <option>Other location</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="destinationOtherGroup">
+                <label for="destinationOther">Enter Your Drop-off Location *</label>
+                <input
+                    type="text"
+                    id="destinationOther"
+                    placeholder="Enter address or place name"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="passengers">Number of Passengers *</label>
+
+                <select id="passengers" required>
+                    <option value="1">1 passenger</option>
+                    <option value="2">2 passengers</option>
+                    <option value="3">3 passengers</option>
+                    <option value="4">4 passengers</option>
+                    <option value="5">5 passengers</option>
+                    <option value="6">6 passengers</option>
+                    <option value="7">7 passengers</option>
+                    <option value="8">8 passengers</option>
+                    <option value="9">9 passengers</option>
+                    <option value="10">10 passengers</option>
+                    <option value="11">11 passengers</option>
+                    <option value="12">12 passengers</option>
+                    <option value="13">13 passengers</option>
+                    <option value="14">14 passengers</option>
+                    <option value="15">15 passengers</option>
+                    <option value="16">16 passengers</option>
+                    <option value="17">17 passengers</option>
+                    <option value="18">18 passengers</option>
+                    <option value="19">19 passengers</option>
+                    <option value="20">20 passengers</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Optional Extras</label>
+
+                <label class="extra-option">
+                    <input type="checkbox" id="warmDrinks">
+                    <span>
+                        <strong>Warm Drinks Stop</strong>
+                        <small>2,500 ISK per passenger</small>
+                    </span>
+                </label>
+
+                <label class="extra-option">
+                    <input type="checkbox" id="photoStop">
+                    <span>
+                        <strong>Extended Photo Stop</strong>
+                        <small>15,000 ISK per booking</small>
+                    </span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="your@email.com"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Additional Requests</label>
+                <textarea
+                    id="notes"
+                    rows="3"
+                    placeholder="Anything we should know before your trip?"
+                ></textarea>
+            </div>
+
+            <div class="total-box">
+
+                <div class="total-line">
+                    <span>Tour package</span>
+                    <span id="packageTotal">89,900 ISK</span>
+                </div>
+
+                <div class="total-line">
+                    <span>Optional extras</span>
+                    <span id="extrasTotal">0 ISK</span>
+                </div>
+
+                <div class="total-line final">
+                    <span>Estimated Total</span>
+                    <span id="grandTotal">89,900 ISK</span>
+                </div>
+
+            </div>
+
+            <button type="submit" class="submit-button">
+                ADD TO BOOKING
+            </button>
+
+            <p class="secure-note">
+                Your selected tour will be added to your booking overview.
+            </p>
+
+        </form>
+
+    </aside>
+
+</main>
+
+<section class="why-section">
+    <div class="why-inner">
+
+        <div class="why-heading">
+            <div class="section-label">Your Iceland Experience</div>
+            <h2>A More Personal Way to Explore</h2>
+            <p class="description">
+                Enjoy a flexible private journey designed around your
+                pickup location, group size and the conditions of the night.
+            </p>
+        </div>
+
+        <div class="why-grid">
+
+            <div class="why-card">
+                <div class="feature-icon">🚘</div>
+                <h3>Private Journey</h3>
+                <p>
+                    Travel with your own group instead of joining a
+                    large shared bus tour.
+                </p>
+            </div>
+
+            <div class="why-card">
+                <div class="feature-icon">🌠</div>
+                <h3>Nature Comes First</h3>
+                <p>
+                    The route can be adjusted according to weather,
+                    road safety and aurora forecasts.
+                </p>
+            </div>
+
+            <div class="why-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Personal Service</h3>
+                <p>
+                    Share your requests in advance so your driver can
+                    understand your group's needs.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section class="other-tours">
+    <div class="section-label">Explore More</div>
+    <h2>Discover More of Iceland</h2>
+    <p>Make your Iceland journey even more memorable.</p>
+
+    <div class="tour-links">
+        <a href="golden-circle-tour.html" class="tour-link">
+            Golden Circle Tour
+        </a>
+
+        <a href="airport-transportation.html" class="tour-link">
+            Airport Transportation
+        </a>
+
+        <a href="transfers.html" class="tour-link">
+            All Transfers
+        </a>
+
+        <a href="order-overview.html" class="tour-link">
+            View Booking Overview
+        </a>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-inner">
+
+        <div>
+            <div class="footer-logo">ICELAND <span>TRANSFER</span></div>
+            <p>Private transportation and tours in Iceland.</p>
+        </div>
+
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="airport-transportation.html">Airport Transfers</a>
+            <a href="order-overview.html">My Booking</a>
+        </div>
+
+    </div>
+</footer>
+
+<a
+    class="whatsapp-button"
+    href="https://wa.me/963998482372"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    WhatsApp Us
+</a>
+
+<script>
+    /*
+      IMPORTANT:
+      These are provisional example prices.
+      Confirm the actual prices with the driver before publishing.
+    */
+
+    const packagePrices = {
+        classic: 89900,
+        comfort: 129900,
+        premium: 189900
+    };
+
+    const packageNames = {
+        classic: "Classic Aurora Chase",
+        comfort: "Comfort Private Tour",
+        premium: "Premium Group Tour"
+    };
+
+    const packageCapacity = {
+        classic: 3,
+        comfort: 7,
+        premium: 20
+    };
+
+    const tourPackage = document.getElementById("tourPackage");
+    const passengers = document.getElementById("passengers");
+
+    const warmDrinks = document.getElementById("warmDrinks");
+    const photoStop = document.getElementById("photoStop");
+
+    const pickup = document.getElementById("pickup");
+    const destination = document.getElementById("destination");
+
+    const pickupOtherGroup = document.getElementById("pickupOtherGroup");
+    const destinationOtherGroup = document.getElementById("destinationOtherGroup");
+
+    const pickupOther = document.getElementById("pickupOther");
+    const destinationOther = document.getElementById("destinationOther");
+
+    const tourDate = document.getElementById("tourDate");
+
+    function formatISK(amount) {
+        return Math.round(amount).toLocaleString("en-US") + " ISK";
+    }
+
+    function updateLocationFields() {
+        const isOtherPickup = pickup.value === "Other location";
+        const isOtherDestination = destination.value === "Other location";
+
+        pickupOtherGroup.classList.toggle("hidden", !isOtherPickup);
+        destinationOtherGroup.classList.toggle("hidden", !isOtherDestination);
+
+        pickupOther.required = isOtherPickup;
+        destinationOther.required = isOtherDestination;
+    }
+
+    function updatePassengerOptions() {
+        const selectedPackage = tourPackage.value;
+        const capacity = packageCapacity[selectedPackage];
+        const currentPassengers = Number(passengers.value);
+
+        Array.from(passengers.options).forEach(function(option) {
+            const number = Number(option.value);
+            option.disabled = number > capacity;
+        });
+
+        if (currentPassengers > capacity) {
+            passengers.value = String(capacity);
+        }
+
+        updateTotal();
+    }
+
+    function updateTotal() {
+        const selectedPackage = tourPackage.value;
+        const basePrice = packagePrices[selectedPackage];
+        const numberOfPassengers = Number(passengers.value);
+
+        let extrasPrice = 0;
+
+        if (warmDrinks.checked) {
+            extrasPrice += 2500 * numberOfPassengers;
+        }
+
+        if (photoStop.checked) {
+            extrasPrice += 15000;
+        }
+
+        const total = basePrice + extrasPrice;
+
+        document.getElementById("startingPrice").textContent =
+            formatISK(packagePrices.classic);
+
+        document.getElementById("packageTotal").textContent =
+            formatISK(basePrice);
+
+        document.getElementById("extrasTotal").textContent =
+            formatISK(extrasPrice);
+
+        document.getElementById("grandTotal").textContent =
+            formatISK(total);
+    }
+
+    tourPackage.addEventListener("change", updatePassengerOptions);
+    passengers.addEventListener("change", updateTotal);
+
+    warmDrinks.addEventListener("change", updateTotal);
+    photoStop.addEventListener("change", updateTotal);
+
+    pickup.addEventListener("change", updateLocationFields);
+    destination.addEventListener("change", updateLocationFields);
+
+    const today = new Date();
+    const localToday = new Date(
+        today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().split("T")[0];
+
+    tourDate.min = localToday;
+
+    document.getElementById("tourBookingForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        if (!this.reportValidity()) {
+            return;
+        }
+
+        const selectedPackage = tourPackage.value;
+        const numberOfPassengers = Number(passengers.value);
+
+        const basePrice = packagePrices[selectedPackage];
+
+        let extrasPrice = 0;
+        const extras = [];
+
+        if (warmDrinks.checked) {
+            extrasPrice += 2500 * numberOfPassengers;
+            extras.push("Warm Drinks Stop");
+        }
+
+        if (photoStop.checked) {
+            extrasPrice += 15000;
+            extras.push("Extended Photo Stop");
+        }
+
+        const pickupLocation =
+            pickup.value === "Other location"
+                ? pickupOther.value.trim()
+                : pickup.value;
+
+        let destinationLocation =
+            destination.value === "Other location"
+                ? destinationOther.value.trim()
+                : destination.value;
+
+        if (destination.value === "Same as pickup location") {
+            destinationLocation = pickupLocation;
+        }
+
+        const totalPrice = basePrice + extrasPrice;
+
+        const booking = {
+            id: "aurora-" + Date.now(),
+            name: "Magical Northern Lights Tour - " + packageNames[selectedPackage],
+            date: tourDate.value,
+            time: document.getElementById("tourTime").value,
+            pickup: pickupLocation,
+            destination: destinationLocation,
+            passengers: numberOfPassengers,
+            unitPrice: basePrice,
+            extras: extras,
+            extrasPrice: extrasPrice,
+            total: totalPrice,
+            email: document.getElementById("email").value.trim(),
+            notes: document.getElementById("notes").value.trim()
+        };
+
+        let cart = [];
+
+        try {
+            const savedCart = localStorage.getItem("icelandTransferCart");
+            cart = savedCart ? JSON.parse(savedCart) : [];
+
+            if (!Array.isArray(cart)) {
+                cart = [];
+            }
+        } catch (error) {
+            cart = [];
+        }
+
+        cart.push(booking);
+
+        try {
+            localStorage.setItem("icelandTransferCart", JSON.stringify(cart));
+        } catch (error) {
+            alert("We could not save your booking in this browser. Please try again.");
+            return;
+        }
+
+        alert("Your Northern Lights Tour has been added to your booking overview!");
+
+        window.location.href = "order-overview.html";
+    });
+
+    updateLocationFields();
+    updatePassengerOptions();
+    updateTotal();
+</script>
+
+</body>
+</html>

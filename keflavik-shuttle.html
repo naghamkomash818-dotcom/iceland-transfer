@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Keflavik KEF Shuttle | Iceland Transfer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --green: #465b45;
+            --deep-green: #293c2e;
+            --beige: #f5f1e8;
+            --gold: #b99b61;
+            --white: #fffdf9;
+            --text: #3d4239;
+            --muted: #777a70;
+            --border: #e6e1d7;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--white);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        /* HEADER */
+
+        header {
+            background: var(--deep-green);
+            color: white;
+            padding: 18px 6%;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #d8c9a8;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #f5f1e8;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #d6bd87;
+        }
+
+        .nav-book {
+            background: var(--gold);
+            color: var(--deep-green);
+            padding: 10px 16px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* BREADCRUMB */
+
+        .breadcrumb {
+            max-width: 1200px;
+            margin: auto;
+            padding: 25px 25px 15px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .breadcrumb a {
+            color: var(--green);
+        }
+
+        /* MAIN PRODUCT SECTION */
+
+        .product-section {
+            max-width: 1200px;
+            margin: auto;
+            padding: 15px 25px 75px;
+        }
+
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 45px;
+            align-items: start;
+        }
+
+        /* PRODUCT IMAGE */
+
+        .product-image-box {
+            width: 100%;
+            height: 540px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--beige);
+            position: relative;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .image-caption {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            background: rgba(41, 60, 46, 0.88);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* PRODUCT DETAILS */
+
+        .product-details {
+            padding-top: 5px;
+        }
+
+        .category-label {
+            display: inline-block;
+            background: var(--beige);
+            color: var(--green);
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        .product-details h1 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: normal;
+            font-size: clamp(30px, 4vw, 42px);
+            line-height: 1.2;
+            color: var(--deep-green);
+            margin-bottom: 15px;
+        }
+
+        .product-description {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .price-area {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 18px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 25px;
+        }
+
+        .price {
+            font-size: 29px;
+            color: var(--deep-green);
+            font-weight: bold;
+        }
+
+        .price-unit {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* BOOKING FORM */
+
+        .booking-box {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(41, 60, 46, 0.05);
+        }
+
+        .booking-box h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: var(--deep-green);
+            font-size: 25px;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+
+        .booking-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 23px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .required {
+            color: #a34e3c;
+        }
+
+        input,
+        select {
+            width: 100%;
+            min-height: 47px;
+            border: 1px solid #dcd8ce;
+            border-radius: 4px;
+            padding: 10px 12px;
+            background: white;
+            color: var(--text);
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 2px rgba(70, 91, 69, 0.10);
+        }
+
+        .form-help {
+            display: block;
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        /* LOCATION INPUTS */
+
+        .custom-location {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .custom-location.visible {
+            display: block;
+        }
+
+        .location-note {
+            background: #f5f1e8;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        /* PASSENGERS */
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 47px;
+            border: 1px solid #dcd8ce;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+
+        .quantity-control button {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 4px;
+            background: var(--beige);
+            color: var(--deep-green);
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .quantity-control button:hover {
+            background: #e8e0cf;
+        }
+
+        .quantity-control span {
+            font-weight: bold;
+        }
+
+        /* PRICE SUMMARY */
+
+        .booking-summary {
+            background: var(--beige);
+            border-radius: 5px;
+            padding: 16px;
+            margin: 22px 0;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .summary-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-total {
+            border-top: 1px solid #d9d0bd;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--deep-green);
+            font-size: 16px;
+        }
+
+        /* BUTTON */
+
+        .add-cart-button {
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            padding: 15px;
+            background: var(--green);
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-cart-button:hover {
+            background: var(--deep-green);
+        }
+
+        .secure-note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 12px;
+        }
+
+        .message {
+            display: none;
+            background: #e9f2e5;
+            color: var(--deep-green);
+            border: 1px solid #cbdcc4;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        .message.error {
+            background: #f9e8e5;
+            color: #8a3024;
+            border-color: #e7c3bc;
+        }
+
+        /* EXTRA INFORMATION */
+
+        .information-section {
+            background: var(--beige);
+            padding: 45px 25px;
+        }
+
+        .information-inner {
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        .information-inner h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 29px;
+            font-weight: normal;
+            color: var(--deep-green);
+            margin-bottom: 22px;
+        }
+
+        .information-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .information-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .information-card h3 {
+            color: var(--deep-green);
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .information-card p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: var(--deep-green);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        footer p {
+            color: #d3d4ca;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+            .product-layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .product-image-box {
+                height: 400px;
+            }
+
+            .information-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            .navbar {
+                flex-direction: column;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 13px 17px;
+            }
+
+            .product-section {
+                padding: 10px 16px 45px;
+            }
+
+            .product-image-box {
+                height: 280px;
+            }
+
+            .booking-box {
+                padding: 18px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .breadcrumb {
+                padding: 20px 16px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+        <div class="navbar">
+
+            <a href="index.html" class="logo">
+                ICELAND TRANSFER
+                <span>YOUR JOURNEY, OUR DRIVE</span>
+            </a>
+
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="transfers.html">Transfers</a>
+                <a href="destinations.html">Destinations</a>
+                <a href="about.html">About Us</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="airport-transportation.html" class="nav-book">
+                    All Transfers
+                </a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <!-- BREADCRUMB -->
+
+    <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        &nbsp; / &nbsp;
+        <a href="transfers.html">Transfers</a>
+        &nbsp; / &nbsp;
+        <a href="airport-transportation.html">Airport Transportation</a>
+        &nbsp; / &nbsp;
+        Keflavik KEF Shuttle
+    </div>
+
+
+    <!-- PRODUCT AND BOOKING -->
+
+    <main>
+
+        <section class="product-section">
+
+            <div class="product-layout">
+
+                <!-- PRODUCT IMAGE -->
+
+                <div class="product-image-box">
+
+                    <img
+                        class="product-image"
+                        src="images2/airport-transfer.jpg"
+                        alt="Keflavik International Airport"
+                        onerror="this.onerror=null; this.src='images2/transfers-hero.jpg';"
+                    >
+
+                    <div class="image-caption">
+                        KEFLAVIK INTERNATIONAL AIRPORT
+                    </div>
+
+                </div>
+
+
+                <!-- PRODUCT DETAILS -->
+
+                <div class="product-details">
+
+                    <span class="category-label">
+                        AIRPORT TRANSPORTATION
+                    </span>
+
+                    <h1>Keflavik KEF Shuttle</h1>
+
+                    <p class="product-description">
+                        Arrange your airport transfer in Iceland.
+                        Select your travel date, pickup location and destination
+                        to prepare your booking.
+                    </p>
+
+                    <div class="price-area">
+                        <span class="price">20,900 kr</span>
+                        <span class="price-unit">per transfer</span>
+                    </div>
+
+
+                    <!-- BOOKING FORM -->
+
+                    <div class="booking-box">
+
+                        <h2>Book Your Transfer</h2>
+
+                        <p class="booking-subtitle">
+                            Enter your journey details below.
+                        </p>
+
+                        <div class="location-note">
+                            Can't find your location? Select
+                            <strong>Other location</strong> and enter its name.
+                        </div>
+
+                        <form id="bookingForm">
+
+                            <!-- DATE AND TIME -->
+
+                            <div class="form-row">
+
+                                <div class="form-group">
+
+                                    <label for="travelDate">
+                                        Travel Date <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="travelDate"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="travelTime">
+                                        Pickup Time <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="time"
+                                        id="travelTime"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- PICKUP LOCATION -->
+
+                            <div class="form-group">
+
+                                <label for="pickup">
+                                    Pickup Location <span class="required">*</span>
+                                </label>
+
+                                <select id="pickup" required>
+
+                                    <option value="">Choose pickup location</option>
+
+                                    <optgroup label="Airports">
+
+                                        <option>Keflavik International Airport (KEF)</option>
+                                        <option>Reykjavik Airport (RKV)</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Capital Area">
+
+                                        <option>Reykjavik</option>
+                                        <option>Kopavogur</option>
+                                        <option>Hafnarfjordur</option>
+                                        <option>Gardabaer</option>
+                                        <option>Mosfellsbaer</option>
+                                        <option>Seltjarnarnes</option>
+                                        <option>Alftanes</option>
+                                        <option>Reykjanesbaer</option>
+                                        <option>Keflavik</option>
+                                        <option>Njarðvik</option>
+                                        <option>Grindavik</option>
+                                        <option>Vogar</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="South Iceland">
+
+                                        <option>Selfoss</option>
+                                        <option>Hveragerdi</option>
+                                        <option>Hella</option>
+                                        <option>Hvolsvollur</option>
+                                        <option>Vestmannaeyjar</option>
+                                        <option>Thorlakshofn</option>
+                                        <option>Eyrarbakki</option>
+                                        <option>Stokkseyri</option>
+                                        <option>Fludir</option>
+                                        <option>Laugarvatn</option>
+                                        <option>Haukadalur</option>
+                                        <option>Geysir</option>
+                                        <option>Gullfoss</option>
+                                        <option>Thingvellir National Park</option>
+                                        <option>Skogar</option>
+                                        <option>Vik</option>
+                                        <option>Kirkjubaejarklaustur</option>
+                                        <option>Skaftafell</option>
+                                        <option>Hof</option>
+                                        <option>Hofn</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="West Iceland">
+
+                                        <option>Borgarnes</option>
+                                        <option>Akranes</option>
+                                        <option>Reykholt</option>
+                                        <option>Husafell</option>
+                                        <option>Arnarstapi</option>
+                                        <option>Hellnar</option>
+                                        <option>Stykkisholmur</option>
+                                        <option>Grundarfjordur</option>
+                                        <option>Olafsvik</option>
+                                        <option>Hellissandur</option>
+                                        <option>Budir</option>
+                                        <option>Snæfellsjokull National Park</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="North Iceland">
+
+                                        <option>Akureyri</option>
+                                        <option>Husavik</option>
+                                        <option>Myvatn</option>
+                                        <option>Reykjahlid</option>
+                                        <option>Godafoss</option>
+                                        <option>Dettifoss</option>
+                                        <option>Siglufjordur</option>
+                                        <option>Dalvik</option>
+                                        <option>Olafsfjordur</option>
+                                        <option>Hofsos</option>
+                                        <option>Blonduos</option>
+                                        <option>Varmahlid</option>
+                                        <option>Saudarkrokur</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="East Iceland">
+
+                                        <option>Egilsstadir</option>
+                                        <option>Seydisfjordur</option>
+                                        <option>Eskifjordur</option>
+                                        <option>Reydarfjordur</option>
+                                        <option>Faskrudsfjordur</option>
+                                        <option>Djupivogur</option>
+                                        <option>Breiddalsvik</option>
+                                        <option>Borgarfjordur Eystri</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Westfjords">
+
+                                        <option>Isafjordur</option>
+                                        <option>Bolungarvik</option>
+                                        <option>Patreksfjordur</option>
+                                        <option>Bildudalur</option>
+                                        <option>Thingeyri</option>
+                                        <option>Flateyri</option>
+                                        <option>Sudureyri</option>
+                                        <option>Holmavik</option>
+                                        <option>Dynjandi</option>
+                                        <option>Latra bjarg</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Popular Attractions">
+
+                                        <option>Blue Lagoon</option>
+                                        <option>Sky Lagoon</option>
+                                        <option>Secret Lagoon</option>
+                                        <option>Hvammsvik Hot Springs</option>
+                                        <option>Kerid Crater</option>
+                                        <option>Seljalandsfoss</option>
+                                        <option>Skogafoss</option>
+                                        <option>Reynisfjara Black Sand Beach</option>
+                                        <option>Dyrholaey</option>
+                                        <option>Fjaðrargljufur Canyon</option>
+                                        <option>Jokulsarlon Glacier Lagoon</option>
+                                        <option>Diamond Beach</option>
+                                        <option>Landmannalaugar</option>
+                                        <option>Thorsmork</option>
+                                        <option>Hverir Geothermal Area</option>
+                                        <option>Asbyrgi Canyon</option>
+                                        <option>Kirkjufell</option>
+                                        <option>Hraunfossar</option>
+                                        <option>Deildartunguhver</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Other">
+
+                                        <option value="OTHER">Other location — enter manually</option>
+
+                                    </optgroup>
+
+                                </select>
+
+                                <div class="custom-location" id="pickupCustomBox">
+
+                                    <label for="pickupCustom">
+                                        Enter Your Pickup Location
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="pickupCustom"
+                                        placeholder="Enter address, hotel or place name"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- DESTINATION -->
+
+                            <div class="form-group">
+
+                                <label for="destination">
+                                    Destination <span class="required">*</span>
+                                </label>
+
+                                <select id="destination" required>
+
+                                    <option value="">Choose destination</option>
+
+                                    <optgroup label="Airports">
+
+                                        <option>Keflavik International Airport (KEF)</option>
+                                        <option>Reykjavik Airport (RKV)</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Capital Area">
+
+                                        <option>Reykjavik</option>
+                                        <option>Kopavogur</option>
+                                        <option>Hafnarfjordur</option>
+                                        <option>Gardabaer</option>
+                                        <option>Mosfellsbaer</option>
+                                        <option>Seltjarnarnes</option>
+                                        <option>Alftanes</option>
+                                        <option>Reykjanesbaer</option>
+                                        <option>Keflavik</option>
+                                        <option>Njarðvik</option>
+                                        <option>Grindavik</option>
+                                        <option>Vogar</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="South Iceland">
+
+                                        <option>Selfoss</option>
+                                        <option>Hveragerdi</option>
+                                        <option>Hella</option>
+                                        <option>Hvolsvollur</option>
+                                        <option>Vestmannaeyjar</option>
+                                        <option>Thorlakshofn</option>
+                                        <option>Eyrarbakki</option>
+                                        <option>Stokkseyri</option>
+                                        <option>Fludir</option>
+                                        <option>Laugarvatn</option>
+                                        <option>Haukadalur</option>
+                                        <option>Geysir</option>
+                                        <option>Gullfoss</option>
+                                        <option>Thingvellir National Park</option>
+                                        <option>Skogar</option>
+                                        <option>Vik</option>
+                                        <option>Kirkjubaejarklaustur</option>
+                                        <option>Skaftafell</option>
+                                        <option>Hof</option>
+                                        <option>Hofn</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="West Iceland">
+
+                                        <option>Borgarnes</option>
+                                        <option>Akranes</option>
+                                        <option>Reykholt</option>
+                                        <option>Husafell</option>
+                                        <option>Arnarstapi</option>
+                                        <option>Hellnar</option>
+                                        <option>Stykkisholmur</option>
+                                        <option>Grundarfjordur</option>
+                                        <option>Olafsvik</option>
+                                        <option>Hellissandur</option>
+                                        <option>Budir</option>
+                                        <option>Snæfellsjokull National Park</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="North Iceland">
+
+                                        <option>Akureyri</option>
+                                        <option>Husavik</option>
+                                        <option>Myvatn</option>
+                                        <option>Reykjahlid</option>
+                                        <option>Godafoss</option>
+                                        <option>Dettifoss</option>
+                                        <option>Siglufjordur</option>
+                                        <option>Dalvik</option>
+                                        <option>Olafsfjordur</option>
+                                        <option>Hofsos</option>
+                                        <option>Blonduos</option>
+                                        <option>Varmahlid</option>
+                                        <option>Saudarkrokur</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="East Iceland">
+
+                                        <option>Egilsstadir</option>
+                                        <option>Seydisfjordur</option>
+                                        <option>Eskifjordur</option>
+                                        <option>Reydarfjordur</option>
+                                        <option>Faskrudsfjordur</option>
+                                        <option>Djupivogur</option>
+                                        <option>Breiddalsvik</option>
+                                        <option>Borgarfjordur Eystri</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Westfjords">
+
+                                        <option>Isafjordur</option>
+                                        <option>Bolungarvik</option>
+                                        <option>Patreksfjordur</option>
+                                        <option>Bildudalur</option>
+                                        <option>Thingeyri</option>
+                                        <option>Flateyri</option>
+                                        <option>Sudureyri</option>
+                                        <option>Holmavik</option>
+                                        <option>Dynjandi</option>
+                                        <option>Latra bjarg</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Popular Attractions">
+
+                                        <option>Blue Lagoon</option>
+                                        <option>Sky Lagoon</option>
+                                        <option>Secret Lagoon</option>
+                                        <option>Hvammsvik Hot Springs</option>
+                                        <option>Kerid Crater</option>
+                                        <option>Seljalandsfoss</option>
+                                        <option>Skogafoss</option>
+                                        <option>Reynisfjara Black Sand Beach</option>
+                                        <option>Dyrholaey</option>
+                                        <option>Fjaðrargljufur Canyon</option>
+                                        <option>Jokulsarlon Glacier Lagoon</option>
+                                        <option>Diamond Beach</option>
+                                        <option>Landmannalaugar</option>
+                                        <option>Thorsmork</option>
+                                        <option>Hverir Geothermal Area</option>
+                                        <option>Asbyrgi Canyon</option>
+                                        <option>Kirkjufell</option>
+                                        <option>Hraunfossar</option>
+                                        <option>Deildartunguhver</option>
+
+                                    </optgroup>
+
+                                    <optgroup label="Other">
+
+                                        <option value="OTHER">Other location — enter manually</option>
+
+                                    </optgroup>
+
+                                </select>
+
+                                <div class="custom-location" id="destinationCustomBox">
+
+                                    <label for="destinationCustom">
+                                        Enter Your Destination
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="destinationCustom"
+                                        placeholder="Enter address, hotel or place name"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- PASSENGERS -->
+
+                            <div class="form-group">
+
+                                <label>Number of Passengers</label>
+
+                                <div class="quantity-control">
+
+                                    <button
+                                        type="button"
+                                        id="decreasePassengers"
+                                        aria-label="Decrease passengers"
+                                    >−</button>
+
+                                    <span id="passengerCount">1</span>
+
+                                    <button
+                                        type="button"
+                                        id="increasePassengers"
+                                        aria-label="Increase passengers"
+                                    >+</button>
+
+                                </div>
+
+                                <span class="form-help">
+                                    Select the number of people travelling.
+                                </span>
+
+                            </div>
+
+
+                            <!-- PRICE SUMMARY -->
+
+                            <div class="booking-summary">
+
+                                <div class="summary-line">
+                                    <span>Transfer price</span>
+                                    <span id="unitPrice">20,900 kr</span>
+                                </div>
+
+                                <div class="summary-line">
+                                    <span>Passengers</span>
+                                    <span id="summaryPassengers">1</span>
+                                </div>
+
+                                <div class="summary-line summary-total">
+                                    <span>Total</span>
+                                    <span id="totalPrice">20,900 kr</span>
+                                </div>
+
+                            </div>
+
+
+                            <!-- ADD TO CART -->
+
+                            <button type="submit" class="add-cart-button">
+                                Add to cart
+                            </button>
+
+                            <p class="secure-note">
+                                Please check your journey details before adding
+                                your transfer to the cart.
+                            </p>
+
+                            <div id="bookingMessage" class="message"></div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INFORMATION -->
+
+        <section class="information-section">
+
+            <div class="information-inner">
+
+                <h2>Before Your Journey</h2>
+
+                <div class="information-grid">
+
+                    <div class="information-card">
+
+                        <h3>📅 Choose Your Date</h3>
+
+                        <p>
+                            Select the date of your planned transfer
+                            using the booking form.
+                        </p>
+
+                    </div>
+
+                    <div class="information-card">
+
+                        <h3>📍 Confirm Your Locations</h3>
+
+                        <p>
+                            Select your locations from the list or enter
+                            your own address if it is not listed.
+                        </p>
+
+                    </div>
+
+                    <div class="information-card">
+
+                        <h3>🧳 Plan Ahead</h3>
+
+                        <p>
+                            Enter your travel details carefully so your
+                            booking information is ready for review.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-logo">ICELAND TRANSFER</div>
+
+        <p>Your journey, our drive.</p>
+
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="transfers.html">Transfers</a>
+            <a href="airport-transportation.html">Airport Transportation</a>
+            <a href="about.html">About Us</a>
+        </div>
+
+        <p>© 2026 Iceland Transfer. All rights reserved.</p>
+
+    </footer>
+
+
+    <!-- BOOKING JAVASCRIPT -->
+
+    <script>
+
+        const pricePerTransfer = 20900;
+
+        let passengers = 1;
+
+        const passengerCount =
+            document.getElementById("passengerCount");
+
+        const summaryPassengers =
+            document.getElementById("summaryPassengers");
+
+        const totalPrice =
+            document.getElementById("totalPrice");
+
+        const travelDate =
+            document.getElementById("travelDate");
+
+        const bookingMessage =
+            document.getElementById("bookingMessage");
+
+
+        // Prevent choosing a date in the past
+
+        const today = new Date();
+
+        const year = today.getFullYear();
+
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+
+        const day = String(today.getDate()).padStart(2, "0");
+
+        travelDate.min = `${year}-${month}-${day}`;
+
+
+        // Show the custom location input when Other is selected
+
+        function setupCustomLocation(selectId, boxId, inputId) {
+
+            const select = document.getElementById(selectId);
+
+            const box = document.getElementById(boxId);
+
+            const input = document.getElementById(inputId);
+
+            function updateCustomLocation() {
+
+                const isOther = select.value === "OTHER";
+
+                box.classList.toggle("visible", isOther);
+
+                input.required = isOther;
+
+                if (!isOther) {
+                    input.value = "";
+                }
+
+            }
+
+            select.addEventListener("change", updateCustomLocation);
+
+            updateCustomLocation();
+
+        }
+
+
+        setupCustomLocation(
+            "pickup",
+            "pickupCustomBox",
+            "pickupCustom"
+        );
+
+        setupCustomLocation(
+            "destination",
+            "destinationCustomBox",
+            "destinationCustom"
+        );
+
+
+        // Get the actual location selected or typed by the customer
+
+        function getLocationValue(selectId, inputId) {
+
+            const select = document.getElementById(selectId);
+
+            const customInput = document.getElementById(inputId);
+
+            if (select.value === "OTHER") {
+                return customInput.value.trim();
+            }
+
+            return select.value;
+
+        }
+
+
+        // Update the passenger count and total price
+
+        function updatePrice() {
+
+            passengerCount.textContent = passengers;
+
+            summaryPassengers.textContent = passengers;
+
+            totalPrice.textContent =
+                (pricePerTransfer * passengers).toLocaleString("en-US") + " kr";
+
+            document.getElementById("unitPrice").textContent =
+                pricePerTransfer.toLocaleString("en-US") + " kr";
+
+        }
+
+
+        // Decrease passengers
+
+        document.getElementById("decreasePassengers")
+            .addEventListener("click", function () {
+
+                if (passengers > 1) {
+
+                    passengers--;
+
+                    updatePrice();
+
+                }
+
+            });
+
+
+        // Increase passengers
+
+        document.getElementById("increasePassengers")
+            .addEventListener("click", function () {
+
+                if (passengers < 20) {
+
+                    passengers++;
+
+                    updatePrice();
+
+                }
+
+            });
+
+
+        // Save booking details in the browser
+
+        document.getElementById("bookingForm")
+            .addEventListener("submit", function (event) {
+
+                event.preventDefault();
+
+                const pickup = getLocationValue(
+                    "pickup",
+                    "pickupCustom"
+                );
+
+                const destination = getLocationValue(
+                    "destination",
+                    "destinationCustom"
+                );
+
+                const date = travelDate.value;
+
+                const time = document.getElementById("travelTime").value;
+
+
+                // Make sure the locations are different
+
+                if (
+                    pickup.trim().toLowerCase() ===
+                    destination.trim().toLowerCase()
+                ) {
+
+                    bookingMessage.className = "message error";
+
+                    bookingMessage.style.display = "block";
+
+                    bookingMessage.textContent =
+                        "Pickup and destination must be different. Please choose another location.";
+
+                    return;
+
+                }
+
+
+                // Create booking information
+
+                const booking = {
+
+                    id: "keflavik-" + Date.now(),
+
+                    name: "Keflavik KEF Shuttle",
+
+                    date: date,
+
+                    time: time,
+
+                    pickup: pickup,
+
+                    destination: destination,
+
+                    passengers: passengers,
+
+                    unitPrice: pricePerTransfer,
+
+                    total: pricePerTransfer * passengers
+
+                };
+
+
+                // Load the existing cart
+
+                let cart = [];
+
+                try {
+
+                    const savedCart =
+                        localStorage.getItem("icelandTransferCart");
+
+                    cart = savedCart ? JSON.parse(savedCart) : [];
+
+                    if (!Array.isArray(cart)) {
+                        cart = [];
+                    }
+
+                } catch (error) {
+
+                    cart = [];
+
+                }
+
+
+                // Add this booking to the cart
+
+                cart.push(booking);
+
+                localStorage.setItem(
+                    "icelandTransferCart",
+                    JSON.stringify(cart)
+                );
+
+
+                // Show confirmation
+
+                bookingMessage.className = "message";
+
+                bookingMessage.style.display = "block";
+
+                bookingMessage.textContent =
+                    "Your transfer has been added to the cart! Your selected locations and travel details have been saved.";
+
+                bookingMessage.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest"
+                });
+
+            });
+
+
+        updatePrice();
+
+    </script>
+
+</body>
+
+</html>

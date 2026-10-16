@@ -1,0 +1,856 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Contact Us | Iceland Transfer</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --green: #465b45;
+        --deep-green: #293c2e;
+        --beige: #f5f1e8;
+        --gold: #b99b61;
+        --white: #fffdf9;
+        --text: #3d4239;
+        --muted: #777a70;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: var(--white);
+        color: var(--text);
+        line-height: 1.7;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+        font: inherit;
+    }
+
+    /* HEADER */
+
+    header {
+        background-color: var(--deep-green);
+        color: white;
+        padding: 20px 7%;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        font-size: 23px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .logo span {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 4px;
+        color: #d8c9a8;
+        text-align: center;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        color: #f5f1e8;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+
+    nav a:hover {
+        color: #d6bd87;
+    }
+
+    .book-button {
+        background-color: var(--gold);
+        color: var(--deep-green);
+        padding: 10px 18px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    /* PAGE INTRO */
+
+    .page-intro {
+        background-color: var(--beige);
+        text-align: center;
+        padding: 65px 20px 60px;
+    }
+
+    .breadcrumb {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 18px;
+    }
+
+    .breadcrumb a {
+        color: var(--green);
+    }
+
+    .small-title {
+        color: var(--gold);
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+
+    .page-intro h1 {
+        color: var(--deep-green);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(35px, 5vw, 49px);
+        font-weight: normal;
+        margin-bottom: 15px;
+    }
+
+    .page-intro p {
+        max-width: 650px;
+        margin: auto;
+        color: #66695f;
+        font-size: 15px;
+    }
+
+    /* CONTACT MAIN */
+
+    .contact-section {
+        max-width: 1150px;
+        margin: auto;
+        padding: 75px 25px 85px;
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 45px;
+    }
+
+    .section-heading h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--deep-green);
+        font-size: 35px;
+        font-weight: normal;
+        margin-bottom: 12px;
+    }
+
+    .section-heading p {
+        max-width: 600px;
+        margin: auto;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .contact-layout {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 35px;
+        align-items: stretch;
+    }
+
+    /* CONTACT INFORMATION */
+
+    .contact-info {
+        background-color: var(--deep-green);
+        color: var(--white);
+        border-radius: 8px;
+        padding: 38px 32px;
+    }
+
+    .contact-info h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 29px;
+        font-weight: normal;
+        margin-bottom: 12px;
+    }
+
+    .contact-info > p {
+        color: #d9ded4;
+        font-size: 14px;
+        margin-bottom: 30px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .info-icon {
+        width: 43px;
+        height: 43px;
+        min-width: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(185, 155, 97, 0.18);
+        border-radius: 50%;
+        font-size: 20px;
+    }
+
+    .info-item h4 {
+        color: #e1c994;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .info-item p,
+    .info-item a {
+        color: #f5f1e8;
+        font-size: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    .info-item a:hover {
+        color: #e1c994;
+    }
+
+    .whatsapp-button {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background-color: var(--gold);
+        color: var(--deep-green);
+        padding: 14px 18px;
+        margin-top: 30px;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .whatsapp-button:hover {
+        background-color: #d0b77e;
+    }
+
+    .contact-note {
+        color: #d9ded4;
+        font-size: 11px;
+        text-align: center;
+        margin-top: 12px;
+    }
+
+    /* CONTACT FORM */
+
+    .contact-form {
+        background-color: #ffffff;
+        border: 1px solid #e8e3d8;
+        border-radius: 8px;
+        padding: 38px 32px;
+        box-shadow: 0 8px 30px rgba(41, 60, 46, 0.06);
+    }
+
+    .contact-form h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 29px;
+        font-weight: normal;
+        color: var(--deep-green);
+        margin-bottom: 8px;
+    }
+
+    .form-description {
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-group {
+        margin-bottom: 19px;
+    }
+
+    .form-group label {
+        display: block;
+        color: var(--deep-green);
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 7px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        display: block;
+        width: 100%;
+        padding: 12px 13px;
+        border: 1px solid #deded4;
+        border-radius: 4px;
+        background-color: #fffdf9;
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 3px rgba(70, 91, 69, 0.1);
+    }
+
+    .form-group textarea {
+        min-height: 145px;
+        resize: vertical;
+    }
+
+    .required {
+        color: #a65b45;
+    }
+
+    .submit-button {
+        display: block;
+        width: 100%;
+        padding: 14px 20px;
+        background-color: var(--green);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .submit-button:hover {
+        background-color: var(--deep-green);
+    }
+
+    .form-message {
+        display: none;
+        margin-top: 15px;
+        padding: 12px;
+        border-radius: 4px;
+        background-color: var(--beige);
+        color: var(--deep-green);
+        font-size: 13px;
+    }
+
+    /* BOTTOM CALL TO ACTION */
+
+    .contact-cta {
+        background-color: var(--beige);
+        padding: 55px 20px;
+        text-align: center;
+    }
+
+    .contact-cta h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--deep-green);
+        font-weight: normal;
+        font-size: 31px;
+        margin-bottom: 12px;
+    }
+
+    .contact-cta p {
+        max-width: 620px;
+        margin: 0 auto 25px;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background-color: var(--green);
+        color: white;
+        padding: 13px 25px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .cta-button:hover {
+        background-color: var(--deep-green);
+    }
+
+    /* FOOTER */
+
+    footer {
+        background-color: var(--deep-green);
+        color: #f5f1e8;
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    .footer-logo {
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    footer p {
+        font-size: 12px;
+        color: #d3d4ca;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 22px;
+        flex-wrap: wrap;
+        margin: 15px 0;
+        font-size: 13px;
+    }
+
+    .footer-links a:hover {
+        color: #d6bd87;
+    }
+
+    /* RESPONSIVE DESIGN */
+
+    @media (max-width: 800px) {
+        .contact-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-info,
+        .contact-form {
+            padding: 30px 24px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        header {
+            padding: 18px 6%;
+        }
+
+        .navbar {
+            flex-direction: column;
+        }
+
+        nav {
+            justify-content: center;
+            gap: 13px 18px;
+        }
+
+        .page-intro {
+            padding: 45px 18px;
+        }
+
+        .contact-section {
+            padding: 45px 18px 55px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .section-heading h2 {
+            font-size: 30px;
+        }
+
+        .contact-cta h2 {
+            font-size: 27px;
+        }
+    }
+</style>
+
+</head><body><!-- HEADER -->
+
+<header>
+    <div class="navbar">
+
+        <a href="index.html" class="logo">
+            ICELAND TRANSFER
+            <span>YOUR JOURNEY, OUR DRIVE</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="transfers.html">Transfers</a>
+            <a href="golden-circle-tour.html">Destinations</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+            <a href="booking.html" class="book-button">Book a Transfer</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<!-- PAGE INTRODUCTION -->
+
+<section class="page-intro">
+
+    <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        &nbsp; / &nbsp;
+        Contact Us
+    </div>
+
+    <div class="small-title">WE ARE HERE TO HELP</div>
+
+    <h1>Contact Us</h1>
+
+    <p>
+        Have a question about your journey in Iceland?
+        Get in touch with us, and we will be happy to help you plan
+        a comfortable and memorable trip.
+    </p>
+
+</section>
+
+
+<!-- CONTACT CONTENT -->
+
+<main>
+
+    <section class="contact-section">
+
+        <div class="section-heading">
+            <h2>Let's Talk About Your Journey</h2>
+
+            <p>
+                Whether you need an airport transfer, a private ride,
+                or a sightseeing trip, feel free to contact us.
+            </p>
+        </div>
+
+
+        <div class="contact-layout">
+
+
+            <!-- CONTACT INFORMATION -->
+
+            <div class="contact-info">
+
+                <h3>Get in Touch</h3>
+
+                <p>
+                    We are here to help you arrange your transportation
+                    and make your Iceland journey easier.
+                </p>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">📱</div>
+
+                    <div>
+                        <h4>Phone & WhatsApp</h4>
+
+                        <a href="https://wa.me/963998482372"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            +963 998 482 372
+                        </a>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">🚘</div>
+
+                    <div>
+                        <h4>Our Services</h4>
+
+                        <p>
+                            Airport transfers, private transportation,
+                            and sightseeing trips in Iceland.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">📍</div>
+
+                    <div>
+                        <h4>Service Area</h4>
+
+                        <p>Iceland</p>
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-icon">💬</div>
+
+                    <div>
+                        <h4>Questions About Your Booking?</h4>
+
+                        <p>
+                            Contact us directly to discuss your trip,
+                            pickup location, or travel plans.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <a class="whatsapp-button"
+                   href="https://wa.me/963998482372?text=Hello%20Iceland%20Transfer%2C%20I%20have%20a%20question%20about%20your%20services."
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Chat with Us on WhatsApp ↗
+                </a>
+
+                <p class="contact-note">
+                    WhatsApp will open in a new window or app.
+                </p>
+
+            </div>
+
+
+
+            <!-- CONTACT FORM -->
+
+            <div class="contact-form">
+
+                <h3>Send Us a Message</h3>
+
+                <p class="form-description">
+                    Fill in the details below to prepare your message.
+                </p>
+
+                <form id="contactForm">
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="fullName">
+                                Full Name <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                placeholder="Enter your name"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="email">
+                                Email Address <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone Number (Optional)
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Enter your phone number"
+                            autocomplete="tel"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="subject">
+                            What Can We Help You With?
+                            <span class="required">*</span>
+                        </label>
+
+                        <select id="subject" name="subject" required>
+
+                            <option value="">Choose a subject</option>
+
+                            <option value="Airport Transfer">
+                                Airport Transfer
+                            </option>
+
+                            <option value="Reykjavik Shuttle">
+                                Reykjavik Shuttle
+                            </option>
+
+                            <option value="Golden Circle Tour">
+                                Golden Circle Tour
+                            </option>
+
+                            <option value="Northern Lights Tour">
+                                Northern Lights Tour
+                            </option>
+
+                            <option value="Existing Booking">
+                                Existing Booking
+                            </option>
+
+                            <option value="Other Question">
+                                Other Question
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="message">
+                            Your Message <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            placeholder="Tell us how we can help you..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button type="submit" class="submit-button">
+                        Continue to WhatsApp →
+                    </button>
+
+                    <div id="formMessage" class="form-message" role="status"></div>
+
+                </form>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- BOOKING CALL TO ACTION -->
+
+    <section class="contact-cta">
+
+        <h2>Ready to Explore Iceland?</h2>
+
+        <p>
+            Choose your transfer or private tour and start planning
+            your journey with Iceland Transfer.
+        </p>
+
+        <a href="booking.html" class="cta-button">
+            Explore Booking Options →
+        </a>
+
+    </section>
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-logo">ICELAND TRANSFER</div>
+
+    <p>Your journey, our drive.</p>
+
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="transfers.html">Transfers</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="booking.html">Book a Transfer</a>
+    </div>
+
+    <p>© 2026 Iceland Transfer. All rights reserved.</p>
+
+</footer>
+
+
+
+<!-- CONTACT FORM BEHAVIOUR -->
+
+<script>
+    const contactForm = document.getElementById("contactForm");
+    const formMessage = document.getElementById("formMessage");
+
+    contactForm.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        const fullName = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const subject = document.getElementById("subject").value;
+        const message = document.getElementById("message").value.trim();
+
+        if (!fullName || !email || !subject || !message) {
+            formMessage.style.display = "block";
+            formMessage.textContent = "Please complete all required fields.";
+            return;
+        }
+
+        let whatsappMessage =
+            "Hello Iceland Transfer!%0A%0A" +
+            "Name: " + encodeURIComponent(fullName) + "%0A" +
+            "Email: " + encodeURIComponent(email) + "%0A" +
+            "Phone: " + encodeURIComponent(phone || "Not provided") + "%0A" +
+            "Subject: " + encodeURIComponent(subject) + "%0A" +
+            "Message: " + encodeURIComponent(message);
+
+        const whatsappURL =
+            "https://wa.me/963998482372?text=" + whatsappMessage;
+
+        formMessage.style.display = "block";
+        formMessage.textContent =
+            "Your message is ready. WhatsApp will open so you can send it.";
+
+        window.open(whatsappURL, "_blank", "noopener,noreferrer");
+    });
+</script>
+
+</body></html>

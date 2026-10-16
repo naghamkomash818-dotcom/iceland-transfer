@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iceland Transfer | Private Journeys</title>
+
+<style>
+:root {
+    --green: #465b45;
+    --deep-green: #293c2e;
+    --beige: #f5f1e8;
+    --gold: #b99b61;
+    --white: #fffdf9;
+    --text: #3d4239;
+    --muted: #777a70;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.7;
+}
+
+img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    width: min(1120px, 90%);
+    margin: auto;
+}
+
+.eyebrow {
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+h2 {
+    color: var(--deep-green);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(30px, 4vw, 43px);
+    font-weight: normal;
+    line-height: 1.2;
+    margin: 12px 0 18px;
+}
+
+p {
+    color: var(--muted);
+}
+
+.button {
+    display: inline-block;
+    background: var(--green);
+    color: white;
+    padding: 13px 25px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: .25s;
+    border: 1px solid var(--green);
+}
+
+.button:hover {
+    background: var(--deep-green);
+    border-color: var(--deep-green);
+}
+
+.button-light {
+    background: var(--beige);
+    color: var(--deep-green);
+    border-color: var(--beige);
+}
+
+.button-light:hover {
+    background: white;
+}
+
+/* HEADER */
+
+header {
+    background: var(--white);
+    border-bottom: 1px solid #ece8df;
+}
+
+.nav {
+    min-height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.brand {
+    color: var(--deep-green);
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+.brand strong {
+    display: block;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
+
+.brand span {
+    display: block;
+    color: var(--gold);
+    font-size: 9px;
+    letter-spacing: 3px;
+    margin-top: 7px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    font-size: 12px;
+}
+
+.nav-links a:not(.nav-button):hover {
+    color: var(--gold);
+}
+
+.nav-button {
+    border: 1px solid var(--green);
+    padding: 11px 18px;
+    color: var(--green);
+    transition: .2s;
+}
+
+.nav-button:hover {
+    background: var(--green);
+    color: white;
+}
+
+/* ORGANIC AURORA HERO */
+
+.welcome {
+    min-height: 330px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px 65px;
+    color: white;
+
+    background:
+        linear-gradient(
+            rgba(19, 35, 28, .35),
+            rgba(19, 35, 28, .55)
+        ),
+        url("images2/aurora2.jpg") center 45% / cover no-repeat;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 78%,
+        97% 82%,
+        93% 86%,
+        88% 90%,
+        82% 94%,
+        75% 97%,
+        66% 99%,
+        56% 100%,
+        46% 99%,
+        36% 97%,
+        27% 94%,
+        19% 90%,
+        12% 86%,
+        6% 82%,
+        0 78%
+    );
+}
+
+.welcome-inner {
+    max-width: 760px;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome .eyebrow {
+    color: #e4cc91;
+}
+
+.welcome h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: white;
+    font-weight: normal;
+    font-size: clamp(35px, 4.5vw, 52px);
+    line-height: 1.13;
+    margin: 10px 0;
+    text-shadow: 0 2px 15px rgba(0,0,0,.2);
+}
+
+.welcome p {
+    max-width: 560px;
+    margin: 0 auto 17px;
+    color: #f7f5ef;
+    font-size: 13px;
+}
+
+.welcome .button {
+    background: var(--beige);
+    color: var(--deep-green);
+    border-color: var(--beige);
+}
+
+.welcome .button:hover {
+    background: white;
+}
+
+.welcome-line {
+    width: 48px;
+    height: 2px;
+    background: #cbb174;
+    margin: 17px auto 0;
+}
+
+/* INTRODUCTION */
+
+.intro {
+    padding: 55px 0 50px;
+    text-align: center;
+}
+
+.intro h2 {
+    max-width: 690px;
+    margin: 14px auto;
+}
+
+.intro p {
+    max-width: 600px;
+    margin: auto;
+    font-size: 14px;
+}
+
+/* SERVICES */
+
+.services {
+    padding: 15px 0 85px;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.service-card {
+    min-width: 0;
+}
+
+.service-image {
+    overflow: hidden;
+}
+
+.service-card img {
+    height: 245px;
+    transition: transform .5s;
+}
+
+.service-card:hover img {
+    transform: scale(1.035);
+}
+
+.service-card h3 {
+    color: var(--deep-green);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 22px;
+    font-weight: normal;
+    margin: 18px 0 7px;
+}
+
+.service-card p {
+    font-size: 13px;
+    margin-bottom: 13px;
+}
+
+.text-link {
+    display: inline-block;
+    color: var(--green);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 4px;
+}
+
+/* ABOUT */
+
+.about {
+    padding: 95px 0;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    align-items: center;
+    gap: 70px;
+}
+
+.about-image {
+    position: relative;
+    isolation: isolate;
+    padding: 25px;
+}
+
+.about-image::before {
+    content: "";
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    background: #dce6d8;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.about-image::after {
+    content: "";
+    position: absolute;
+    width: 115px;
+    height: 115px;
+    border: 17px solid #c7d5bd;
+    border-radius: 50%;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.about-image img {
+    width: 100%;
+    height: 430px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 18px 40px rgba(41, 60, 46, .14);
+    position: relative;
+    z-index: 1;
+}
+
+.about-copy p {
+    font-size: 14px;
+    margin-bottom: 17px;
+}
+
+.about-copy .button {
+    margin-top: 10px;
+}
+
+/* AUTOMATIC IMAGE GALLERY */
+
+.gallery-section {
+    background: var(--beige);
+    padding: 70px 0;
+    overflow: hidden;
+}
+
+.gallery-heading {
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+}
+
+.gallery-heading p {
+    font-size: 14px;
+}
+
+.slider {
+    width: min(1000px, 90%);
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    border-radius: 35px 35px 90px 35px;
+}
+
+.slider-track {
+    display: flex;
+    width: 400%;
+    animation: moveImages 24s infinite;
+}
+
+.slide {
+    flex: 0 0 25%;
+    width: 25%;
+    height: 480px;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide:nth-child(1) {
+    border-radius: 35px 100px 35px 35px;
+}
+
+.slide:nth-child(2) {
+    border-radius: 100px 35px 35px 35px;
+}
+
+.slide:nth-child(3) {
+    border-radius: 35px 35px 100px 35px;
+}
+
+.slide:nth-child(4) {
+    border-radius: 35px 35px 35px 100px;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .6s;
+}
+
+.slide:hover img {
+    transform: scale(1.04);
+}
+
+.slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(24, 39, 29, .68),
+        transparent 55%
+    );
+    pointer-events: none;
+}
+
+.slide-caption {
+    position: absolute;
+    z-index: 2;
+    left: 30px;
+    bottom: 24px;
+    color: white;
+}
+
+.slide-caption span {
+    display: block;
+    color: #e2c990;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.slide-caption h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: normal;
+    font-size: 29px;
+    margin-top: 5px;
+}
+
+@keyframes moveImages {
+    0%, 20% {
+        transform: translateX(0);
+    }
+
+    25%, 45% {
+        transform: translateX(-25%);
+    }
+
+    50%, 70% {
+        transform: translateX(-50%);
+    }
+
+    75%, 95% {
+        transform: translateX(-75%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* DESTINATIONS */
+
+.destinations {
+    padding: 85px 0 95px;
+    background: var(--white);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.section-heading h2 {
+    margin-bottom: 0;
+}
+
+.section-heading p {
+    max-width: 360px;
+    font-size: 13px;
+}
+
+.destination-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.destination-card {
+    background: var(--beige);
+    transition: transform .25s;
+}
+
+.destination-card:hover {
+    transform: translateY(-4px);
+}
+
+.destination-card img {
+    height: 225px;
+}
+
+.destination-copy {
+    padding: 20px 21px 25px;
+}
+
+.destination-copy h3 {
+    color: var(--deep-green);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px;
+    font-weight: normal;
+}
+
+.destination-copy p {
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+/* CONTACT */
+
+.contact-banner {
+    background: var(--deep-green);
+    color: white;
+    text-align: center;
+    padding: 75px 20px;
+}
+
+.contact-banner .eyebrow {
+    color: #ddc58f;
+}
+
+.contact-banner h2 {
+    color: white;
+    margin-top: 13px;
+}
+
+.contact-banner p {
+    color: #d8dfd4;
+    max-width: 520px;
+    margin: 0 auto 25px;
+    font-size: 14px;
+}
+
+/* FOOTER */
+
+footer {
+    padding: 36px 0 22px;
+    background: #f1ede3;
+}
+
+.footer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    padding-bottom: 25px;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 12px;
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+}
+
+.footer-bottom {
+    border-top: 1px solid #ded8ca;
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+/* WHATSAPP */
+
+.whatsapp {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10;
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    background: #38845b;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+    box-shadow: 0 4px 15px #0002;
+}
+
+/* TABLET */
+
+@media (max-width: 800px) {
+    .nav {
+        padding: 20px 0;
+        flex-direction: column;
+    }
+
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 13px 18px;
+    }
+
+    .service-grid,
+    .destination-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px 18px;
+    }
+
+    .about-grid {
+        gap: 35px;
+    }
+
+    .about-image {
+        padding: 20px;
+    }
+
+    .about-image::before {
+        width: 145px;
+        height: 145px;
+    }
+
+    .about-image::after {
+        width: 90px;
+        height: 90px;
+        border-width: 13px;
+    }
+
+    .about-image img {
+        height: 350px;
+    }
+
+    .section-heading {
+        display: block;
+    }
+
+    .section-heading p {
+        margin-top: 15px;
+    }
+
+    .slide {
+        height: 420px;
+    }
+
+    .slider {
+        border-radius: 28px 28px 65px 28px;
+    }
+
+    .slide:nth-child(1) {
+        border-radius: 28px 70px 28px 28px;
+    }
+
+    .slide:nth-child(2) {
+        border-radius: 70px 28px 28px 28px;
+    }
+
+    .slide:nth-child(3) {
+        border-radius: 28px 28px 70px 28px;
+    }
+
+    .slide:nth-child(4) {
+        border-radius: 28px 28px 28px 70px;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 560px) {
+    .container {
+        width: 88%;
+    }
+
+    .nav-links {
+        gap: 12px;
+        font-size: 11px;
+    }
+
+    .welcome {
+        min-height: 280px;
+        padding: 30px 16px 55px;
+        background-position: center;
+        clip-path: polygon(
+            0 0,
+            100% 0,
+            100% 84%,
+            94% 89%,
+            85% 94%,
+            74% 98%,
+            60% 100%,
+            45% 99%,
+            30% 96%,
+            17% 91%,
+            7% 86%,
+            0 82%
+        );
+    }
+
+    .welcome h1 {
+        font-size: 35px;
+        margin: 8px 0;
+    }
+
+    .welcome p {
+        font-size: 12px;
+        margin-bottom: 14px;
+    }
+
+    .welcome-line {
+        margin-top: 12px;
+    }
+
+    .service-grid,
+    .destination-grid,
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .intro {
+        padding: 45px 0 40px;
+    }
+
+    .service-card img {
+        height: 240px;
+    }
+
+    .about {
+        padding: 65px 0;
+    }
+
+    .about-image {
+        width: 100%;
+        max-width: 390px;
+        margin: 0 auto 15px;
+        padding: 22px;
+    }
+
+    .about-image::before {
+        width: 145px;
+        height: 145px;
+        top: 0;
+        left: 0;
+    }
+
+    .about-image::after {
+        width: 85px;
+        height: 85px;
+        border-width: 12px;
+        right: 0;
+        bottom: 0;
+    }
+
+    .about-image img {
+        height: 300px;
+    }
+
+    .gallery-section {
+        padding: 55px 0;
+    }
+
+    .slider {
+        width: 92%;
+        border-radius: 22px 22px 55px 22px;
+    }
+
+    .slide {
+        height: 350px;
+    }
+
+    .slide:nth-child(1) {
+        border-radius: 22px 55px 22px 22px;
+    }
+
+    .slide:nth-child(2) {
+        border-radius: 55px 22px 22px 22px;
+    }
+
+    .slide:nth-child(3) {
+        border-radius: 22px 22px 55px 22px;
+    }
+
+    .slide:nth-child(4) {
+        border-radius: 22px 22px 22px 55px;
+    }
+
+    .slide-caption {
+        left: 18px;
+        bottom: 17px;
+    }
+
+    .slide-caption h3 {
+        font-size: 22px;
+    }
+
+    .destinations {
+        padding: 65px 0;
+    }
+
+    .destination-card img {
+        height: 235px;
+    }
+
+    .footer-top,
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .slider-track {
+        animation: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="container nav">
+        <a href="index.html" class="brand">
+            <strong>ICELAND TRANSFER</strong>
+            <span>YOUR JOURNEY, OUR DRIVE</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="transfers.html">Services</a>
+            <a href="golden-circle-tour.html">Destinations</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="booking.html" class="nav-button">Book a Transfer</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+<section class="welcome" id="home">
+    <div class="welcome-inner">
+        <div class="eyebrow">PRIVATE JOURNEYS ACROSS ICELAND</div>
+        <h1>Discover Iceland,<br>Beautifully.</h1>
+
+        <p>
+            Private transfers and unforgettable tours,
+            designed to make every moment of your Iceland journey special.
+        </p>
+
+        <a href="booking.html" class="button">Explore Our Services</a>
+        <div class="welcome-line"></div>
+    </div>
+</section>
+
+<section class="intro">
+    <div class="container">
+        <div class="eyebrow">Travel with peace of mind</div>
+        <h2>Your Iceland Adventure Begins With the Journey</h2>
+        <p>
+            From your arrival in Iceland to its most breathtaking destinations,
+            enjoy a private travel experience focused on comfort and discovery.
+        </p>
+    </div>
+</section>
+
+<section class="services" id="services">
+    <div class="container">
+        <div class="service-grid">
+
+            <article class="service-card">
+                <div class="service-image">
+                    <img src="images2/airport-transfer.jpg" alt="Airport transfer in Iceland">
+                </div>
+                <h3>Airport Transfers</h3>
+                <p>Enjoy a comfortable private transfer to your destination.</p>
+                <a class="text-link" href="airport-transportation.html">DISCOVER MORE →</a>
+            </article>
+
+            <article class="service-card">
+                <div class="service-image">
+                    <img src="images2/private-transfer.jpg" alt="Private port and city transfers in Iceland">
+                </div>
+                <h3>Cruise Port Transfers</h3>
+                <p>Travel between the port and the places you want to discover.</p>
+                <a class="text-link" href="transfers.html">DISCOVER MORE →</a>
+            </article>
+
+            <article class="service-card">
+                <div class="service-image">
+                    <img src="images2/day-trips.jpg" alt="Private sightseeing tours in Iceland">
+                </div>
+                <h3>Private Tours</h3>
+                <p>Discover Iceland's extraordinary scenery at your own pace.</p>
+                <a class="text-link" href="golden-circle-tour.html">DISCOVER MORE →</a>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section class="about" id="about">
+    <div class="container about-grid">
+
+        <div class="about-image">
+            <img src="images2/hotel-transfer.jpg" alt="Iceland Transfer vehicle and scenery">
+        </div>
+
+        <div class="about-copy">
+            <div class="eyebrow">Iceland Transfer</div>
+            <h2>Every Journey<br>Should Feel Special.</h2>
+            <p>
+                We make exploring Iceland easier with private transportation
+                for airport arrivals, cruise visits and sightseeing trips.
+            </p>
+            <p>
+                Our focus is simple: a comfortable journey, personal service
+                and more time to enjoy Iceland's remarkable beauty.
+            </p>
+            <a href="about.html" class="button">Discover Our Story</a>
+        </div>
+
+    </div>
+</section>
+
+<section class="gallery-section">
+    <div class="gallery-heading">
+        <div class="eyebrow">The beauty of Iceland</div>
+        <h2>Discover Amazing Places</h2>
+        <p>
+            A glimpse of the incredible landscapes waiting for you.
+            Sit back and let Iceland inspire your next adventure.
+        </p>
+    </div>
+
+    <div class="slider">
+        <div class="slider-track">
+
+            <div class="slide">
+                <img src="images2/day-trips.jpg" alt="Golden Circle and Icelandic scenery">
+                <div class="slide-caption">
+                    <span>Discover Iceland</span>
+                    <h3>The Golden Circle</h3>
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="images2/iceland-road.jpg" alt="Road through Iceland's landscapes">
+                <div class="slide-caption">
+                    <span>Natural Wonders</span>
+                    <h3>Magnificent Landscapes</h3>
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="images2/transfers-hero.jpg" alt="Iceland's dramatic scenery">
+                <div class="slide-caption">
+                    <span>Wild Landscapes</span>
+                    <h3>Explore Iceland</h3>
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="images2/aurora2.jpg" alt="Northern Lights in Iceland">
+                <div class="slide-caption">
+                    <span>A Magical Experience</span>
+                    <h3>The Northern Lights</h3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="destinations" id="destinations">
+    <div class="container">
+
+        <div class="section-heading">
+            <div>
+                <div class="eyebrow">Places worth discovering</div>
+                <h2>Explore Iceland</h2>
+            </div>
+
+            <p>
+                From geothermal waters to dramatic waterfalls
+                and incredible night skies.
+            </p>
+        </div>
+
+        <div class="destination-grid">
+
+            <a class="destination-card" href="golden-circle-tour.html">
+                <img src="images2/day-trips.jpg" alt="Golden Circle tour">
+                <div class="destination-copy">
+                    <h3>The Golden Circle</h3>
+                    <p>Discover Iceland's most iconic natural wonders.</p>
+                </div>
+            </a>
+
+            <a class="destination-card" href="booking.html">
+                <img src="images2/transfers-hero.jpg" alt="Icelandic waterfalls and landscapes">
+                <div class="destination-copy">
+                    <h3>Waterfall Wonders</h3>
+                    <p>Experience the beauty and power of Icelandic waterfalls.</p>
+                </div>
+            </a>
+
+            <a class="destination-card" href="magical-northern-lights-tour.html">
+                <img src="images2/aurora2.jpg" alt="Northern Lights in Iceland">
+                <div class="destination-copy">
+                    <h3>The Northern Lights</h3>
+                    <p>Explore Iceland's night sky on a magical private tour.</p>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<section class="contact-banner" id="contact">
+    <div class="eyebrow">Your journey starts here</div>
+    <h2>Ready to Discover Iceland?</h2>
+    <p>
+        Tell us about your plans and let us help you arrange your next journey.
+    </p>
+
+    <a href="contact.html" class="button button-light">
+        Contact Us
+    </a>
+
+    <br><br>
+
+    <a href="booking.html" class="button button-light">
+        Book a Transfer
+    </a>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+
+        <div class="footer-top">
+            <a href="index.html" class="brand">
+                <strong>ICELAND TRANSFER</strong>
+                <span>YOUR JOURNEY, OUR DRIVE</span>
+            </a>
+
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="transfers.html">Services</a>
+                <a href="golden-circle-tour.html">Destinations</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="booking.html">Book a Transfer</a>
+
+                <a href="https://www.facebook.com/share/1CSMPP15kx/"
+                   target="_blank" rel="noopener">Facebook</a>
+
+                <a href="https://www.instagram.com/mazenshtay?xtok=MWNiaXR4ZHM5OTYwag=="
+                   target="_blank" rel="noopener">Instagram</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Iceland Transfer. All rights reserved.</span>
+            <a href="tel:+963998482372">+963 998 482 372</a>
+        </div>
+
+    </div>
+</footer>
+
+<a class="whatsapp"
+   href="https://wa.me/963998482372"
+   target="_blank"
+   rel="noopener"
+   aria-label="WhatsApp">☏</a>
+
+</body>
+</html>

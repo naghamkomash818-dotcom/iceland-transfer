@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us | Iceland Transfer</title>
+
+    <meta name="description"
+        content="Discover Iceland Transfer, your personal private transfer service for comfortable journeys and unforgettable experiences in Iceland.">
+
+    <style>
+        /* =========================
+           COLORS & GENERAL SETTINGS
+        ========================= */
+
+        :root {
+            --green: #465b45;
+            --deep-green: #293c2e;
+            --beige: #f5f1e8;
+            --gold: #b99b61;
+            --white: #fffdf9;
+            --text: #3d4239;
+            --muted: #777a70;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--white);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1160px, 90%);
+            margin: auto;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            color: var(--deep-green);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(32px, 4vw, 48px);
+            line-height: 1.2;
+            font-weight: normal;
+            margin-bottom: 22px;
+        }
+
+        .section-text {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--green);
+            color: var(--white);
+            padding: 14px 27px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            transition: 0.3s ease;
+            border: 1px solid var(--green);
+        }
+
+        .button:hover {
+            background: var(--deep-green);
+            transform: translateY(-3px);
+        }
+
+        .button-light {
+            background: var(--white);
+            color: var(--deep-green);
+            border-color: var(--white);
+        }
+
+        .button-light:hover {
+            background: var(--beige);
+            color: var(--deep-green);
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            background: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 3px 18px rgba(41, 60, 46, 0.06);
+        }
+
+        .nav {
+            min-height: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            color: var(--deep-green);
+            line-height: 1.2;
+            flex-shrink: 0;
+        }
+
+        .logo strong {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 23px;
+            letter-spacing: 1.5px;
+            font-weight: normal;
+        }
+
+        .logo span {
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            color: var(--gold);
+            margin-top: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 27px;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            font-size: 12px;
+            transition: 0.25s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+        }
+
+        .nav-book {
+            background: var(--green);
+            color: var(--white) !important;
+            padding: 12px 20px;
+            border-radius: 30px;
+        }
+
+        .nav-book:hover {
+            background: var(--deep-green);
+        }
+
+
+        /* =========================
+           HERO - AURORA BLENDING
+        ========================= */
+
+        .about-hero {
+            min-height: 470px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            isolation: isolate;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(27, 43, 31, 0.42) 0%,
+                    rgba(27, 43, 31, 0.48) 42%,
+                    rgba(27, 43, 31, 0.58) 66%,
+                    rgba(245, 241, 232, 0.25) 82%,
+                    var(--white) 100%
+                ),
+                url("images/aurora.jpg") center 45% / cover no-repeat;
+
+            margin-bottom: 0;
+        }
+
+        /* Soft fade from the aurora image into the page background */
+
+        .about-hero::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 175px;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 253, 249, 0) 0%,
+                rgba(255, 253, 249, 0.45) 42%,
+                rgba(255, 253, 249, 0.82) 75%,
+                var(--white) 100%
+            );
+
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: min(760px, 90%);
+            padding: 65px 0 105px;
+            color: var(--white);
+        }
+
+        .hero-content .eyebrow {
+            color: #e4cc9b;
+        }
+
+        .hero-content h1 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(40px, 6vw, 68px);
+            font-weight: normal;
+            line-height: 1.13;
+            margin-bottom: 22px;
+            text-shadow: 0 3px 22px rgba(0, 0, 0, 0.18);
+        }
+
+        .hero-content p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 15px;
+            color: rgba(255, 253, 249, 0.95);
+            line-height: 1.9;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .hero-decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 1px solid rgba(255, 253, 249, 0.28);
+            border-radius: 62% 38% 57% 43%;
+            right: 8%;
+            bottom: 18%;
+            transform: rotate(35deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-decoration-two {
+            width: 90px;
+            height: 90px;
+            left: 10%;
+            top: 18%;
+            border-radius: 40% 60% 45% 55%;
+            transform: rotate(-25deg);
+        }
+
+
+        /* =========================
+           INTRO / OUR STORY
+        ========================= */
+
+        .story-section {
+            position: relative;
+            padding: 55px 0 105px;
+            background: var(--white);
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 75px;
+        }
+
+        .story-image-area {
+            position: relative;
+            padding: 0 20px 22px 0;
+        }
+
+        .story-image {
+            width: 100%;
+            height: 440px;
+            object-fit: cover;
+            border-radius: 48% 48% 20px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .story-image-shape {
+            position: absolute;
+            width: 75%;
+            height: 75%;
+            right: 0;
+            bottom: 0;
+            background: #e5e8dc;
+            border-radius: 45% 55% 15% 15%;
+            transform: translate(13px, 13px);
+        }
+
+        .image-caption {
+            position: absolute;
+            z-index: 3;
+            left: -20px;
+            bottom: 50px;
+            background: var(--white);
+            padding: 17px 24px;
+            border-radius: 4px 25px 25px 25px;
+            box-shadow: 0 12px 35px rgba(41, 60, 46, 0.12);
+        }
+
+        .image-caption strong {
+            display: block;
+            color: var(--deep-green);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .image-caption span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .story-content {
+            padding: 10px 0;
+        }
+
+        .story-content .section-title {
+            max-width: 480px;
+        }
+
+        .story-content p {
+            margin-bottom: 17px;
+        }
+
+        .story-content .button {
+            margin-top: 14px;
+        }
+
+
+        /* =========================
+           OUR VALUES
+        ========================= */
+
+        .values-section {
+            background: var(--beige);
+            padding: 85px 0 95px;
+            border-radius: 65px 65px 0 0;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 50px;
+        }
+
+        .section-heading .section-title {
+            margin-bottom: 15px;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .value-card {
+            background: var(--white);
+            padding: 34px 27px;
+            border-radius: 25px 25px 25px 6px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(70, 91, 69, 0.06);
+        }
+
+        .value-card:nth-child(2) {
+            border-radius: 6px 25px 25px 25px;
+            transform: translateY(15px);
+        }
+
+        .value-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 35px rgba(41, 60, 46, 0.08);
+        }
+
+        .value-icon {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8ecdf;
+            color: var(--green);
+            border-radius: 50% 50% 50% 15%;
+            font-size: 24px;
+            margin-bottom: 22px;
+        }
+
+        .value-card h3 {
+            color: var(--deep-green);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 23px;
+            font-weight: normal;
+            margin-bottom: 12px;
+        }
+
+        .value-card p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+
+        /* =========================
+           EXPERIENCE SECTION
+        ========================= */
+
+        .experience-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 65px;
+            align-items: center;
+        }
+
+        .experience-image {
+            position: relative;
+            z-index: 1;
+        }
+
+        .experience-image img {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 18px 18px 48% 18px;
+        }
+
+        .experience-image::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            width: 130px;
+            height: 130px;
+            left: -20px;
+            top: -20px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+        }
+
+        .experience-content p {
+            margin-bottom: 18px;
+        }
+
+        .experience-note {
+            border-left: 3px solid var(--gold);
+            padding: 12px 0 12px 20px;
+            margin-top: 25px;
+            color: var(--deep-green);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 19px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           FINAL BOOKING BANNER
+        ========================= */
+
+        .booking-section {
+            padding: 0 0 90px;
+        }
+
+        .booking-banner {
+            background:
+                linear-gradient(
+                    110deg,
+                    rgba(41, 60, 46, 0.96),
+                    rgba(70, 91, 69, 0.89)
+                ),
+                url("images/waterfall.jpg") center / cover no-repeat;
+
+            color: var(--white);
+            text-align: center;
+            padding: 65px 25px;
+            border-radius: 70px 15px 70px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-banner::before,
+        .booking-banner::after {
+            content: "";
+            position: absolute;
+            width: 170px;
+            height: 170px;
+            border: 1px solid rgba(255, 253, 249, 0.18);
+            border-radius: 60% 40% 55% 45%;
+            transform: rotate(25deg);
+        }
+
+        .booking-banner::before {
+            left: -65px;
+            top: -70px;
+        }
+
+        .booking-banner::after {
+            right: -60px;
+            bottom: -85px;
+            transform: rotate(-25deg);
+        }
+
+        .booking-banner .eyebrow {
+            color: #e4cc9b;
+        }
+
+        .booking-banner h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(30px, 4vw, 45px);
+            font-weight: normal;
+            line-height: 1.25;
+            max-width: 700px;
+            margin: 0 auto 18px;
+        }
+
+        .booking-banner p {
+            color: rgba(255, 253, 249, 0.85);
+            max-width: 570px;
+            margin: 0 auto 28px;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            background: var(--deep-green);
+            color: var(--white);
+            padding: 55px 0 22px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 0.8fr 1fr;
+            gap: 45px;
+            padding-bottom: 40px;
+        }
+
+        .footer-logo {
+            display: inline-block;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+            letter-spacing: 1.5px;
+            margin-bottom: 7px;
+        }
+
+        .footer-tagline {
+            display: block;
+            color: #d2bd8e;
+            font-size: 9px;
+            letter-spacing: 2.5px;
+            margin-bottom: 20px;
+        }
+
+        .footer-description {
+            color: rgba(255, 253, 249, 0.7);
+            font-size: 13px;
+            max-width: 340px;
+            line-height: 1.9;
+        }
+
+        .footer h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 20px;
+            font-weight: normal;
+            margin-bottom: 18px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a,
+        .footer-contact p {
+            color: rgba(255, 253, 249, 0.72);
+            font-size: 13px;
+            transition: color 0.25s;
+        }
+
+        .footer-links a:hover,
+        .footer-contact a:hover {
+            color: #d2bd8e;
+        }
+
+        .footer-contact p {
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.13);
+            padding-top: 20px;
+            text-align: center;
+            color: rgba(255, 253, 249, 0.55);
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           WHATSAPP BUTTON
+        ========================= */
+
+        .whatsapp-float {
+            position: fixed;
+            z-index: 999;
+            right: 22px;
+            bottom: 22px;
+            width: 54px;
+            height: 54px;
+            background: #426c4a;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.85);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.18);
+            transition: 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: translateY(-4px) scale(1.04);
+        }
+
+
+        /* =========================
+           RESPONSIVE DESIGN
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 18px 0;
+                gap: 17px;
+            }
+
+            .logo {
+                align-items: center;
+            }
+
+            .nav-links {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 15px 22px;
+            }
+
+            .story-grid {
+                gap: 40px;
+            }
+
+            .story-image {
+                height: 370px;
+            }
+
+            .values-grid {
+                gap: 15px;
+            }
+
+            .value-card {
+                padding: 27px 20px;
+            }
+
+            .experience-grid {
+                gap: 40px;
+            }
+
+            .footer-grid {
+                gap: 28px;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 90%;
+            }
+
+            .nav {
+                min-height: auto;
+                padding: 17px 0;
+            }
+
+            .logo strong {
+                font-size: 21px;
+            }
+
+            .nav-links {
+                gap: 12px 17px;
+            }
+
+            .nav-links a {
+                font-size: 11px;
+            }
+
+            .nav-book {
+                padding: 9px 14px;
+            }
+
+            /* Softer image fade on mobile */
+
+            .about-hero {
+                min-height: 410px;
+
+                background:
+                    linear-gradient(
+                        to bottom,
+                        rgba(27, 43, 31, 0.43) 0%,
+                        rgba(27, 43, 31, 0.52) 52%,
+                        rgba(245, 241, 232, 0.28) 78%,
+                        var(--white) 100%
+                    ),
+                    url("images/aurora.jpg") center 45% / cover no-repeat;
+            }
+
+            .about-hero::after {
+                height: 140px;
+
+                background: linear-gradient(
+                    to bottom,
+                    rgba(255, 253, 249, 0) 0%,
+                    rgba(255, 253, 249, 0.58) 50%,
+                    var(--white) 100%
+                );
+            }
+
+            .hero-content {
+                padding: 55px 0 100px;
+            }
+
+            .hero-content h1 {
+                font-size: 43px;
+            }
+
+            .hero-content p {
+                font-size: 13px;
+            }
+
+            .hero-decoration {
+                width: 85px;
+                height: 85px;
+                right: 4%;
+                bottom: 13%;
+            }
+
+            .hero-decoration-two {
+                width: 60px;
+                height: 60px;
+                left: 4%;
+                top: 12%;
+            }
+
+            .story-section {
+                padding: 35px 0 70px;
+            }
+
+            .story-grid,
+            .experience-grid {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .story-image-area {
+                width: 92%;
+                margin: 0 auto;
+            }
+
+            .story-image {
+                height: 370px;
+            }
+
+            .image-caption {
+                left: -10px;
+                bottom: 30px;
+                padding: 13px 18px;
+            }
+
+            .image-caption strong {
+                font-size: 18px;
+            }
+
+            .story-content .section-title,
+            .experience-content .section-title {
+                font-size: 35px;
+            }
+
+            .values-section {
+                padding: 65px 0 75px;
+                border-radius: 40px 40px 0 0;
+            }
+
+            .section-heading {
+                margin-bottom: 35px;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+                gap: 17px;
+            }
+
+            .value-card,
+            .value-card:nth-child(2) {
+                transform: none;
+                padding: 28px;
+            }
+
+            .experience-section {
+                padding: 70px 0;
+            }
+
+            .experience-image img {
+                height: 300px;
+            }
+
+            .booking-section {
+                padding-bottom: 65px;
+            }
+
+            .booking-banner {
+                padding: 50px 23px;
+                border-radius: 45px 12px 45px 12px;
+            }
+
+            .booking-banner h2 {
+                font-size: 33px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer {
+                padding-top: 45px;
+            }
+
+            .whatsapp-float {
+                right: 15px;
+                bottom: 15px;
+                width: 49px;
+                height: 49px;
+                font-size: 23px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="container nav">
+
+            <a href="index.html" class="logo">
+                <strong>ICELAND TRANSFER</strong>
+                <span>YOUR JOURNEY, OUR DRIVE</span>
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="transfers.html">Transfers</a>
+                <a href="destinations.html">Destinations</a>
+                <a href="about.html" class="active">About Us</a>
+                <a href="reviews.html">Reviews</a>
+                <a href="contact.html">Contact</a>
+                <a href="transfers.html#booking" class="nav-book">Book a Transfer</a>
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- HERO / AURORA -->
+
+    <section class="about-hero">
+
+        <div class="hero-decoration"></div>
+        <div class="hero-decoration hero-decoration-two"></div>
+
+        <div class="hero-content">
+
+            <span class="eyebrow">A Personal Touch in Iceland</span>
+
+            <h1>More Than Just<br>A Transfer</h1>
+
+            <p>
+                Discover the beauty of Iceland with a comfortable,
+                personal journey designed around you.
+                Every road has a story, and every journey deserves care.
+            </p>
+
+           
+
+        </div>
+
+    </section>
+
+
+    <!-- OUR STORY -->
+
+    <section class="story-section" id="our-story">
+
+        <div class="container story-grid">
+
+            <div class="story-image-area">
+
+                <div class="story-image-shape"></div>
+
+                <img
+                    src="images/hero-van.jpg"
+                    alt="Private transfer vehicle in Iceland"
+                    class="story-image">
+
+                <div class="image-caption">
+                    <strong>Your Journey</strong>
+                    <span>Comfortable. Personal. Memorable.</span>
+                </div>
+
+            </div>
+
+
+            <div class="story-content">
+
+                <span class="eyebrow">Who We Are</span>
+
+                <h2 class="section-title">
+                    A Better Way to Explore Iceland
+                </h2>
+
+                <p class="section-text">
+                    Iceland is a land of extraordinary landscapes,
+                    peaceful moments, and unforgettable adventures.
+                    Getting there should be just as enjoyable as
+                    the destination itself.
+                </p>
+
+                <p class="section-text">
+                    Iceland Transfer offers private transportation
+                    for travelers who value comfort, flexibility,
+                    and a more personal experience. Whether you are
+                    arriving at the airport, visiting a famous
+                    attraction, or discovering a hidden corner of
+                    Iceland, your journey matters to us.
+                </p>
+
+                <p class="section-text">
+                    Our goal is simple: to make getting around Iceland
+                    easy, comfortable, and stress-free, so you can
+                    focus on enjoying every moment of your trip.
+                </p>
+
+                <a href="transfers.html" class="button">
+                    Explore Our Services <span>→</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- OUR VALUES -->
+
+    <section class="values-section">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <span class="eyebrow">What Matters to Us</span>
+
+                <h2 class="section-title">
+                    The Journey Is Part of the Experience
+                </h2>
+
+                <p class="section-text">
+                    We believe that great transportation is about
+                    more than reaching a destination. It is about
+                    how you feel along the way.
+                </p>
+
+            </div>
+
+
+            <div class="values-grid">
+
+                <article class="value-card">
+
+                    <div class="value-icon">♡</div>
+
+                    <h3>Personal Service</h3>
+
+                    <p>
+                        Every traveler is different. We aim to provide
+                        a friendly, personal experience that respects
+                        your plans, preferences, and travel needs.
+                    </p>
+
+                </article>
+
+
+                <article class="value-card">
+
+                    <div class="value-icon">✧</div>
+
+                    <h3>Comfort & Care</h3>
+
+                    <p>
+                        From pickup to drop-off, we want your journey
+                        to feel smooth, comfortable, and thoughtfully
+                        arranged around your trip.
+                    </p>
+
+                </article>
+
+
+                <article class="value-card">
+
+                    <div class="value-icon">⌁</div>
+
+                    <h3>Discover Iceland</h3>
+
+                    <p>
+                        Spend less time worrying about transportation
+                        and more time enjoying Iceland's remarkable
+                        landscapes and memorable destinations.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- THE EXPERIENCE -->
+
+    <section class="experience-section">
+
+        <div class="container experience-grid">
+
+            <div class="experience-image">
+
+                <img
+                    src="images/waterfall.jpg"
+                    alt="Beautiful Icelandic waterfall surrounded by nature">
+
+            </div>
+
+
+            <div class="experience-content">
+
+                <span class="eyebrow">Made for Your Journey</span>
+
+                <h2 class="section-title">
+                    See More.<br>Worry Less.
+                </h2>
+
+                <p class="section-text">
+                    From the moment you arrive in Iceland to the
+                    final stop on your itinerary, having transportation
+                    arranged can make your travels easier.
+                </p>
+
+                <p class="section-text">
+                    Whether you need an airport transfer, a ride to
+                    your accommodation, or transportation to one of
+                    Iceland's incredible attractions, we are here to
+                    help you plan the journey that suits you.
+                </p>
+
+                <div class="experience-note">
+                    Your destination is important.
+                    Your experience along the way matters just as much.
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- BOOKING BANNER -->
+
+    <section class="booking-section" id="book">
+
+        <div class="container">
+
+            <div class="booking-banner">
+
+                <span class="eyebrow">Your Iceland Adventure Starts Here</span>
+
+                <h2>Ready to Explore Iceland Your Way?</h2>
+
+                <p>
+                    Let us take care of the journey while you enjoy
+                    the landscapes, the moments, and the memories
+                    waiting for you in Iceland.
+                </p>
+
+                <a href="transfers.html#booking" class="button button-light">
+                    Plan Your Transfer <span>→</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-grid">
+
+                <div>
+
+                    <a href="index.html" class="footer-logo">
+                        ICELAND TRANSFER
+                    </a>
+
+                    <span class="footer-tagline">
+                        YOUR JOURNEY, OUR DRIVE
+                    </span>
+
+                    <p class="footer-description">
+                        Private transfers in Iceland, with a personal
+                        touch. Travel comfortably and enjoy more of
+                        what makes Iceland unforgettable.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h3>Explore</h3>
+
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="transfers.html">Our Transfers</a>
+                        <a href="destinations.html">Destinations</a>
+                        <a href="about.html">About Us</a>
+                        <a href="reviews.html">Reviews</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+
+                </div>
+
+
+                <div class="footer-contact">
+
+                    <h3>Get in Touch</h3>
+
+                    <p>
+                        Phone:
+                        <a href="tel:+3548333707">+354 833 3707</a>
+                    </p>
+
+                    <p>
+                        WhatsApp:
+                        <a href="https://wa.me/3548333707"
+                           target="_blank" rel="noopener">
+                            Message Us
+                        </a>
+                    </p>
+
+                    <p>
+                        <a href="https://www.facebook.com/share/1CSMPP15kx/"
+                           target="_blank" rel="noopener">
+                            Facebook
+                        </a>
+                    </p>
+
+                    <p>
+                        <a href="https://www.instagram.com/mazenshtay?xtok=MWNiaXR4ZHM5OTYwag=="
+                           target="_blank" rel="noopener">
+                            Instagram
+                        </a>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+                © 2026 Iceland Transfer. All rights reserved.
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- WHATSAPP FLOATING BUTTON -->
+
+    <a
+        href="https://wa.me/3548333707"
+        class="whatsapp-float"
+        target="_blank"
+        rel="noopener"
+        aria-label="Contact us on WhatsApp">
+        ☎
+    </a>
+
+</body>
+
+</html>

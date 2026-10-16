@@ -1,0 +1,833 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Book Your Journey | Iceland Transfer</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --green: #465b45;
+        --deep-green: #293c2e;
+        --beige: #f5f1e8;
+        --gold: #b99b61;
+        --white: #fffdf9;
+        --text: #3d4239;
+        --muted: #777a70;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: var(--white);
+        color: var(--text);
+        line-height: 1.7;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* HEADER */
+
+    header {
+        background-color: var(--deep-green);
+        color: white;
+        padding: 20px 7%;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        font-size: 23px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .logo span {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 4px;
+        color: #d8c9a8;
+        text-align: center;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        flex-wrap: wrap;
+    }
+
+    nav a {
+        color: #f5f1e8;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+
+    nav a:hover {
+        color: #d6bd87;
+    }
+
+    .book-button {
+        background-color: var(--gold);
+        color: var(--deep-green);
+        padding: 10px 18px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    /* HERO */
+
+    .hero {
+        background:
+            linear-gradient(rgba(30, 48, 35, 0.68), rgba(30, 48, 35, 0.76)),
+            url("images2/transfers-hero.jpg") center/cover no-repeat;
+        min-height: 390px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 65px 20px;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-content {
+        max-width: 760px;
+    }
+
+    .hero-label {
+        color: #e0c58c;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+
+    .hero h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(37px, 6vw, 58px);
+        font-weight: normal;
+        line-height: 1.2;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        color: #f0eee7;
+        font-size: 15px;
+        max-width: 620px;
+        margin: auto;
+    }
+
+    .hero-button {
+        display: inline-block;
+        background-color: var(--gold);
+        color: var(--deep-green);
+        padding: 13px 25px;
+        border-radius: 4px;
+        margin-top: 28px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .hero-button:hover {
+        background-color: #d5bd89;
+    }
+
+    /* BREADCRUMB */
+
+    .breadcrumb {
+        padding: 18px 7%;
+        font-size: 13px;
+        color: var(--muted);
+        border-bottom: 1px solid #eee9df;
+    }
+
+    .breadcrumb a {
+        color: var(--green);
+    }
+
+    /* BOOKING INTRO */
+
+    .booking-section {
+        max-width: 1250px;
+        margin: auto;
+        padding: 65px 25px 80px;
+    }
+
+    .section-heading {
+        text-align: center;
+        margin-bottom: 42px;
+    }
+
+    .small-title {
+        color: var(--gold);
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .section-heading h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 36px;
+        font-weight: normal;
+        color: var(--deep-green);
+        margin-bottom: 12px;
+    }
+
+    .section-heading p {
+        max-width: 650px;
+        margin: auto;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    /* SERVICE CARDS */
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px;
+    }
+
+    .service-card {
+        background-color: white;
+        border: 1px solid #e8e3d8;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(41, 60, 46, 0.07);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 32px rgba(41, 60, 46, 0.13);
+    }
+
+    .image-container {
+        height: 260px;
+        overflow: hidden;
+        background-color: var(--beige);
+    }
+
+    .service-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .service-card:hover .service-image {
+        transform: scale(1.04);
+    }
+
+    .service-content {
+        padding: 25px 27px 28px;
+    }
+
+    .service-label {
+        display: inline-block;
+        background-color: var(--beige);
+        color: var(--green);
+        padding: 5px 11px;
+        border-radius: 3px;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+    }
+
+    .service-content h3 {
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--deep-green);
+        font-size: 27px;
+        font-weight: normal;
+        margin-bottom: 10px;
+    }
+
+    .service-content p {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 22px;
+        min-height: 48px;
+    }
+
+    .service-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        padding-top: 18px;
+        border-top: 1px solid #eee9df;
+    }
+
+    .service-type {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .service-link {
+        display: inline-block;
+        background-color: var(--green);
+        color: white;
+        padding: 11px 17px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .service-link:hover {
+        background-color: var(--deep-green);
+    }
+
+    /* HOW IT WORKS */
+
+    .how-it-works {
+        background-color: var(--beige);
+        padding: 60px 25px;
+    }
+
+    .steps-container {
+        max-width: 1050px;
+        margin: auto;
+    }
+
+    .steps-container > h2 {
+        text-align: center;
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--deep-green);
+        font-size: 34px;
+        font-weight: normal;
+        margin-bottom: 38px;
+    }
+
+    .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 25px;
+    }
+
+    .step {
+        text-align: center;
+        padding: 22px 18px;
+        background-color: rgba(255, 253, 249, 0.75);
+        border-radius: 7px;
+    }
+
+    .step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background-color: var(--green);
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .step h3 {
+        color: var(--deep-green);
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .step p {
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    /* HELP SECTION */
+
+    .help-section {
+        padding: 55px 20px;
+        text-align: center;
+    }
+
+    .help-section h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 31px;
+        font-weight: normal;
+        color: var(--deep-green);
+        margin-bottom: 10px;
+    }
+
+    .help-section p {
+        max-width: 600px;
+        margin: 0 auto 22px;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .help-button {
+        display: inline-block;
+        border: 1px solid var(--green);
+        color: var(--green);
+        padding: 12px 23px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .help-button:hover {
+        background-color: var(--green);
+        color: white;
+    }
+
+    /* FOOTER */
+
+    footer {
+        background-color: var(--deep-green);
+        color: #f5f1e8;
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    .footer-logo {
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+    }
+
+    footer p {
+        font-size: 12px;
+        color: #d3d4ca;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 22px;
+        flex-wrap: wrap;
+        margin: 15px 0;
+        font-size: 13px;
+    }
+
+    .footer-links a:hover {
+        color: #d6bd87;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 750px) {
+        header {
+            padding: 18px 6%;
+        }
+
+        .navbar {
+            flex-direction: column;
+        }
+
+        nav {
+            justify-content: center;
+            gap: 13px 18px;
+        }
+
+        .services-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .image-container {
+            height: 240px;
+        }
+
+        .steps-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .hero {
+            min-height: 340px;
+            padding: 50px 20px;
+        }
+
+        .booking-section {
+            padding: 45px 18px 55px;
+        }
+
+        .section-heading h2 {
+            font-size: 30px;
+        }
+
+        .service-content {
+            padding: 22px 20px;
+        }
+    }
+</style>
+
+</head><body><!-- HEADER -->
+
+<header>
+    <div class="navbar">
+
+        <a href="index.html" class="logo">
+            ICELAND TRANSFER
+            <span>YOUR JOURNEY, OUR DRIVE</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="transfers.html">Transfers</a>
+            <a href="golden-circle-tour.html">Destinations</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+            <a href="booking.html" class="book-button">Book a Transfer</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-label">YOUR ICELAND JOURNEY STARTS HERE</div>
+
+        <h1>Book Your Journey</h1>
+
+        <p>
+            From airport transfers to unforgettable Icelandic adventures,
+            choose your service and let us help you plan a comfortable journey.
+        </p>
+
+        <a href="#services" class="hero-button">
+            Explore Our Services ↓
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- BREADCRUMB -->
+
+<div class="breadcrumb">
+    <a href="index.html">Home</a>
+    &nbsp; / &nbsp;
+    Booking
+</div>
+
+
+<!-- BOOKING OPTIONS -->
+
+<main>
+
+    <section class="booking-section" id="services">
+
+        <div class="section-heading">
+
+            <div class="small-title">CHOOSE YOUR EXPERIENCE</div>
+
+            <h2>How Would You Like to Travel?</h2>
+
+            <p>
+                Select one of our services below to view the details,
+                enter your travel information, and prepare your booking.
+            </p>
+
+        </div>
+
+
+        <div class="services-grid">
+
+
+            <!-- KEFLAVIK SHUTTLE -->
+
+            <article class="service-card">
+
+                <div class="image-container">
+
+                    <img
+                        class="service-image"
+                        src="images2/airport-transfer.jpg"
+                        alt="Keflavik airport transportation"
+                        onerror="this.onerror=null; this.src='images2/transfers-hero.jpg';"
+                    >
+
+                </div>
+
+                <div class="service-content">
+
+                    <span class="service-label">AIRPORT TRANSFER</span>
+
+                    <h3>Keflavik KEF Shuttle</h3>
+
+                    <p>
+                        Arrange transportation between Keflavik International
+                        Airport and your chosen destination in Iceland.
+                    </p>
+
+                    <div class="service-footer">
+
+                        <span class="service-type">Airport transportation</span>
+
+                        <a href="keflavik-shuttle.html" class="service-link">
+                            Book Now →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- REYKJAVIK SHUTTLE -->
+
+            <article class="service-card">
+
+                <div class="image-container">
+
+                    <img
+                        class="service-image"
+                        src="images2/private-transfer.jpg"
+                        alt="Private transportation in Reykjavik"
+                        onerror="this.onerror=null; this.src='images2/airport-transfer.jpg';"
+                    >
+
+                </div>
+
+                <div class="service-content">
+
+                    <span class="service-label">CITY TRANSFER</span>
+
+                    <h3>Reykjavik Shuttle</h3>
+
+                    <p>
+                        Plan a comfortable private transfer to or from
+                        Reykjavik, tailored to your travel plans.
+                    </p>
+
+                    <div class="service-footer">
+
+                        <span class="service-type">Private transportation</span>
+
+                        <a href="reykjavik-shuttle.html" class="service-link">
+                            Book Now →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- GOLDEN CIRCLE TOUR -->
+
+            <article class="service-card">
+
+                <div class="image-container">
+
+                    <img
+                        class="service-image"
+                        src="images2/day-trips.jpg"
+                        alt="Scenic sightseeing trip in Iceland"
+                        onerror="this.onerror=null; this.src='images2/iceland-road.jpg';"
+                    >
+
+                </div>
+
+                <div class="service-content">
+
+                    <span class="service-label">SIGHTSEEING TOUR</span>
+
+                    <h3>Golden Circle Tour</h3>
+
+                    <p>
+                        Discover Iceland's famous landscapes, waterfalls,
+                        geothermal wonders, and unforgettable scenery.
+                    </p>
+
+                    <div class="service-footer">
+
+                        <span class="service-type">Private sightseeing tour</span>
+
+                        <a href="golden-circle-tour.html" class="service-link">
+                            Book Now →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- NORTHERN LIGHTS TOUR -->
+
+            <article class="service-card">
+
+                <div class="image-container">
+
+                    <img
+                        class="service-image"
+                        src="images2/aurora2.jpg"
+                        alt="Northern lights dancing in the Icelandic sky"
+                        onerror="this.onerror=null; this.src='images2/aurora-transfer.jpg';"
+                    >
+
+                </div>
+
+                <div class="service-content">
+
+                    <span class="service-label">EVENING ADVENTURE</span>
+
+                    <h3>Magical Northern Lights Tour</h3>
+
+                    <p>
+                        Venture away from city lights in search of the
+                        beautiful aurora borealis across Iceland's night sky.
+                    </p>
+
+                    <div class="service-footer">
+
+                        <span class="service-type">Northern lights experience</span>
+
+                        <a href="magical-northern-lights-tour.html" class="service-link">
+                            Book Now →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- HOW IT WORKS -->
+
+    <section class="how-it-works">
+
+        <div class="steps-container">
+
+            <h2>How Booking Works</h2>
+
+            <div class="steps-grid">
+
+                <div class="step">
+
+                    <div class="step-number">1</div>
+
+                    <h3>Choose Your Service</h3>
+
+                    <p>
+                        Select the transfer or tour that best fits your plans.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">2</div>
+
+                    <h3>Enter Your Details</h3>
+
+                    <p>
+                        Choose your date, time, pickup location,
+                        destination, and passenger count.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <div class="step-number">3</div>
+
+                    <h3>Review Your Booking</h3>
+
+                    <p>
+                        Review the information you entered on the
+                        order overview page before proceeding.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- CONTACT HELP -->
+
+    <section class="help-section">
+
+        <h2>Need Help Choosing?</h2>
+
+        <p>
+            Have a question or need help arranging your journey?
+            Contact us and we will help you find the right service.
+        </p>
+
+        <a href="contact.html" class="help-button">
+            Contact Us →
+        </a>
+
+    </section>
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-logo">ICELAND TRANSFER</div>
+
+    <p>Your journey, our drive.</p>
+
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="transfers.html">Transfers</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="booking.html">Book a Transfer</a>
+    </div>
+
+    <p>© 2026 Iceland Transfer. All rights reserved.</p>
+
+</footer>
+
+</body></html>
