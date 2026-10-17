@@ -1,0 +1,13 @@
+{
+  "name": "iceland-transfer-server",
+  "version": "1.0.0",
+  "description": "Iceland Transfer booking server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "dotenv": "^16.4.7"
+  }
+}
