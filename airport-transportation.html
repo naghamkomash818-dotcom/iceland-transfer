@@ -1,421 +1,411 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Airport Transportation | Iceland Transfer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
+    <title>Airport Transportation | Iceland Transfer</title>
+    <meta name="description" content="Explore airport transportation services in Iceland and request a transfer with Iceland Transfer.">
 
-    :root {
-        --green: #465b45;
-        --deep-green: #293c2e;
-        --beige: #f5f1e8;
-        --gold: #b99b61;
-        --white: #fffdf9;
-        --text: #3d4239;
-        --muted: #777a70;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background-color: var(--white);
-        color: var(--text);
-        line-height: 1.7;
-    }
+        :root {
+            --green: #465b45;
+            --deep-green: #293c2e;
+            --beige: #f5f1e8;
+            --gold: #b99b61;
+            --white: #fffdf9;
+            --text: #3d4239;
+            --muted: #777a70;
+        }
 
-    a {
-        text-decoration: none;
-        color: inherit;
-    }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--white);
+            color: var(--text);
+            line-height: 1.7;
+        }
 
-    /* HEADER */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-    header {
-        background-color: var(--deep-green);
-        color: white;
-        padding: 20px 7%;
-    }
+        img {
+            max-width: 100%;
+        }
 
-    .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-
-    .logo {
-        font-size: 23px;
-        font-weight: bold;
-        letter-spacing: 2px;
-    }
-
-    .logo span {
-        display: block;
-        font-size: 10px;
-        letter-spacing: 4px;
-        color: #d8c9a8;
-        text-align: center;
-    }
-
-    nav {
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        flex-wrap: wrap;
-    }
-
-    nav a {
-        color: #f5f1e8;
-        font-size: 14px;
-        transition: color 0.3s;
-    }
-
-    nav a:hover {
-        color: #d6bd87;
-    }
-
-    .book-button {
-        background-color: var(--gold);
-        color: var(--deep-green);
-        padding: 10px 18px;
-        border-radius: 4px;
-        font-weight: bold;
-    }
-
-    /* PAGE INTRODUCTION */
-
-    .page-intro {
-        background-color: var(--beige);
-        text-align: center;
-        padding: 65px 20px 55px;
-    }
-
-    .breadcrumb {
-        font-size: 13px;
-        color: var(--muted);
-        margin-bottom: 15px;
-    }
-
-    .breadcrumb a {
-        color: var(--green);
-    }
-
-    .small-title {
-        color: var(--gold);
-        font-size: 12px;
-        font-weight: bold;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-    }
-
-    .page-intro h1 {
-        color: var(--deep-green);
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(32px, 5vw, 46px);
-        font-weight: normal;
-        margin-bottom: 16px;
-    }
-
-    .page-intro p {
-        max-width: 680px;
-        margin: auto;
-        color: #66695f;
-        font-size: 15px;
-    }
-
-    /* SERVICES */
-
-    .services-section {
-        max-width: 1200px;
-        margin: auto;
-        padding: 65px 25px 80px;
-    }
-
-    .section-heading {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    .section-heading h2 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 34px;
-        font-weight: normal;
-        color: var(--deep-green);
-        margin-bottom: 10px;
-    }
-
-    .section-heading p {
-        color: var(--muted);
-        font-size: 14px;
-    }
-
-    .services-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 30px;
-    }
-
-    .service-card {
-        background-color: white;
-        border: 1px solid #e8e3d8;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(41, 60, 46, 0.07);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .service-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 14px 32px rgba(41, 60, 46, 0.13);
-    }
-
-    .image-container {
-        height: 290px;
-        overflow: hidden;
-        background-color: var(--beige);
-    }
-
-    .service-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.5s;
-    }
-
-    .service-card:hover .service-image {
-        transform: scale(1.04);
-    }
-
-    .service-content {
-        padding: 27px 28px 30px;
-    }
-
-    .service-label {
-        display: inline-block;
-        background-color: var(--beige);
-        color: var(--green);
-        padding: 5px 12px;
-        border-radius: 3px;
-        font-size: 11px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        margin-bottom: 13px;
-    }
-
-    .service-content h3 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 27px;
-        font-weight: normal;
-        color: var(--deep-green);
-        margin-bottom: 12px;
-    }
-
-    .service-content p {
-        color: var(--muted);
-        font-size: 14px;
-        margin-bottom: 22px;
-        min-height: 48px;
-    }
-
-    .service-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: wrap;
-        padding-top: 18px;
-        border-top: 1px solid #eee9df;
-    }
-
-    .price-label {
-        display: block;
-        color: var(--muted);
-        font-size: 12px;
-    }
-
-    .price {
-        color: var(--deep-green);
-        font-size: 21px;
-        font-weight: bold;
-    }
-
-    .price-note {
-        font-size: 13px;
-        color: var(--green);
-        font-weight: bold;
-    }
-
-    .details-button {
-        display: inline-block;
-        background-color: var(--green);
-        color: white;
-        padding: 12px 19px;
-        border-radius: 4px;
-        font-size: 13px;
-        font-weight: bold;
-        transition: background-color 0.3s;
-    }
-
-    .details-button:hover {
-        background-color: var(--deep-green);
-    }
-
-    /* WHY CHOOSE US */
-
-    .benefits {
-        background-color: var(--beige);
-        padding: 55px 25px;
-        text-align: center;
-    }
-
-    .benefits h2 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-weight: normal;
-        color: var(--deep-green);
-        font-size: 30px;
-        margin-bottom: 30px;
-    }
-
-    .benefits-grid {
-        max-width: 1000px;
-        margin: auto;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 25px;
-    }
-
-    .benefit {
-        padding: 15px;
-    }
-
-    .benefit-icon {
-        font-size: 29px;
-        margin-bottom: 8px;
-    }
-
-    .benefit h3 {
-        color: var(--deep-green);
-        font-size: 16px;
-        margin-bottom: 7px;
-    }
-
-    .benefit p {
-        color: var(--muted);
-        font-size: 13px;
-    }
-
-    /* FOOTER */
-
-    footer {
-        background-color: var(--deep-green);
-        color: #f5f1e8;
-        padding: 30px 20px;
-        text-align: center;
-    }
-
-    .footer-logo {
-        font-size: 20px;
-        font-weight: bold;
-        letter-spacing: 2px;
-        margin-bottom: 5px;
-    }
-
-    footer p {
-        font-size: 12px;
-        color: #d3d4ca;
-    }
-
-    .footer-links {
-        display: flex;
-        justify-content: center;
-        gap: 22px;
-        flex-wrap: wrap;
-        margin: 15px 0;
-        font-size: 13px;
-    }
-
-    .footer-links a:hover {
-        color: #d6bd87;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 750px) {
         header {
-            padding: 18px 6%;
+            background-color: var(--deep-green);
+            color: white;
+            padding: 20px 7%;
         }
 
         .navbar {
-            flex-direction: column;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #d8c9a8;
+            text-align: center;
         }
 
         nav {
-            justify-content: center;
-            gap: 13px 18px;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
         }
 
-        .services-grid {
-            grid-template-columns: 1fr;
+        nav a {
+            color: #f5f1e8;
+            font-size: 14px;
+            transition: color .3s;
         }
 
-        .image-container {
-            height: 250px;
+        nav a:hover {
+            color: #d6bd87;
         }
 
-        .benefits-grid {
-            grid-template-columns: 1fr;
-            gap: 10px;
+        .book-button {
+            background-color: var(--gold);
+            color: var(--deep-green);
+            padding: 10px 18px;
+            border-radius: 4px;
+            font-weight: bold;
         }
 
         .page-intro {
-            padding: 45px 20px;
+            background-color: var(--beige);
+            text-align: center;
+            padding: 65px 20px 55px;
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 15px;
+        }
+
+        .breadcrumb a {
+            color: var(--green);
+        }
+
+        .small-title {
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .page-intro h1 {
+            color: var(--deep-green);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(32px, 5vw, 46px);
+            font-weight: normal;
+            margin-bottom: 16px;
+        }
+
+        .page-intro p {
+            max-width: 680px;
+            margin: auto;
+            color: #66695f;
+            font-size: 15px;
         }
 
         .services-section {
-            padding: 45px 18px 55px;
+            max-width: 1200px;
+            margin: auto;
+            padding: 65px 25px 80px;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-heading h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 34px;
+            font-weight: normal;
+            color: var(--deep-green);
+            margin-bottom: 10px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: white;
+            border: 1px solid #e8e3d8;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(41, 60, 46, .07);
+            transition: transform .3s, box-shadow .3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 32px rgba(41, 60, 46, .13);
+        }
+
+        .image-container {
+            height: 290px;
+            overflow: hidden;
+            background-color: var(--beige);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .5s;
+        }
+
+        .service-card:hover .service-image {
+            transform: scale(1.04);
         }
 
         .service-content {
-            padding: 23px 20px;
+            padding: 27px 28px 30px;
         }
-    }
-</style>
 
-</head><body><!-- HEADER -->
+        .service-label {
+            display: inline-block;
+            background-color: var(--beige);
+            color: var(--green);
+            padding: 5px 12px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 13px;
+        }
+
+        .service-content h3 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 27px;
+            font-weight: normal;
+            color: var(--deep-green);
+            margin-bottom: 12px;
+        }
+
+        .service-content p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 22px;
+            min-height: 48px;
+        }
+
+        .service-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding-top: 18px;
+            border-top: 1px solid #eee9df;
+        }
+
+        .price-label {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .price {
+            color: var(--deep-green);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .price-note {
+            font-size: 12px;
+            color: var(--green);
+            margin-top: 3px;
+        }
+
+        .details-button {
+            display: inline-block;
+            background-color: var(--green);
+            color: white;
+            padding: 12px 19px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: background-color .3s;
+        }
+
+        .details-button:hover {
+            background-color: var(--deep-green);
+        }
+
+        .benefits {
+            background-color: var(--beige);
+            padding: 55px 25px;
+            text-align: center;
+        }
+
+        .benefits h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-weight: normal;
+            color: var(--deep-green);
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        .benefits-grid {
+            max-width: 1000px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+        }
+
+        .benefit {
+            padding: 15px;
+        }
+
+        .benefit-icon {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .benefit h3 {
+            color: var(--deep-green);
+            font-size: 16px;
+            margin-bottom: 7px;
+        }
+
+        .benefit p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        footer {
+            background-color: var(--deep-green);
+            color: #f5f1e8;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        footer p {
+            font-size: 12px;
+            color: #d3d4ca;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        .footer-links a:hover {
+            color: #d6bd87;
+        }
+
+        @media (max-width: 750px) {
+            header {
+                padding: 18px 6%;
+            }
+
+            .navbar {
+                flex-direction: column;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 13px 18px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-container {
+                height: 250px;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .page-intro {
+                padding: 45px 20px;
+            }
+
+            .services-section {
+                padding: 45px 18px 55px;
+            }
+
+            .service-content {
+                padding: 23px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
 
 <header>
     <div class="navbar">
-
         <a href="index.html" class="logo">
             ICELAND TRANSFER
             <span>YOUR JOURNEY, OUR DRIVE</span>
         </a>
 
-        <nav>
+        <nav aria-label="Main navigation">
             <a href="index.html">Home</a>
             <a href="transfers.html">Transfers</a>
             <a href="golden-circle-tour.html">Destinations</a>
             <a href="about.html">About Us</a>
-            <a href="index.html#contact">Contact</a>
-            <a href="airport-transportation.html" class="book-button">
-                Book a Transfer
-            </a>
+            <a href="contact.html">Contact</a>
+            <a href="airport-transportation.html" class="book-button">Book a Transfer</a>
         </nav>
-
     </div>
 </header>
 
-
-<!-- PAGE INTRODUCTION -->
-
 <section class="page-intro">
-
     <div class="breadcrumb">
         <a href="index.html">Home</a>
         &nbsp; / &nbsp;
@@ -424,99 +414,71 @@
         Airport Transportation
     </div>
 
-    <div class="small-title">COMFORTABLE & RELIABLE</div>
+    <div class="small-title">COMFORTABLE &amp; RELIABLE</div>
 
     <h1>Airport Transportation</h1>
 
     <p>
         Start your Iceland journey with a comfortable and reliable transfer.
-        Choose the service that suits your travel plans and let us take care
-        of your journey.
+        Choose the service that suits your travel plans and send your booking request.
+        The driver will review your details and confirm the price.
     </p>
-
 </section>
 
-
-<!-- AIRPORT TRANSFER SERVICES -->
-
 <main>
-
     <section class="services-section">
-
         <div class="section-heading">
             <h2>Choose Your Transfer</h2>
-
-            <p>
-                Explore our airport transfer services and choose your destination.
-            </p>
+            <p>Explore our airport transfer services and choose your destination.</p>
         </div>
-
 
         <div class="services-grid">
 
-
-            <!-- KEFLAVIK SHUTTLE -->
-
             <article class="service-card">
-
                 <div class="image-container">
-
                     <img
                         class="service-image"
                         src="images2/airport-transfer.jpg"
                         alt="Keflavik International Airport transfer"
-                        onerror="this.onerror=null; this.src='images2/transfers-hero.jpg';"
-                    >
-
+                        loading="lazy"
+                        onerror="this.onerror=null; this.src='images2/transfers-hero.jpg';">
                 </div>
 
                 <div class="service-content">
-
                     <span class="service-label">AIRPORT TRANSFER</span>
 
                     <h3>Keflavik KEF Shuttle</h3>
 
                     <p>
-                        Travel between Keflavik International Airport and
-                        your destination in Iceland with a convenient transfer.
+                        Travel between Keflavik International Airport and your
+                        destination in Iceland with a convenient transfer.
                     </p>
 
                     <div class="service-bottom">
-
                         <div>
-                            <span class="price-label">Starting price</span>
-                            <span class="price">20,900 kr</span>
+                            <span class="price-label">Transfer price</span>
+                            <span class="price">Price on request</span>
+                            <div class="price-note">Confirmed by the driver</div>
                         </div>
 
                         <a href="keflavik-shuttle.html" class="details-button">
                             Book Now →
                         </a>
-
                     </div>
-
                 </div>
-
             </article>
 
-
-
-            <!-- REYKJAVIK SHUTTLE -->
-
             <article class="service-card">
-
                 <div class="image-container">
-
                     <img
                         class="service-image"
                         src="images2/private-transfer.jpg"
                         alt="Private shuttle transfer in Iceland"
-                        onerror="this.onerror=null; this.src='images2/airport-transfer.jpg';"
-                    >
-
+                        loading="lazy"
+                        onerror="this.onerror=null; this.src='images2/airport-transfer.jpg';">
                 </div>
 
                 <div class="service-content">
-
                     <span class="service-label">CITY TRANSFER</span>
 
                     <h3>Reykjavik Shuttle</h3>
@@ -527,99 +489,65 @@
                     </p>
 
                     <div class="service-bottom">
-
                         <div>
-                            <span class="price-label">Starting price</span>
-                            <span class="price">20,900 kr</span>
+                            <span class="price-label">Transfer price</span>
+                            <span class="price">Price on request</span>
+                            <div class="price-note">Confirmed by the driver</div>
                         </div>
 
                         <a href="reykjavik-shuttle.html" class="details-button">
                             View Details →
                         </a>
-
                     </div>
-
                 </div>
-
             </article>
 
-
         </div>
-
     </section>
 
-
-
-    <!-- BENEFITS -->
-
     <section class="benefits">
-
         <h2>A Comfortable Journey Starts Here</h2>
 
         <div class="benefits-grid">
-
             <div class="benefit">
-
                 <div class="benefit-icon">✈️</div>
-
                 <h3>Airport Convenience</h3>
-
-                <p>
-                    Make getting to and from the airport easier.
-                </p>
-
+                <p>Make getting to and from the airport easier.</p>
             </div>
 
-
             <div class="benefit">
-
                 <div class="benefit-icon">🚘</div>
-
                 <h3>Comfortable Transfers</h3>
-
-                <p>
-                    Enjoy a convenient journey to your destination.
-                </p>
-
+                <p>Enjoy a convenient journey to your destination.</p>
             </div>
-
 
             <div class="benefit">
-
                 <div class="benefit-icon">🇮🇸</div>
-
                 <h3>Explore Iceland</h3>
-
-                <p>
-                    Begin your Iceland adventure with peace of mind.
-                </p>
-
+                <p>Begin your Iceland adventure with peace of mind.</p>
             </div>
-
         </div>
-
     </section>
-
 </main>
 
-
-<!-- FOOTER -->
-
 <footer>
-
     <div class="footer-logo">ICELAND TRANSFER</div>
-
     <p>Your journey, our drive.</p>
 
     <div class="footer-links">
         <a href="index.html">Home</a>
         <a href="transfers.html">Transfers</a>
         <a href="about.html">About Us</a>
-        <a href="index.html#contact">Contact</a>
+        <a href="contact.html">Contact</a>
     </div>
 
-    <p>© 2026 Iceland Transfer. All rights reserved.</p>
-
+    <p>© <span id="currentYear"></span> Iceland Transfer. All rights reserved.</p>
 </footer>
 
-</body></html>
+<script>
+    document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
+</script>
+
+</body>
+</html>
