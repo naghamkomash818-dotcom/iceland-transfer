@@ -9,6 +9,10 @@ const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 
+// Public HTTPS address of the deployed backend.
+const PUBLIC_SERVER_URL =
+    "https://iceland-transfer-server.onrender.com";
+
 if (!SUPABASE_URL || !SUPABASE_SECRET_KEY) {
     console.error("ERROR: Supabase environment variables are missing.");
     process.exit(1);
@@ -19,42 +23,32 @@ const supabase = createClient(
     SUPABASE_SECRET_KEY
 );
 
-// ==================================================
-// CONFIGURATION
-// Prices are temporary examples in Icelandic krona.
-// Change these values when the driver confirms prices.
-// ==================================================
-
 const CURRENCY = "ISK";
-
 const WORK_START_HOUR = 6;
 const LAST_TRIP_START_HOUR = 22;
 
-// Price lookup ignores capitalization and extra spaces.
 const ROUTE_PRICES = {
     "keflavik airport|reykjavik": 20000,
     "reykjavik|keflavik airport": 20000,
-
     "reykjavik|blue lagoon": 25000,
     "keflavik airport|blue lagoon": 12000,
-
     "reykjavik|golden circle": 45000,
     "reykjavik|sky lagoon": 15000,
     "reykjavik|cruise port": 8000
 };
 
-// Temporary fallback price for other routes.
 const DEFAULT_ROUTE_PRICE = 30000;
 
-// ==================================================
+// --------------------------------------------------
 // HELPERS
-// ==================================================
+// --------------------------------------------------
 
 function sendJSON(res, statusCode, data) {
     if (res.writableEnded) return;
 
     res.writeHead(statusCode, {
-        "Content-Type": "application/json; charset=utf-8"
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store"
     });
 
     res.end(JSON.stringify(data));
@@ -89,7 +83,6 @@ function normalizeTime(value) {
     const minutes = match[2];
     const seconds = match[3] || "00";
 
-    // Hourly bookings only.
     if (minutes !== "00" || seconds !== "00") {
         return null;
     }
@@ -104,14 +97,31 @@ function normalizeLocation(value) {
         .replace(/\s+/g, " ");
 }
 
+function canonicalLocation(value) {
+    const location = normalizeLocation(value);
+
+    const aliases = {
+        "keflavik international airport (kef)": "keflavik airport",
+        "keflavik international airport": "keflavik airport",
+        "keflavik airport (kef)": "keflavik airport",
+        "reykjavik city centre": "reykjavik",
+        "reykjavik city center": "reykjavik",
+        "reykjavik harbour / old harbour": "cruise port",
+        "reykjavik harbor / old harbor": "cruise port"
+    };
+
+    return aliases[location] || location;
+}
+
 function getRoutePrice(pickup, destination) {
-    const routeKey =
-        `${normalizeLocation(pickup)}|${normalizeLocation(destination)}`;
+    const pickupName = canonicalLocation(pickup);
+    const destinationName = canonicalLocation(destination);
+
+    const routeKey = `${pickupName}|${destinationName}`;
 
     return ROUTE_PRICES[routeKey] ?? DEFAULT_ROUTE_PRICE;
 }
 
-// Iceland local time, including daylight-saving changes.
 function getIcelandDateTime() {
     const parts = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Atlantic/Reykjavik",
@@ -151,6 +161,7 @@ function isWithinWorkingHours(time) {
 
 function isFutureBooking(date, time) {
     const now = getIcelandDateTime();
+
     const currentTime =
         `${String(now.hour).padStart(2, "0")}:` +
         `${String(now.minute).padStart(2, "0")}:` +
@@ -163,11 +174,12 @@ function isFutureBooking(date, time) {
 }
 
 function isMoreThan24HoursAway(date, time) {
-    // Iceland is UTC+0. Compare timestamps consistently.
     const tripTimestamp = Date.parse(`${date}T${time}Z`);
-    const nowTimestamp = Date.now();
 
-    return tripTimestamp - nowTimestamp > 24 * 60 * 60 * 1000;
+    return (
+        Number.isFinite(tripTimestamp) &&
+        tripTimestamp - Date.now() > 24 * 60 * 60 * 1000
+    );
 }
 
 function makeCancellationToken() {
@@ -204,11 +216,12 @@ function getRequestBody(req, callback) {
     });
 }
 
-// ==================================================
+// --------------------------------------------------
 // SERVER
-// ==================================================
+// --------------------------------------------------
 
 const server = http.createServer(async (req, res) => {
+    // CORS headers must be added before handling any route.
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
         "Access-Control-Allow-Methods",
@@ -218,6 +231,7 @@ const server = http.createServer(async (req, res) => {
         "Access-Control-Allow-Headers",
         "Content-Type"
     );
+    res.setHeader("Access-Control-Max-Age", "86400");
 
     if (req.method === "OPTIONS") {
         res.writeHead(204);
@@ -227,10 +241,10 @@ const server = http.createServer(async (req, res) => {
 
     const requestURL = new URL(
         req.url,
-        `http://${req.headers.host || "localhost"}`
+        `https://${req.headers.host || "localhost"}`
     );
 
-    // Health check
+    // HEALTH CHECK
     if (
         req.method === "GET" &&
         requestURL.pathname === "/health"
@@ -241,11 +255,7 @@ const server = http.createServer(async (req, res) => {
         });
     }
 
-    // ==================================================
     // AVAILABLE TIMES
-    // GET /api/availability?date=YYYY-MM-DD
-    // ==================================================
-
     if (
         req.method === "GET" &&
         requestURL.pathname === "/api/availability"
@@ -278,18 +288,17 @@ const server = http.createServer(async (req, res) => {
             const bookedTimes = [
                 ...new Set(
                     (data || [])
-                        .map(row => {
-                            return normalizeTime(
+                        .map(row =>
+                            normalizeTime(
                                 String(row.pickup_time || "").slice(0, 8)
-                            );
-                        })
+                            )
+                        )
                         .filter(Boolean)
                         .map(time => time.slice(0, 5))
                 )
             ];
 
             const now = getIcelandDateTime();
-
             const availableTimes = [];
 
             for (
@@ -297,17 +306,13 @@ const server = http.createServer(async (req, res) => {
                 hour <= LAST_TRIP_START_HOUR;
                 hour++
             ) {
-                const time =
-                    `${String(hour).padStart(2, "0")}:00`;
+                const time = `${String(hour).padStart(2, "0")}:00`;
 
                 if (bookedTimes.includes(time)) continue;
-
                 if (date < now.date) continue;
 
                 if (date === now.date) {
-                    const currentMinutes =
-                        now.hour * 60 + now.minute;
-
+                    const currentMinutes = now.hour * 60 + now.minute;
                     const slotMinutes = hour * 60;
 
                     if (slotMinutes <= currentMinutes) continue;
@@ -333,11 +338,7 @@ const server = http.createServer(async (req, res) => {
         }
     }
 
-    // ==================================================
     // CREATE BOOKING
-    // POST /api/bookings
-    // ==================================================
-
     if (
         req.method === "POST" &&
         requestURL.pathname === "/api/bookings"
@@ -355,6 +356,13 @@ const server = http.createServer(async (req, res) => {
             }
 
             try {
+                if (!booking || typeof booking !== "object") {
+                    return sendJSON(res, 400, {
+                        success: false,
+                        message: "Invalid booking details."
+                    });
+                }
+
                 const requiredFields = [
                     "full_name",
                     "email",
@@ -446,10 +454,7 @@ const server = http.createServer(async (req, res) => {
                     });
                 }
 
-                // The server calculates the price.
-                // Do not trust a price supplied by the browser.
                 const price = getRoutePrice(pickup, destination);
-
                 const cancellationToken = makeCancellationToken();
 
                 const newBooking = {
@@ -462,15 +467,12 @@ const server = http.createServer(async (req, res) => {
                     pickup_time: pickupTime,
                     passengers,
                     luggage,
-
                     flight_number: booking.flight_number
                         ? String(booking.flight_number).trim()
                         : null,
-
                     special_requests: booking.special_requests
                         ? String(booking.special_requests).trim()
                         : null,
-
                     price,
                     status: "confirmed",
                     cancellation_token: cancellationToken
@@ -501,9 +503,9 @@ const server = http.createServer(async (req, res) => {
                     });
                 }
 
-                // The returned cancellation link must be treated as private.
+                // Always generate the cancellation URL using HTTPS.
                 const cancellationUrl =
-                    `${requestURL.origin}/api/bookings/cancel/` +
+                    `${PUBLIC_SERVER_URL}/api/bookings/cancel/` +
                     cancellationToken;
 
                 return sendJSON(res, 201, {
@@ -517,7 +519,8 @@ const server = http.createServer(async (req, res) => {
                         payment_status: "Payment not processed"
                     },
                     cancellation_url: cancellationUrl,
-                    cancellation_policy: "Cancellation is allowed only more than 24 hours before pickup."
+                    cancellation_policy:
+                        "Cancellation is allowed only more than 24 hours before pickup."
                 });
             } catch (error) {
                 console.error("Booking processing error:", error.message);
@@ -530,11 +533,7 @@ const server = http.createServer(async (req, res) => {
         });
     }
 
-    // ==================================================
     // CANCEL BOOKING
-    // POST /api/bookings/cancel/:token
-    // ==================================================
-
     const cancelMatch = requestURL.pathname.match(
         /^\/api\/bookings\/cancel\/([a-f0-9]{64})$/
     );
@@ -574,11 +573,21 @@ const server = http.createServer(async (req, res) => {
                 });
             }
 
+            if (booking.status !== "confirmed") {
+                return sendJSON(res, 409, {
+                    success: false,
+                    message: "This booking cannot be cancelled in its current status."
+                });
+            }
+
             const time = normalizeTime(
                 String(booking.pickup_time).slice(0, 8)
             );
 
-            if (!time || !isMoreThan24HoursAway(booking.pickup_date, time)) {
+            if (
+                !time ||
+                !isMoreThan24HoursAway(booking.pickup_date, time)
+            ) {
                 return sendJSON(res, 403, {
                     success: false,
                     code: "CANCELLATION_WINDOW_CLOSED",
@@ -586,21 +595,32 @@ const server = http.createServer(async (req, res) => {
                 });
             }
 
-            const { error: updateError } = await supabase
+            const { data: updatedRows, error: updateError } = await supabase
                 .from("bookings")
                 .update({
                     status: "cancelled",
                     cancelled_at: new Date().toISOString()
                 })
                 .eq("id", booking.id)
-                .eq("status", "confirmed");
+                .eq("status", "confirmed")
+                .select("id");
 
             if (updateError) {
-                console.error("Cancellation update error:", updateError.message);
+                console.error(
+                    "Cancellation update error:",
+                    updateError.message
+                );
 
                 return sendJSON(res, 500, {
                     success: false,
                     message: "Could not cancel the booking. Please try again."
+                });
+            }
+
+            if (!updatedRows || updatedRows.length === 0) {
+                return sendJSON(res, 409, {
+                    success: false,
+                    message: "This booking has already changed. Please refresh and check its status."
                 });
             }
 
