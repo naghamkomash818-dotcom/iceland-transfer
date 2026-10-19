@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 
-// Public HTTPS address of the deployed backend.
 const PUBLIC_SERVER_URL =
     "https://iceland-transfer-server.onrender.com";
 
@@ -38,6 +37,41 @@ const ROUTE_PRICES = {
 };
 
 const DEFAULT_ROUTE_PRICE = 30000;
+
+// --------------------------------------------------
+// GOLDEN CIRCLE TOUR PRICES
+// Prices are temporary estimates and can be changed.
+// --------------------------------------------------
+
+const GOLDEN_CIRCLE_PACKAGES = {
+    classic: {
+        name: "Classic",
+        price: 80400
+    },
+    extended: {
+        name: "Extended",
+        price: 128900
+    },
+    premium: {
+        name: "Premium",
+        price: 225000
+    }
+};
+
+const GOLDEN_CIRCLE_ADDONS = {
+    kerid: {
+        name: "Kerið Crater",
+        price_per_passenger: 1500
+    },
+    fridheimar: {
+        name: "Friðheimar",
+        price_per_passenger: 2500
+    },
+    secret_lagoon: {
+        name: "Secret Lagoon",
+        price_per_passenger: 12000
+    }
+};
 
 // --------------------------------------------------
 // HELPERS
@@ -122,6 +156,75 @@ function getRoutePrice(pickup, destination) {
     return ROUTE_PRICES[routeKey] ?? DEFAULT_ROUTE_PRICE;
 }
 
+function calculateGoldenCirclePrice(booking) {
+    const packageType = String(
+        booking.package_type || ""
+    ).trim().toLowerCase();
+
+    const selectedPackage = GOLDEN_CIRCLE_PACKAGES[packageType];
+
+    if (!selectedPackage) {
+        throw new Error(
+            "Please select a valid Golden Circle package."
+        );
+    }
+
+    const passengers = Number(booking.passengers ?? 1);
+
+    if (
+        !Number.isInteger(passengers) ||
+        passengers < 1 ||
+        passengers > 20
+    ) {
+        throw new Error(
+            "Golden Circle tours allow between 1 and 20 passengers."
+        );
+    }
+
+    const requestedAddons = booking.addons ?? [];
+
+    if (!Array.isArray(requestedAddons)) {
+        throw new Error("Invalid Golden Circle add-ons.");
+    }
+
+    const uniqueAddonIds = [...new Set(requestedAddons)];
+
+    const selectedAddons = uniqueAddonIds.map(addonId => {
+        if (typeof addonId !== "string") {
+            throw new Error("Invalid Golden Circle add-on.");
+        }
+
+        const addon = GOLDEN_CIRCLE_ADDONS[addonId];
+
+        if (!addon) {
+            throw new Error(
+                "An invalid Golden Circle add-on was selected."
+            );
+        }
+
+        return {
+            id: addonId,
+            name: addon.name,
+            price_per_passenger: addon.price_per_passenger,
+            total: addon.price_per_passenger * passengers
+        };
+    });
+
+    const extrasTotal = selectedAddons.reduce(
+        (sum, addon) => sum + addon.total,
+        0
+    );
+
+    return {
+        package_type: packageType,
+        package_name: selectedPackage.name,
+        base_price: selectedPackage.price,
+        addons: selectedAddons,
+        extras_total: extrasTotal,
+        total: selectedPackage.price + extrasTotal
+    };
+}
+
 function getIcelandDateTime() {
     const parts = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Atlantic/Reykjavik",
@@ -174,6 +277,8 @@ function isFutureBooking(date, time) {
 }
 
 function isMoreThan24HoursAway(date, time) {
+    // Convert Iceland local time to a UTC timestamp using
+    // the current Iceland UTC offset. Iceland uses UTC year-round.
     const tripTimestamp = Date.parse(`${date}T${time}Z`);
 
     return (
@@ -221,7 +326,6 @@ function getRequestBody(req, callback) {
 // --------------------------------------------------
 
 const server = http.createServer(async (req, res) => {
-    // CORS headers must be added before handling any route.
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
         "Access-Control-Allow-Methods",
@@ -277,7 +381,10 @@ const server = http.createServer(async (req, res) => {
                 .neq("status", "cancelled");
 
             if (error) {
-                console.error("Availability error:", error.message);
+                console.error(
+                    "Availability error:",
+                    error.message
+                );
 
                 return sendJSON(res, 500, {
                     success: false,
@@ -306,13 +413,16 @@ const server = http.createServer(async (req, res) => {
                 hour <= LAST_TRIP_START_HOUR;
                 hour++
             ) {
-                const time = `${String(hour).padStart(2, "0")}:00`;
+                const time =
+                    `${String(hour).padStart(2, "0")}:00`;
 
                 if (bookedTimes.includes(time)) continue;
                 if (date < now.date) continue;
 
                 if (date === now.date) {
-                    const currentMinutes = now.hour * 60 + now.minute;
+                    const currentMinutes =
+                        now.hour * 60 + now.minute;
+
                     const slotMinutes = hour * 60;
 
                     if (slotMinutes <= currentMinutes) continue;
@@ -329,7 +439,10 @@ const server = http.createServer(async (req, res) => {
                 booked_times: bookedTimes
             });
         } catch (error) {
-            console.error("Availability error:", error.message);
+            console.error(
+                "Availability error:",
+                error.message
+            );
 
             return sendJSON(res, 500, {
                 success: false,
@@ -347,7 +460,9 @@ const server = http.createServer(async (req, res) => {
             if (bodyError) {
                 return sendJSON(
                     res,
-                    bodyError.message === "REQUEST_TOO_LARGE" ? 413 : 400,
+                    bodyError.message === "REQUEST_TOO_LARGE"
+                        ? 413
+                        : 400,
                     {
                         success: false,
                         message: "Invalid booking request."
@@ -356,7 +471,11 @@ const server = http.createServer(async (req, res) => {
             }
 
             try {
-                if (!booking || typeof booking !== "object") {
+                if (
+                    !booking ||
+                    typeof booking !== "object" ||
+                    Array.isArray(booking)
+                ) {
                     return sendJSON(res, 400, {
                         success: false,
                         message: "Invalid booking details."
@@ -385,12 +504,31 @@ const server = http.createServer(async (req, res) => {
                     }
                 }
 
+                const fullName = booking.full_name.trim();
                 const email = booking.email.trim();
+                const phone = booking.phone.trim();
 
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                if (fullName.length > 150) {
+                    return sendJSON(res, 400, {
+                        success: false,
+                        message: "Name is too long."
+                    });
+                }
+
+                if (
+                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+                    email.length > 254
+                ) {
                     return sendJSON(res, 400, {
                         success: false,
                         message: "Please enter a valid email."
+                    });
+                }
+
+                if (phone.length > 40) {
+                    return sendJSON(res, 400, {
+                        success: false,
+                        message: "Phone number is too long."
                     });
                 }
 
@@ -401,7 +539,9 @@ const server = http.createServer(async (req, res) => {
                     });
                 }
 
-                const pickupTime = normalizeTime(booking.pickup_time);
+                const pickupTime = normalizeTime(
+                    booking.pickup_time
+                );
 
                 if (!pickupTime) {
                     return sendJSON(res, 400, {
@@ -412,6 +552,13 @@ const server = http.createServer(async (req, res) => {
 
                 const pickup = booking.pickup_location.trim();
                 const destination = booking.destination.trim();
+
+                if (pickup.length > 200 || destination.length > 200) {
+                    return sendJSON(res, 400, {
+                        success: false,
+                        message: "Pickup or destination is too long."
+                    });
+                }
 
                 if (
                     normalizeLocation(pickup) ===
@@ -426,53 +573,118 @@ const server = http.createServer(async (req, res) => {
                 if (!isWithinWorkingHours(pickupTime)) {
                     return sendJSON(res, 400, {
                         success: false,
-                        message: "Bookings are available from 06:00 to 22:00 Iceland time."
+                        message:
+                            "Bookings are available from 06:00 to 22:00 Iceland time."
                     });
                 }
 
-                if (!isFutureBooking(booking.pickup_date, pickupTime)) {
+                if (
+                    !isFutureBooking(
+                        booking.pickup_date,
+                        pickupTime
+                    )
+                ) {
                     return sendJSON(res, 400, {
                         success: false,
-                        message: "Please select a future pickup time."
+                        message:
+                            "Please select a future pickup time."
                     });
                 }
 
-                const passengers = Number(booking.passengers ?? 1);
-                const luggage = Number(booking.luggage ?? 0);
+                const passengers = Number(
+                    booking.passengers ?? 1
+                );
+
+                const luggage = Number(
+                    booking.luggage ?? 0
+                );
+
+                const serviceType = String(
+                    booking.service_type || "transfer"
+                ).trim();
 
                 if (
                     !Number.isInteger(passengers) ||
                     passengers < 1 ||
-                    passengers > 100 ||
+                    passengers > (
+                        serviceType === "golden_circle_tour"
+                            ? 20
+                            : 100
+                    ) ||
                     !Number.isInteger(luggage) ||
                     luggage < 0 ||
                     luggage > 100
                 ) {
                     return sendJSON(res, 400, {
                         success: false,
-                        message: "Invalid passenger or luggage count."
+                        message:
+                            "Invalid passenger or luggage count."
                     });
                 }
 
-                const price = getRoutePrice(pickup, destination);
-                const cancellationToken = makeCancellationToken();
+                let price;
+                let tourDetails = null;
+
+                if (serviceType === "golden_circle_tour") {
+                    try {
+                        tourDetails =
+                            calculateGoldenCirclePrice(booking);
+
+                        price = tourDetails.total;
+                    } catch (error) {
+                        return sendJSON(res, 400, {
+                            success: false,
+                            message: error.message
+                        });
+                    }
+                } else if (serviceType === "transfer") {
+                    price = getRoutePrice(
+                        pickup,
+                        destination
+                    );
+                } else {
+                    return sendJSON(res, 400, {
+                        success: false,
+                        message: "Invalid service type."
+                    });
+                }
+
+                const cancellationToken =
+                    makeCancellationToken();
 
                 const newBooking = {
-                    full_name: booking.full_name.trim(),
+                    full_name: fullName,
                     email,
-                    phone: booking.phone.trim(),
+                    phone,
                     pickup_location: pickup,
                     destination,
                     pickup_date: booking.pickup_date,
                     pickup_time: pickupTime,
                     passengers,
                     luggage,
+
                     flight_number: booking.flight_number
-                        ? String(booking.flight_number).trim()
+                        ? String(booking.flight_number).trim().slice(0, 50)
                         : null,
+
                     special_requests: booking.special_requests
-                        ? String(booking.special_requests).trim()
+                        ? String(booking.special_requests).trim().slice(0, 2000)
                         : null,
+
+                    service_type: serviceType,
+
+                    package_type: tourDetails
+                        ? tourDetails.package_type
+                        : null,
+
+                    addons: tourDetails
+                        ? tourDetails.addons
+                        : [],
+
+                    extras_total: tourDetails
+                        ? tourDetails.extras_total
+                        : 0,
+
                     price,
                     status: "confirmed",
                     cancellation_token: cancellationToken
@@ -482,28 +694,32 @@ const server = http.createServer(async (req, res) => {
                     .from("bookings")
                     .insert([newBooking])
                     .select(
-                        "id, full_name, email, phone, pickup_location, destination, pickup_date, pickup_time, passengers, luggage, price, status, created_at"
+                        "id, full_name, email, phone, pickup_location, destination, pickup_date, pickup_time, passengers, luggage, price, status, created_at, service_type, package_type, addons, extras_total"
                     )
                     .single();
 
                 if (error) {
-                    console.error("Booking error:", error.message);
+                    console.error(
+                        "Booking error:",
+                        error.message
+                    );
 
                     if (error.code === "23505") {
                         return sendJSON(res, 409, {
                             success: false,
                             code: "TIME_SLOT_TAKEN",
-                            message: "This time has already been booked. Please choose another time."
+                            message:
+                                "This time has already been booked. Please choose another time."
                         });
                     }
 
                     return sendJSON(res, 500, {
                         success: false,
-                        message: "Could not save the booking. Please try again."
+                        message:
+                            "Could not save the booking. Please try again."
                     });
                 }
 
-                // Always generate the cancellation URL using HTTPS.
                 const cancellationUrl =
                     `${PUBLIC_SERVER_URL}/api/bookings/cancel/` +
                     cancellationToken;
@@ -512,22 +728,43 @@ const server = http.createServer(async (req, res) => {
                     success: true,
                     message: "Your booking has been confirmed.",
                     booking: data,
+
+                    tour_details: tourDetails,
+
                     invoice: {
                         invoice_number: `IT-${data.id}`,
                         currency: CURRENCY,
                         amount: price,
-                        payment_status: "Payment not processed"
+                        payment_status: "Payment not processed",
+
+                        base_price: tourDetails
+                            ? tourDetails.base_price
+                            : price,
+
+                        extras_total: tourDetails
+                            ? tourDetails.extras_total
+                            : 0,
+
+                        addons: tourDetails
+                            ? tourDetails.addons
+                            : []
                     },
+
                     cancellation_url: cancellationUrl,
+
                     cancellation_policy:
                         "Cancellation is allowed only more than 24 hours before pickup."
                 });
             } catch (error) {
-                console.error("Booking processing error:", error.message);
+                console.error(
+                    "Booking processing error:",
+                    error.message
+                );
 
                 return sendJSON(res, 500, {
                     success: false,
-                    message: "An unexpected error occurred."
+                    message:
+                        "An unexpected error occurred."
                 });
             }
         });
@@ -538,7 +775,10 @@ const server = http.createServer(async (req, res) => {
         /^\/api\/bookings\/cancel\/([a-f0-9]{64})$/
     );
 
-    if (cancelMatch && req.method === "POST") {
+    if (
+        cancelMatch &&
+        req.method === "POST"
+    ) {
         try {
             const token = cancelMatch[1];
 
@@ -551,32 +791,39 @@ const server = http.createServer(async (req, res) => {
                 .maybeSingle();
 
             if (error) {
-                console.error("Cancellation lookup error:", error.message);
+                console.error(
+                    "Cancellation lookup error:",
+                    error.message
+                );
 
                 return sendJSON(res, 500, {
                     success: false,
-                    message: "Could not process the cancellation."
+                    message:
+                        "Could not process the cancellation."
                 });
             }
 
             if (!booking) {
                 return sendJSON(res, 404, {
                     success: false,
-                    message: "Booking not found or cancellation link is invalid."
+                    message:
+                        "Booking not found or cancellation link is invalid."
                 });
             }
 
             if (booking.status === "cancelled") {
                 return sendJSON(res, 200, {
                     success: true,
-                    message: "This booking has already been cancelled."
+                    message:
+                        "This booking has already been cancelled."
                 });
             }
 
             if (booking.status !== "confirmed") {
                 return sendJSON(res, 409, {
                     success: false,
-                    message: "This booking cannot be cancelled in its current status."
+                    message:
+                        "This booking cannot be cancelled in its current status."
                 });
             }
 
@@ -586,24 +833,29 @@ const server = http.createServer(async (req, res) => {
 
             if (
                 !time ||
-                !isMoreThan24HoursAway(booking.pickup_date, time)
+                !isMoreThan24HoursAway(
+                    booking.pickup_date,
+                    time
+                )
             ) {
                 return sendJSON(res, 403, {
                     success: false,
                     code: "CANCELLATION_WINDOW_CLOSED",
-                    message: "Cancellation is only allowed more than 24 hours before pickup."
+                    message:
+                        "Cancellation is only allowed more than 24 hours before pickup."
                 });
             }
 
-            const { data: updatedRows, error: updateError } = await supabase
-                .from("bookings")
-                .update({
-                    status: "cancelled",
-                    cancelled_at: new Date().toISOString()
-                })
-                .eq("id", booking.id)
-                .eq("status", "confirmed")
-                .select("id");
+            const { data: updatedRows, error: updateError } =
+                await supabase
+                    .from("bookings")
+                    .update({
+                        status: "cancelled",
+                        cancelled_at: new Date().toISOString()
+                    })
+                    .eq("id", booking.id)
+                    .eq("status", "confirmed")
+                    .select("id");
 
             if (updateError) {
                 console.error(
@@ -613,28 +865,35 @@ const server = http.createServer(async (req, res) => {
 
                 return sendJSON(res, 500, {
                     success: false,
-                    message: "Could not cancel the booking. Please try again."
+                    message:
+                        "Could not cancel the booking. Please try again."
                 });
             }
 
             if (!updatedRows || updatedRows.length === 0) {
                 return sendJSON(res, 409, {
                     success: false,
-                    message: "This booking has already changed. Please refresh and check its status."
+                    message:
+                        "This booking has already changed. Please refresh and check its status."
                 });
             }
 
             return sendJSON(res, 200, {
                 success: true,
-                message: "Your booking has been cancelled successfully.",
+                message:
+                    "Your booking has been cancelled successfully.",
                 booking_id: booking.id
             });
         } catch (error) {
-            console.error("Cancellation error:", error.message);
+            console.error(
+                "Cancellation error:",
+                error.message
+            );
 
             return sendJSON(res, 500, {
                 success: false,
-                message: "Could not process the cancellation."
+                message:
+                    "Could not process the cancellation."
             });
         }
     }
@@ -646,5 +905,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, "0.0.0.0", () => {
-    console.log(`Iceland Transfer server running on port ${PORT}`);
+    console.log(
+        `Iceland Transfer server running on port ${PORT}`
+    );
 });
