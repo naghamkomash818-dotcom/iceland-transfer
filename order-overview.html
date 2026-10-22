@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Booking Overview | Iceland Transfer</title>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Booking Overview | Iceland Transfer</title><style>
 :root {
     --green: #465b45;
     --deep-green: #293c2e;
@@ -127,6 +122,7 @@ main {
 
 .detail-value {
     font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .price-row {
@@ -181,20 +177,23 @@ main {
     overflow-wrap: anywhere;
 }
 
-.message.success {
+.message.success,
+.message.error,
+.message.info {
     display: block;
+}
+
+.message.success {
     background: #e7f2e5;
     color: #28572c;
 }
 
 .message.error {
-    display: block;
     background: #f8e5e2;
     color: #8c2823;
 }
 
 .message.info {
-    display: block;
     background: #edf0ed;
     color: var(--deep-green);
 }
@@ -213,6 +212,7 @@ main {
 .booking-item h3 {
     margin-top: 0;
     color: var(--deep-green);
+    overflow-wrap: anywhere;
 }
 
 .actions {
@@ -383,133 +383,119 @@ footer {
         page-break-inside: avoid;
     }
 }
-</style>
-</head>
-
-<body>
-
-<header>
+</style></head><body><header>
     <div class="header-inner">
         <a href="index.html">
             <div class="brand">ICELAND TRANSFER</div>
             <div class="tagline">YOUR JOURNEY, OUR DRIVE</div>
+        </a>    <a href="index.html">Back to Home</a>
+</div>
+
+</header><main><div class="page-heading">
+    <h1>Booking Overview</h1>
+    <p>Review your trip details and confirm your reservation.</p>
+</div>
+
+<div id="messageBox" class="message" role="status" aria-live="polite"></div>
+
+<section id="cartSection" class="card">
+    <h2>Your Selected Trips</h2>
+
+    <div id="cartContainer">
+        <div class="loading">Loading your booking details...</div>
+    </div>
+
+    <div id="bookingActions" class="actions">
+        <button id="confirmBookingButton" class="primary" type="button">
+            Confirm Booking
+        </button>
+
+        <button id="clearCartButton" class="secondary" type="button">
+            Clear Selection
+        </button>
+
+        <a class="button secondary" href="index.html">
+            Continue Browsing
         </a>
-
-        <a href="index.html">Back to Home</a>
-    </div>
-</header>
-
-<main>
-
-    <div class="page-heading">
-        <h1>Booking Overview</h1>
-        <p>Review your trip details and confirm your reservation.</p>
     </div>
 
-    <div id="messageBox" class="message" role="status" aria-live="polite"></div>
+    <p class="muted">
+        Your booking is not confirmed until the server successfully saves it.
+    </p>
+</section>
 
-    <!-- CART -->
-    <section id="cartSection" class="card">
-        <h2>Your Selected Trips</h2>
-
-        <div id="cartContainer">
-            <div class="loading">Loading your booking details...</div>
+<section id="invoiceSection" class="card invoice hidden">
+    <div class="invoice-top">
+        <div>
+            <div class="invoice-brand">ICELAND TRANSFER</div>
+            <div class="muted">YOUR JOURNEY, OUR DRIVE</div>
+            <p>Booking Invoice</p>
         </div>
 
-        <div id="bookingActions" class="actions">
-            <button id="confirmBookingButton" class="primary" type="button">
-                Confirm Booking
-            </button>
-
-            <button id="clearCartButton" class="secondary" type="button">
-                Clear Selection
-            </button>
-
-            <a class="button secondary" href="index.html">
-                Continue Browsing
-            </a>
+        <div class="invoice-number">
+            <strong>Invoice / Booking ID</strong>
+            <div id="invoiceNumber">—</div>
+            <div id="invoiceStatus" class="status">Confirmed</div>
         </div>
+    </div>
 
-        <p class="muted">
-            Your booking is not confirmed until the server successfully saves it.
-        </p>
-    </section>
+    <h2>Customer & Trip Details</h2>
 
-    <!-- INVOICE -->
-    <section id="invoiceSection" class="card invoice hidden">
-        <div class="invoice-top">
-            <div>
-                <div class="invoice-brand">ICELAND TRANSFER</div>
-                <div class="muted">YOUR JOURNEY, OUR DRIVE</div>
-                <p>Booking Invoice</p>
-            </div>
+    <div id="invoiceDetails" class="details-grid"></div>
 
-            <div class="invoice-number">
-                <strong>Invoice / Booking ID</strong>
-                <div id="invoiceNumber">—</div>
-                <div id="invoiceStatus" class="status">Confirmed</div>
-            </div>
-        </div>
+    <h2 style="margin-top:25px;">Price Summary</h2>
 
-        <h2>Customer & Trip Details</h2>
+    <div id="invoicePriceLines"></div>
 
-        <div id="invoiceDetails" class="details-grid"></div>
+    <div class="price-row price-total">
+        <span>Total</span>
+        <span id="invoiceTotal">ISK 0</span>
+    </div>
 
-        <h2 style="margin-top:25px;">Price Summary</h2>
+    <div id="invoiceCancellationNote" class="invoice-note">
+        Cancellation is available more than 24 hours before departure.
+    </div>
 
-        <div id="invoicePriceLines"></div>
+    <div class="actions no-print">
+        <button id="printInvoiceButton" class="primary" type="button">
+            Print / Save PDF
+        </button>
 
-        <div class="price-row price-total">
-            <span>Total</span>
-            <span id="invoiceTotal">ISK 0</span>
-        </div>
+        <button id="cancelBookingButton" class="danger" type="button">
+            Cancel Booking
+        </button>
 
-        <div id="invoiceCancellationNote" class="invoice-note">
-            Cancellation is available more than 24 hours before departure.
-        </div>
+        <a href="index.html" class="button secondary">
+            Back to Home
+        </a>
+    </div>
+</section>
 
-        <div class="actions no-print">
-            <button id="printInvoiceButton" class="primary" type="button">
-                Print / Save PDF
-            </button>
+<section id="confirmedBookingsSection" class="card hidden">
+    <h2>Previous Confirmed Bookings</h2>
+    <div id="confirmedBookingsContainer"></div>
+</section>
 
-            <button id="cancelBookingButton" class="danger" type="button">
-                Cancel Booking
-            </button>
-
-            <a href="index.html" class="button secondary">
-                Back to Home
-            </a>
-        </div>
-    </section>
-
-    <!-- CONFIRMED BOOKINGS -->
-    <section id="confirmedBookingsSection" class="card hidden">
-        <h2>Previous Confirmed Bookings</h2>
-        <div id="confirmedBookingsContainer"></div>
-    </section>
-
-</main>
-
-<footer>
+</main><footer>
     <p>© <span id="currentYear"></span> Iceland Transfer. All rights reserved.</p>
     <p>For assistance, contact us at +354 833 3707.</p>
-</footer>
-
-<script>
+</footer><script>
 "use strict";
 
 /* =========================================
    CONFIGURATION
 ========================================= */
 
-const SERVER_URL =
-    "https://iceland-transfer-server.onrender.com";
+const SERVER_URL = "https://iceland-transfer-server.onrender.com";
 
 const CART_KEY = "icelandTransferCart";
 const CONFIRMED_KEY = "icelandTransferConfirmedBookings";
 
-const CURRENCY = "ISK";
+const PENDING_KEYS = [
+    "icelandTransferPendingBooking",
+    "bookingData",
+    "icelandTransferBooking"
+];
 
 let cart = [];
 let confirmedBookings = [];
@@ -521,78 +507,50 @@ let isSubmitting = false;
    ELEMENTS
 ========================================= */
 
-const messageBox =
-    document.getElementById("messageBox");
+const messageBox = document.getElementById("messageBox");
+const cartContainer = document.getElementById("cartContainer");
+const confirmBookingButton = document.getElementById("confirmBookingButton");
+const clearCartButton = document.getElementById("clearCartButton");
+const invoiceSection = document.getElementById("invoiceSection");
+const invoiceNumber = document.getElementById("invoiceNumber");
+const invoiceStatus = document.getElementById("invoiceStatus");
+const invoiceDetails = document.getElementById("invoiceDetails");
+const invoicePriceLines = document.getElementById("invoicePriceLines");
+const invoiceTotal = document.getElementById("invoiceTotal");
+const cancelBookingButton = document.getElementById("cancelBookingButton");
+const printInvoiceButton = document.getElementById("printInvoiceButton");
 
-const cartContainer =
-    document.getElementById("cartContainer");
-
-const confirmBookingButton =
-    document.getElementById("confirmBookingButton");
-
-const clearCartButton =
-    document.getElementById("clearCartButton");
-
-const invoiceSection =
-    document.getElementById("invoiceSection");
-
-const invoiceNumber =
-    document.getElementById("invoiceNumber");
-
-const invoiceStatus =
-    document.getElementById("invoiceStatus");
-
-const invoiceDetails =
-    document.getElementById("invoiceDetails");
-
-const invoicePriceLines =
-    document.getElementById("invoicePriceLines");
-
-const invoiceTotal =
-    document.getElementById("invoiceTotal");
-
-const cancelBookingButton =
-    document.getElementById("cancelBookingButton");
-
-const printInvoiceButton =
-    document.getElementById("printInvoiceButton");
-
-document.getElementById("currentYear").textContent =
-    new Date().getFullYear();
+document.getElementById("currentYear").textContent = new Date().getFullYear();
 
 /* =========================================
    SAFE HELPERS
 ========================================= */
 
 function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, character => {
-        const entities = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        };
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
 
-        return entities[character];
-    });
+function readStorageFrom(storage, key, fallback = null) {
+    try {
+        const raw = storage.getItem(key);
+
+        if (!raw) return fallback;
+
+        return JSON.parse(raw);
+    } catch (error) {
+        console.warn("Could not read storage key:", key, error);
+        return fallback;
+    }
 }
 
 function readStorage(key, fallback) {
-    try {
-        const raw = localStorage.getItem(key);
-
-        if (!raw) {
-            return fallback;
-        }
-
-        const parsed = JSON.parse(raw);
-
-        return parsed ?? fallback;
-    } catch (error) {
-        console.error("Storage read failed:", error);
-        return fallback;
-    }
+    return readStorageFrom(localStorage, key, fallback);
 }
 
 function writeStorage(key, value) {
@@ -601,12 +559,10 @@ function writeStorage(key, value) {
         return true;
     } catch (error) {
         console.error("Storage write failed:", error);
-
         showMessage(
-            "Your browser could not save the booking locally. Please keep your invoice details.",
+            "Your browser could not save this information. Please keep a copy of your booking details.",
             "error"
         );
-
         return false;
     }
 }
@@ -614,10 +570,6 @@ function writeStorage(key, value) {
 function showMessage(message, type = "info") {
     messageBox.textContent = message;
     messageBox.className = "message " + type;
-    messageBox.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest"
-    });
 }
 
 function clearMessage() {
@@ -634,15 +586,23 @@ function formatMoney(value) {
 }
 
 function formatDate(value) {
-    if (!value) {
-        return "Not provided";
+    if (!value) return "Not provided";
+
+    const text = String(value).trim();
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+        const date = new Date(text + "T12:00:00");
+
+        return date.toLocaleDateString("en-GB", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
     }
 
-    const date = new Date(value + "T12:00:00");
+    const date = new Date(text);
 
-    if (Number.isNaN(date.getTime())) {
-        return String(value);
-    }
+    if (Number.isNaN(date.getTime())) return text;
 
     return date.toLocaleDateString("en-GB", {
         year: "numeric",
@@ -660,15 +620,19 @@ function normalizeText(value) {
 }
 
 function getServiceType(item) {
-    const type = normalizeText(item.service_type);
+    const type = normalizeText(
+        item.service_type || item.serviceType || item.service || ""
+    );
+
     const name = normalizeText(
-        item.name || item.service_name || ""
+        item.name || item.service_name || item.title || ""
     );
 
     if (
         type.includes("northern") ||
         type.includes("aurora") ||
-        name.includes("northern lights")
+        name.includes("northern lights") ||
+        name.includes("aurora")
     ) {
         return "northern_lights_tour";
     }
@@ -686,26 +650,24 @@ function getServiceType(item) {
 function getServiceLabel(item) {
     const type = getServiceType(item);
 
-    if (type === "golden_circle_tour") {
-        return "Golden Circle Tour";
-    }
+    if (type === "golden_circle_tour") return "Golden Circle Tour";
 
-    if (type === "northern_lights_tour") {
-        return "Northern Lights Tour";
-    }
+    if (type === "northern_lights_tour") return "Northern Lights Tour";
 
-    return "Transfer";
+    return item.service_name || item.service || "Transfer";
 }
 
 function getItemPrice(item) {
-    const possiblePrices = [
+    const values = [
         item.total,
+        item.estimatedPrice,
+        item.estimated_price,
         item.price,
         item.unitPrice,
-        item.estimatedPrice
+        item.unit_price
     ];
 
-    for (const value of possiblePrices) {
+    for (const value of values) {
         if (
             value !== undefined &&
             value !== null &&
@@ -720,59 +682,156 @@ function getItemPrice(item) {
 }
 
 function getItemDate(item) {
-    return item.pickup_date || item.date || "";
+    return item.pickup_date || item.date || item.travel_date || "";
 }
 
 function getItemTime(item) {
-    return item.pickup_time || item.time || "";
+    return item.pickup_time || item.time || item.departure_time || "";
 }
 
 function getItemPickup(item) {
-    return (
-        item.pickup_location ||
-        item.pickup ||
-        item.pickupLocation ||
-        ""
-    );
+    return item.pickup_location || item.pickup || item.pickupLocation || "";
 }
 
 function getItemDestination(item) {
-    return (
-        item.destination ||
+    return item.destination ||
         item.destination_location ||
+        item.dropoff_location ||
+        item.dropoff ||
         item.destinationLocation ||
-        ""
-    );
+        "";
 }
 
 function getItemPassengers(item) {
-    return Number(
-        item.passengers ||
-        item.numberOfPassengers ||
-        item.count ||
-        1
-    );
+    const value = item.passengers ??
+        item.numberOfPassengers ??
+        item.number_of_passengers ??
+        item.count ??
+        1;
+
+    return Math.max(1, Number(value) || 1);
 }
 
 function getItemCustomerName(item) {
-    return (
-        item.full_name ||
+    return item.full_name ||
         item.customerName ||
         item.name_on_booking ||
-        ""
-    );
+        item.customer_name ||
+        item.customer ||
+        "";
 }
 
 function getItemExtras(item) {
-    if (Array.isArray(item.extras)) {
-        return item.extras;
-    }
+    if (Array.isArray(item.extras)) return item.extras;
 
-    if (Array.isArray(item.addons)) {
-        return item.addons;
-    }
+    if (Array.isArray(item.addons)) return item.addons;
+
+    if (Array.isArray(item.selectedExtras)) return item.selectedExtras;
 
     return [];
+}
+
+function makeBookingId(item) {
+    if (item.id) return String(item.id);
+
+    return "local-" + Date.now() + "-" +
+        Math.random().toString(36).slice(2, 10);
+}
+
+function normalizePendingBooking(value) {
+    if (!value || typeof value !== "object") return null;
+
+    // Some older versions saved the actual booking inside a wrapper.
+    const item =
+        value.booking && typeof value.booking === "object"
+            ? value.booking
+            : value.formData && typeof value.formData === "object"
+                ? value.formData
+                : value;
+
+    const normalized = { ...item };
+
+    normalized.id = makeBookingId(normalized);
+
+    if (!normalized.name && normalized.service_name) {
+        normalized.name = normalized.service_name;
+    }
+
+    if (!normalized.service_name && normalized.name) {
+        normalized.service_name = normalized.name;
+    }
+
+    if (!normalized.service_type && !normalized.service && !normalized.serviceType) {
+        normalized.service_type = getServiceType(normalized);
+    }
+
+    return normalized;
+}
+
+function addPendingBookingToCart() {
+    let existing = readStorage(CART_KEY, []);
+
+    if (!Array.isArray(existing)) {
+        existing = existing && typeof existing === "object"
+            ? [existing]
+            : [];
+    }
+
+    const pendingCandidates = [];
+
+    // Check localStorage and sessionStorage because earlier page versions
+    // used different storage locations and key names.
+    for (const key of PENDING_KEYS) {
+        const localValue = readStorageFrom(localStorage, key);
+        const sessionValue = readStorageFrom(sessionStorage, key);
+
+        if (localValue) pendingCandidates.push(localValue);
+        if (sessionValue) pendingCandidates.push(sessionValue);
+    }
+
+    let changed = false;
+
+    for (const candidate of pendingCandidates) {
+        const normalized = normalizePendingBooking(candidate);
+
+        if (!normalized) continue;
+
+        const hasUsefulData =
+            getItemCustomerName(normalized) ||
+            normalized.email ||
+            normalized.phone ||
+            getItemPickup(normalized) ||
+            getItemDate(normalized) ||
+            getItemPrice(normalized) > 0;
+
+        if (!hasUsefulData) continue;
+
+        const duplicate = existing.some(item => {
+            if (item.id && normalized.id && item.id === normalized.id) {
+                return true;
+            }
+
+            return (
+                getItemCustomerName(item) === getItemCustomerName(normalized) &&
+                getItemDate(item) === getItemDate(normalized) &&
+                getItemTime(item) === getItemTime(normalized) &&
+                getItemPickup(item) === getItemPickup(normalized) &&
+                getItemDestination(item) === getItemDestination(normalized) &&
+                getServiceType(item) === getServiceType(normalized)
+            );
+        });
+
+        if (!duplicate) {
+            existing.push(normalized);
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        writeStorage(CART_KEY, existing);
+    }
+
+    return existing;
 }
 
 /* =========================================
@@ -780,15 +839,9 @@ function getItemExtras(item) {
 ========================================= */
 
 function loadCart() {
-    const saved = readStorage(CART_KEY, []);
+    cart = addPendingBookingToCart();
 
-    if (Array.isArray(saved)) {
-        cart = saved;
-    } else if (saved && typeof saved === "object") {
-        cart = [saved];
-    } else {
-        cart = [];
-    }
+    if (!Array.isArray(cart)) cart = [];
 
     confirmedBookings = readStorage(CONFIRMED_KEY, []);
 
@@ -805,7 +858,8 @@ function renderCart() {
         cartContainer.innerHTML = `
             <p>Your selection is empty.</p>
             <p class="muted">
-                Choose a transfer or tour first, then return here to confirm your booking.
+                Please return to the tour or transfer page, complete the booking form,
+                and select “Add to Booking” before returning here.
             </p>
         `;
 
@@ -823,18 +877,12 @@ function renderCart() {
 
     cart.forEach((item, index) => {
         const price = getItemPrice(item);
-
         estimatedTotal += price;
 
-        const title =
-            item.name ||
+        const title = item.name ||
             item.service_name ||
+            item.title ||
             getServiceLabel(item);
-
-        const date = getItemDate(item);
-        const time = getItemTime(item);
-        const pickup = getItemPickup(item);
-        const destination = getItemDestination(item);
 
         html += `
             <div class="booking-item">
@@ -843,46 +891,51 @@ function renderCart() {
                 <div class="details-grid">
                     <div class="detail">
                         <span class="detail-label">Service</span>
-                        <span class="detail-value">
-                            ${escapeHTML(getServiceLabel(item))}
-                        </span>
+                        <span class="detail-value">${escapeHTML(getServiceLabel(item))}</span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Customer</span>
+                        <span class="detail-value">${escapeHTML(getItemCustomerName(item) || "Not provided")}</span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Email</span>
+                        <span class="detail-value">${escapeHTML(item.email || "Not provided")}</span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Phone</span>
+                        <span class="detail-value">${escapeHTML(item.phone || "Not provided")}</span>
                     </div>
 
                     <div class="detail">
                         <span class="detail-label">Travel Date</span>
-                        <span class="detail-value">
-                            ${escapeHTML(formatDate(date))}
-                        </span>
+                        <span class="detail-value">${escapeHTML(formatDate(getItemDate(item)))}</span>
                     </div>
 
                     <div class="detail">
                         <span class="detail-label">Departure Time</span>
-                        <span class="detail-value">
-                            ${escapeHTML(time || "Not provided")}
-                        </span>
+                        <span class="detail-value">${escapeHTML(getItemTime(item) || "Not provided")}</span>
                     </div>
 
                     <div class="detail">
                         <span class="detail-label">Passengers</span>
-                        <span class="detail-value">
-                            ${escapeHTML(getItemPassengers(item))}
-                        </span>
+                        <span class="detail-value">${escapeHTML(getItemPassengers(item))}</span>
                     </div>
 
                     <div class="detail">
                         <span class="detail-label">Pickup</span>
-                        <span class="detail-value">
-                            ${escapeHTML(pickup || "Not provided")}
-                        </span>
+                        <span class="detail-value">${escapeHTML(getItemPickup(item) || "Not provided")}</span>
                     </div>
 
                     <div class="detail">
                         <span class="detail-label">Destination</span>
-                        <span class="detail-value">
-                            ${escapeHTML(destination || "Not provided")}
-                        </span>
+                        <span class="detail-value">${escapeHTML(getItemDestination(item) || "Not provided")}</span>
                     </div>
                 </div>
+
+                ${renderExtras(item)}
 
                 <div class="price-row" style="margin-top:15px;">
                     <strong>Estimated price</strong>
@@ -890,10 +943,7 @@ function renderCart() {
                 </div>
 
                 <div class="actions no-print">
-                    <button
-                        type="button"
-                        class="secondary remove-item"
-                        data-index="${index}">
+                    <button type="button" class="secondary remove-item" data-index="${index}">
                         Remove This Trip
                     </button>
                 </div>
@@ -906,11 +956,8 @@ function renderCart() {
             <span>Estimated Total</span>
             <span>${escapeHTML(formatMoney(estimatedTotal))}</span>
         </div>
-    `;
-
-    html += `
         <p class="muted">
-            Final prices are calculated and verified by the server.
+            This is an estimate. The server validates the booking and calculates the final price.
         </p>
     `;
 
@@ -920,18 +967,48 @@ function renderCart() {
         button.addEventListener("click", () => {
             const index = Number(button.dataset.index);
 
-            if (!Number.isInteger(index)) {
+            if (!Number.isInteger(index) || index < 0 || index >= cart.length) {
                 return;
             }
 
             cart.splice(index, 1);
-
             writeStorage(CART_KEY, cart);
-
             renderCart();
             clearMessage();
         });
     });
+}
+
+function renderExtras(item) {
+    const extras = getItemExtras(item);
+
+    if (!extras.length) return "";
+
+    let html = `
+        <div style="margin-top:15px;">
+            <strong>Selected extras</strong>
+    `;
+
+    extras.forEach(extra => {
+        if (typeof extra === "string") {
+            html += `<div class="price-row"><span>${escapeHTML(extra)}</span></div>`;
+            return;
+        }
+
+        const name = extra.name || extra.label || extra.id || "Extra";
+        const price = Number(extra.total ?? extra.price ?? extra.amount ?? 0);
+
+        html += `
+            <div class="price-row">
+                <span>${escapeHTML(name)}</span>
+                <span>${escapeHTML(formatMoney(price))}</span>
+            </div>
+        `;
+    });
+
+    html += "</div>";
+
+    return html;
 }
 
 /* =========================================
@@ -943,38 +1020,22 @@ function buildBookingPayload(item) {
 
     const payload = {
         full_name: getItemCustomerName(item),
-
         email: item.email || "",
-
         phone: item.phone || "",
-
         pickup_location: getItemPickup(item),
-
         destination: getItemDestination(item),
-
         pickup_date: getItemDate(item),
-
         pickup_time: getItemTime(item),
-
         passengers: getItemPassengers(item),
-
         luggage: Number(item.luggage || 0),
-
         flight_number: item.flight_number || "",
-
-        special_requests:
-            item.special_requests ||
-            item.notes ||
-            "",
-
+        special_requests: item.special_requests || item.notes || "",
         service_type: serviceType,
-
-        package_type: item.package_type || "classic"
+        package_type: item.package_type || item.packageType || "classic"
     };
 
     if (serviceType === "golden_circle_tour") {
         payload.addons = getItemExtras(item);
-
         payload.selected_stops = Array.isArray(item.selected_stops)
             ? item.selected_stops
             : [];
@@ -995,7 +1056,7 @@ function buildBookingPayload(item) {
 }
 
 /* =========================================
-   SERVER REQUESTS
+   SERVER REQUEST
 ========================================= */
 
 async function requestJSON(url, options = {}) {
@@ -1011,7 +1072,7 @@ async function requestJSON(url, options = {}) {
         });
     } catch (error) {
         throw new Error(
-            "Could not connect to the booking server. Please check your internet connection and try again."
+            "Could not connect to the booking server. Check your internet connection and try again."
         );
     }
 
@@ -1019,20 +1080,15 @@ async function requestJSON(url, options = {}) {
 
     try {
         data = await response.json();
-    } catch {
+    } catch (error) {
         throw new Error(
             "The server returned an invalid response. Please try again later."
         );
     }
 
     if (!response.ok || data.success === false) {
-        const message =
-            data.error ||
-            (
-                Array.isArray(data.errors)
-                    ? data.errors.join(" ")
-                    : ""
-            ) ||
+        const message = data.error ||
+            (Array.isArray(data.errors) ? data.errors.join(" ") : "") ||
             "The request failed. Please try again.";
 
         throw new Error(message);
@@ -1046,31 +1102,23 @@ async function requestJSON(url, options = {}) {
 ========================================= */
 
 async function confirmBookings() {
-    if (isSubmitting) {
-        return;
-    }
+    if (isSubmitting) return;
 
     if (!cart.length) {
-        showMessage(
-            "Your selection is empty. Please select a trip first.",
-            "error"
-        );
-
+        showMessage("Your selection is empty. Please select a trip first.", "error");
         return;
     }
 
     const incomplete = cart.find(item => {
         const payload = buildBookingPayload(item);
 
-        return (
-            !payload.full_name ||
+        return !payload.full_name ||
             !payload.email ||
             !payload.phone ||
             !payload.pickup_location ||
             !payload.destination ||
             !payload.pickup_date ||
-            !payload.pickup_time
-        );
+            !payload.pickup_time;
     });
 
     if (incomplete) {
@@ -1078,7 +1126,6 @@ async function confirmBookings() {
             "Some booking details are missing. Please return to the tour page and complete your name, email, phone, pickup, destination, date and time.",
             "error"
         );
-
         return;
     }
 
@@ -1087,24 +1134,21 @@ async function confirmBookings() {
             "You have selected multiple trips. Each trip will be submitted separately. Continue?"
         );
 
-        if (!proceed) {
-            return;
-        }
+        if (!proceed) return;
     }
 
     isSubmitting = true;
     confirmBookingButton.disabled = true;
+    clearCartButton.disabled = true;
     confirmBookingButton.textContent = "Processing...";
-
     clearMessage();
 
     const successfulBookings = [];
     const failedBookings = [];
+    const submittedItems = [...cart];
 
     try {
-        for (let i = 0; i < cart.length; i++) {
-            const item = cart[i];
-
+        for (const item of submittedItems) {
             try {
                 const payload = buildBookingPayload(item);
 
@@ -1117,10 +1161,10 @@ async function confirmBookings() {
                 );
 
                 successfulBookings.push({
-                    booking: result.booking,
-                    invoice: result.invoice,
-                    cancellation_url: result.cancellation_url,
-                    cancellation_policy: result.cancellation_policy,
+                    booking: result.booking || {},
+                    invoice: result.invoice || null,
+                    cancellation_url: result.cancellation_url || "",
+                    cancellation_policy: result.cancellation_policy || null,
                     original_item: item
                 });
             } catch (error) {
@@ -1139,80 +1183,60 @@ async function confirmBookings() {
                 cancellation_policy: entry.cancellation_policy
             }));
 
-            confirmedBookings = [
-                ...confirmedBookings,
-                ...saved
-            ];
-
+            confirmedBookings = [...confirmedBookings, ...saved];
             writeStorage(CONFIRMED_KEY, confirmedBookings);
 
-            currentInvoice = successfulBookings[0].invoice;
+            const successfulIds = new Set(
+                successfulBookings.map(entry => String(entry.original_item.id))
+            );
 
-            currentCancellationToken =
-                getCancellationToken(
-                    successfulBookings[0].cancellation_url
+            cart = cart.filter(item => !successfulIds.has(String(item.id)));
+            writeStorage(CART_KEY, cart);
+            renderCart();
+            renderConfirmedBookings();
+
+            const first = successfulBookings[0];
+
+            currentInvoice = first.invoice;
+            currentCancellationToken = getCancellationToken(first.cancellation_url);
+
+            if (first.invoice) {
+                displayInvoice(
+                    first.invoice,
+                    first.booking,
+                    first.cancellation_url
+                );
+            } else {
+                showMessage(
+                    "The server reported a successful booking but did not return an invoice. Please contact us with your booking details.",
+                    "error"
+                );
+            }
+
+            if (failedBookings.length) {
+                showMessage(
+                    successfulBookings.length + " booking(s) confirmed. " +
+                    failedBookings.length + " booking(s) failed. Details are shown below.",
+                    "info"
                 );
 
-            if (failedBookings.length === 0) {
-                cart = [];
-                writeStorage(CART_KEY, cart);
-                renderCart();
+                const errorsContainer = document.createElement("div");
 
+                errorsContainer.innerHTML = failedBookings.map(entry => `
+                    <p>
+                        <strong>${escapeHTML(entry.item.name || getServiceLabel(entry.item))}:</strong>
+                        ${escapeHTML(entry.message)}
+                    </p>
+                `).join("");
+
+                messageBox.appendChild(errorsContainer);
+            } else {
                 showMessage(
                     successfulBookings.length === 1
                         ? "Your booking has been confirmed successfully!"
                         : "Your bookings have been processed successfully.",
                     "success"
                 );
-            } else {
-                const successfulIds = new Set(
-                    successfulBookings.map(entry => entry.original_item.id)
-                );
-
-                cart = cart.filter(item => {
-                    return !successfulIds.has(item.id);
-                });
-
-                writeStorage(CART_KEY, cart);
-                renderCart();
-
-                showMessage(
-                    successfulBookings.length +
-                    " booking(s) confirmed. " +
-                    failedBookings.length +
-                    " booking(s) failed. Check the messages below.",
-                    "info"
-                );
-            }
-
-            renderConfirmedBookings();
-
-            displayInvoice(
-                successfulBookings[0].invoice,
-                successfulBookings[0].booking,
-                successfulBookings[0].cancellation_url
-            );
-
-            if (failedBookings.length) {
-                const errorsHTML = failedBookings.map(entry => {
-                    const title =
-                        entry.item.name ||
-                        getServiceLabel(entry.item);
-
-                    return `
-                        <p>
-                            <strong>${escapeHTML(title)}:</strong>
-                            ${escapeHTML(entry.message)}
-                        </p>
-                    `;
-                }).join("");
-
-                const errorsContainer =
-                    document.createElement("div");
-
-                errorsContainer.innerHTML = errorsHTML;
-
-                messageBox.appendChild(errorsContainer);
             }
         } else {
             const messages = failedBookings
@@ -1236,6 +1260,7 @@ async function confirmBookings() {
     } finally {
         isSubmitting = false;
         confirmBookingButton.disabled = cart.length === 0;
+        clearCartButton.disabled = cart.length === 0;
         confirmBookingButton.textContent = "Confirm Booking";
     }
 }
@@ -1256,17 +1281,14 @@ function createDetail(label, value) {
 function displayInvoice(invoice, booking, cancellationUrl) {
     if (!invoice) {
         showMessage(
-            "The booking was saved, but the invoice could not be displayed.",
+            "The booking was saved, but the server did not provide invoice details.",
             "error"
         );
-
         return;
     }
 
     currentInvoice = invoice;
-
-    currentCancellationToken =
-        getCancellationToken(cancellationUrl);
+    currentCancellationToken = getCancellationToken(cancellationUrl);
 
     invoiceNumber.textContent =
         invoice.invoice_number ||
@@ -1278,9 +1300,7 @@ function displayInvoice(invoice, booking, cancellationUrl) {
         invoice.status || booking?.status || "confirmed"
     ).toLowerCase();
 
-    invoiceStatus.textContent =
-        status.charAt(0).toUpperCase() + status.slice(1);
-
+    invoiceStatus.textContent = status.charAt(0).toUpperCase() + status.slice(1);
     invoiceStatus.className = "status";
 
     if (status === "cancelled") {
@@ -1290,28 +1310,27 @@ function displayInvoice(invoice, booking, cancellationUrl) {
     }
 
     invoiceDetails.innerHTML = [
-        createDetail("Customer", invoice.customer_name || invoice.full_name),
-        createDetail("Email", invoice.email),
-        createDetail("Phone", invoice.phone),
-        createDetail("Service", invoice.service_type),
-        createDetail("Package", invoice.package_type),
-        createDetail("Pickup", invoice.pickup_location),
-        createDetail("Destination", invoice.destination),
-        createDetail("Date", formatDate(invoice.pickup_date)),
-        createDetail("Time", invoice.pickup_time),
-        createDetail("Passengers", invoice.passengers),
-        createDetail("Luggage", invoice.luggage)
+        createDetail("Customer", invoice.customer_name || invoice.full_name || booking?.full_name),
+        createDetail("Email", invoice.email || booking?.email),
+        createDetail("Phone", invoice.phone || booking?.phone),
+        createDetail("Service", invoice.service_type || booking?.service_type),
+        createDetail("Package", invoice.package_type || booking?.package_type),
+        createDetail("Pickup", invoice.pickup_location || booking?.pickup_location),
+        createDetail("Destination", invoice.destination || booking?.destination),
+        createDetail("Date", formatDate(invoice.pickup_date || booking?.pickup_date)),
+        createDetail("Time", invoice.pickup_time || booking?.pickup_time),
+        createDetail("Passengers", invoice.passengers ?? booking?.passengers),
+        createDetail("Luggage", invoice.luggage ?? booking?.luggage)
     ].join("");
-
-    let priceHTML = "";
 
     const basePrice = Number(
         invoice.base_price ??
         invoice.price ??
+        booking?.base_price ??
         0
     );
 
-    priceHTML += `
+    let priceHTML = `
         <div class="price-row">
             <span>Base price</span>
             <span>${escapeHTML(formatMoney(basePrice))}</span>
@@ -1320,18 +1339,18 @@ function displayInvoice(invoice, booking, cancellationUrl) {
 
     const extras = Array.isArray(invoice.extras)
         ? invoice.extras
-        : [];
+        : Array.isArray(invoice.addons)
+            ? invoice.addons
+            : [];
 
     extras.forEach(extra => {
+        const name = extra.name || extra.label || extra.id || "Extra";
+        const price = Number(extra.total ?? extra.price ?? extra.amount ?? 0);
+
         priceHTML += `
             <div class="price-row">
-                <span>
-                    ${escapeHTML(extra.name || extra.id || "Extra")}
-                </span>
-
-                <span>
-                    ${escapeHTML(formatMoney(extra.total || 0))}
-                </span>
+                <span>${escapeHTML(name)}</span>
+                <span>${escapeHTML(formatMoney(price))}</span>
             </div>
         `;
     });
@@ -1341,23 +1360,21 @@ function displayInvoice(invoice, booking, cancellationUrl) {
     const total = Number(
         invoice.total ??
         invoice.price ??
+        booking?.total ??
         booking?.price ??
         0
     );
 
     invoiceTotal.textContent = formatMoney(total);
 
-    const departureDate = invoice.pickup_date;
+    const departureDate = invoice.pickup_date || booking?.pickup_date;
     const departureTime = String(
-        invoice.pickup_time || "00:00"
+        invoice.pickup_time || booking?.pickup_time || "00:00"
     ).slice(0, 5);
 
-    const departure = new Date(
-        `${departureDate}T${departureTime}:00Z`
-    );
-
-    const remaining =
-        departure.getTime() - Date.now();
+    // Treat the entered departure date/time as Iceland local time (UTC).
+    const departure = new Date(`${departureDate}T${departureTime}:00Z`);
+    const remaining = departure.getTime() - Date.now();
 
     const canCancel =
         status !== "cancelled" &&
@@ -1365,24 +1382,17 @@ function displayInvoice(invoice, booking, cancellationUrl) {
         remaining > 24 * 60 * 60 * 1000 &&
         Boolean(currentCancellationToken);
 
-    cancelBookingButton.classList.toggle(
-        "hidden",
-        !canCancel
-    );
+    cancelBookingButton.classList.toggle("hidden", !canCancel);
+
+    const note = document.getElementById("invoiceCancellationNote");
 
     if (status === "cancelled") {
-        document.getElementById(
-            "invoiceCancellationNote"
-        ).textContent = "This booking has been cancelled.";
+        note.textContent = "This booking has been cancelled.";
     } else if (!canCancel) {
-        document.getElementById(
-            "invoiceCancellationNote"
-        ).textContent =
-            "Online cancellation is unavailable within 24 hours of departure.";
+        note.textContent =
+            "Online cancellation is unavailable within 24 hours of departure, or the cancellation link is unavailable.";
     } else {
-        document.getElementById(
-            "invoiceCancellationNote"
-        ).textContent =
+        note.textContent =
             "You can cancel this booking while more than 24 hours remain before departure.";
     }
 
@@ -1399,15 +1409,18 @@ function displayInvoice(invoice, booking, cancellationUrl) {
 ========================================= */
 
 function getCancellationToken(url) {
-    if (!url || typeof url !== "string") {
-        return null;
+    if (!url || typeof url !== "string") return null;
+
+    try {
+        const parsed = new URL(url, SERVER_URL);
+        const match = parsed.pathname.match(/\/api\/bookings\/cancel\/([a-f0-9]{64})/i);
+
+        return match ? match[1] : null;
+    } catch (error) {
+        const match = url.match(/\/api\/bookings\/cancel\/([a-f0-9]{64})/i);
+
+        return match ? match[1] : null;
     }
-
-    const match = url.match(
-        /\/api\/bookings\/cancel\/([a-f0-9]{64})/i
-    );
-
-    return match ? match[1] : null;
 }
 
 async function cancelCurrentBooking() {
@@ -1416,7 +1429,6 @@ async function cancelCurrentBooking() {
             "The cancellation link is unavailable for this booking.",
             "error"
         );
-
         return;
     }
 
@@ -1424,77 +1436,67 @@ async function cancelCurrentBooking() {
         "Are you sure you want to cancel this booking? This action cannot be undone."
     );
 
-    if (!confirmed) {
-        return;
-    }
+    if (!confirmed) return;
 
     cancelBookingButton.disabled = true;
     cancelBookingButton.textContent = "Cancelling...";
 
     try {
         const result = await requestJSON(
-            SERVER_URL +
-            "/api/bookings/cancel/" +
-            currentCancellationToken,
+            SERVER_URL + "/api/bookings/cancel/" + currentCancellationToken,
             {
                 method: "POST",
                 body: JSON.stringify({})
             }
         );
 
-        showMessage(
-            result.message || "Your booking has been cancelled.",
-            "success"
-        );
-
-        const bookingId =
+        const bookingId = String(
             currentInvoice?.booking_id ||
-            currentInvoice?.invoice_number;
+            currentInvoice?.id ||
+            currentInvoice?.invoice_number ||
+            ""
+        );
 
         confirmedBookings = confirmedBookings.map(entry => {
             const savedBooking = entry.booking || {};
             const savedInvoice = entry.invoice || {};
 
-            const matches =
-                String(savedBooking.id) === String(bookingId) ||
-                String(savedInvoice.booking_id) === String(bookingId) ||
-                String(savedInvoice.invoice_number) === String(bookingId);
+            const identifiers = [
+                savedBooking.id,
+                savedInvoice.booking_id,
+                savedInvoice.id,
+                savedInvoice.invoice_number
+            ].filter(value => value !== undefined && value !== null)
+                .map(String);
 
-            if (!matches) {
-                return entry;
-            }
+            if (!identifiers.includes(bookingId)) return entry;
 
-            if (entry.booking) {
-                entry.booking.status = "cancelled";
-            }
-
-            if (entry.invoice) {
-                entry.invoice.status = "cancelled";
-            }
+            if (entry.booking) entry.booking.status = "cancelled";
+            if (entry.invoice) entry.invoice.status = "cancelled";
 
             return entry;
         });
 
         writeStorage(CONFIRMED_KEY, confirmedBookings);
 
-        if (currentInvoice) {
-            currentInvoice.status = "cancelled";
-        }
+        if (currentInvoice) currentInvoice.status = "cancelled";
 
         invoiceStatus.textContent = "Cancelled";
         invoiceStatus.className = "status cancelled";
-
         cancelBookingButton.classList.add("hidden");
 
-        document.getElementById(
-            "invoiceCancellationNote"
-        ).textContent = "This booking has been cancelled.";
+        document.getElementById("invoiceCancellationNote").textContent =
+            "This booking has been cancelled.";
 
         renderConfirmedBookings();
+
+        showMessage(
+            result.message || "Your booking has been cancelled.",
+            "success"
+        );
     } catch (error) {
         showMessage(
-            error.message ||
-            "Unable to cancel this booking. Please try again.",
+            error.message || "Unable to cancel this booking. Please try again.",
             "error"
         );
     } finally {
@@ -1508,11 +1510,8 @@ async function cancelCurrentBooking() {
 ========================================= */
 
 function renderConfirmedBookings() {
-    const section =
-        document.getElementById("confirmedBookingsSection");
-
-    const container =
-        document.getElementById("confirmedBookingsContainer");
+    const section = document.getElementById("confirmedBookingsSection");
+    const container = document.getElementById("confirmedBookingsContainer");
 
     if (!confirmedBookings.length) {
         section.classList.add("hidden");
@@ -1522,70 +1521,60 @@ function renderConfirmedBookings() {
 
     section.classList.remove("hidden");
 
-    container.innerHTML = confirmedBookings
-        .map((entry, index) => {
-            const booking = entry.booking || {};
-            const invoice = entry.invoice || {};
+    container.innerHTML = confirmedBookings.map((entry, index) => {
+        const booking = entry.booking || {};
+        const invoice = entry.invoice || {};
 
-            const status = String(
-                booking.status ||
-                invoice.status ||
-                "confirmed"
-            ).toLowerCase();
+        const status = String(
+            booking.status || invoice.status || "confirmed"
+        ).toLowerCase();
 
-            const id =
-                invoice.invoice_number ||
-                invoice.booking_id ||
-                booking.id ||
-                "Booking";
+        const id =
+            invoice.invoice_number ||
+            invoice.booking_id ||
+            booking.id ||
+            "Booking";
 
-            return `
-                <div class="booking-item">
-                    <h3>Booking ${escapeHTML(id)}</h3>
+        return `
+            <div class="booking-item">
+                <h3>Booking ${escapeHTML(id)}</h3>
 
-                    <p>
-                        <strong>Service:</strong>
-                        ${escapeHTML(invoice.service_type || booking.service_type || "Transfer")}
-                    </p>
+                <p>
+                    <strong>Service:</strong>
+                    ${escapeHTML(invoice.service_type || booking.service_type || "Transfer")}
+                </p>
 
-                    <p>
-                        <strong>Date:</strong>
-                        ${escapeHTML(formatDate(invoice.pickup_date || booking.pickup_date))}
-                    </p>
+                <p>
+                    <strong>Date:</strong>
+                    ${escapeHTML(formatDate(invoice.pickup_date || booking.pickup_date))}
+                </p>
 
-                    <p>
-                        <strong>Total:</strong>
-                        ${escapeHTML(formatMoney(invoice.total ?? booking.price ?? 0))}
-                    </p>
+                <p>
+                    <strong>Total:</strong>
+                    ${escapeHTML(formatMoney(invoice.total ?? invoice.price ?? booking.price ?? 0))}
+                </p>
 
-                    <p>
-                        <span class="status ${status === "cancelled" ? "cancelled" : ""}">
-                            ${escapeHTML(status)}
-                        </span>
-                    </p>
+                <p>
+                    <span class="status ${status === "cancelled" ? "cancelled" : ""}">
+                        ${escapeHTML(status)}
+                    </span>
+                </p>
 
-                    <div class="actions no-print">
-                        <button
-                            type="button"
-                            class="secondary view-booking"
-                            data-index="${index}">
-                            View Invoice
-                        </button>
-                    </div>
+                <div class="actions no-print">
+                    <button type="button" class="secondary view-booking" data-index="${index}">
+                        View Invoice
+                    </button>
                 </div>
-            `;
-        })
-        .join("");
+            </div>
+        `;
+    }).join("");
 
     container.querySelectorAll(".view-booking").forEach(button => {
         button.addEventListener("click", () => {
             const index = Number(button.dataset.index);
-
             const entry = confirmedBookings[index];
 
-            if (!entry) {
-                return;
-            }
+            if (!entry) return;
 
             displayInvoice(
                 entry.invoice,
@@ -1600,56 +1589,38 @@ function renderConfirmedBookings() {
    BUTTON EVENTS
 ========================================= */
 
-confirmBookingButton.addEventListener(
-    "click",
-    confirmBookings
-);
+confirmBookingButton.addEventListener("click", confirmBookings);
 
 clearCartButton.addEventListener("click", () => {
-    if (!cart.length) {
-        return;
-    }
+    if (!cart.length) return;
 
     const confirmed = window.confirm(
         "Do you want to clear all selected trips?"
     );
 
-    if (!confirmed) {
-        return;
-    }
+    if (!confirmed) return;
 
     cart = [];
-
     writeStorage(CART_KEY, cart);
-
     renderCart();
     clearMessage();
 });
 
 printInvoiceButton.addEventListener("click", () => {
     if (!currentInvoice) {
-        showMessage(
-            "There is no invoice to print yet.",
-            "error"
-        );
-
+        showMessage("There is no invoice to print yet.", "error");
         return;
     }
 
     window.print();
 });
 
-cancelBookingButton.addEventListener(
-    "click",
-    cancelCurrentBooking
-);
+cancelBookingButton.addEventListener("click", cancelCurrentBooking);
 
 /* =========================================
    INITIALIZE
 ========================================= */
 
 loadCart();
-</script>
-
-</body>
+</script></body>
 </html>
