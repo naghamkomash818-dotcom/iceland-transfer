@@ -3,334 +3,385 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order Overview | Iceland Transfer</title>
+
+<title>Booking Overview | Iceland Transfer</title>
 
 <style>
 :root {
-    --green:#465b45;
-    --deep-green:#293c2e;
-    --beige:#f5f1e8;
-    --gold:#b99b61;
-    --white:#fffdf9;
-    --text:#333a32;
-    --muted:#777d75;
-    --border:#e5e0d6;
-    --danger:#a33d35;
-    --success:#2f7046;
-    --shadow:0 12px 35px rgba(41,60,46,.09);
+    --green: #465b45;
+    --deep-green: #293c2e;
+    --beige: #f5f1e8;
+    --gold: #b99b61;
+    --white: #fffdf9;
+    --red: #a33b32;
+    --border: #e6e0d5;
+    --text: #30352f;
+    --muted: #74786f;
 }
 
-* { box-sizing:border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
-    margin:0;
-    background:var(--beige);
-    color:var(--text);
-    font-family:Arial,Helvetica,sans-serif;
-    line-height:1.6;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--beige);
+    color: var(--text);
+    line-height: 1.6;
 }
-
-a { color:inherit; text-decoration:none; }
 
 header {
-    background:var(--white);
-    border-bottom:1px solid var(--border);
-    padding:18px 5%;
+    background: var(--deep-green);
+    color: white;
+    padding: 20px;
 }
 
-.nav {
-    max-width:1180px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
+.header-inner {
+    max-width: 1050px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-.logo {
-    color:var(--deep-green);
-    font-weight:800;
-    letter-spacing:2px;
-    font-size:20px;
+.brand {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
 }
 
-.logo small {
-    display:block;
-    font-size:10px;
-    font-weight:500;
-    letter-spacing:3px;
-    color:var(--gold);
+.tagline {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #e4d6b9;
 }
 
-.nav-links {
-    display:flex;
-    gap:22px;
-    flex-wrap:wrap;
-    align-items:center;
-    font-size:14px;
+header a {
+    color: white;
+    text-decoration: none;
 }
-
-.nav-links a:hover { color:var(--gold); }
 
 main {
-    max-width:1180px;
-    margin:45px auto;
-    padding:0 20px;
+    max-width: 1000px;
+    margin: 35px auto;
+    padding: 0 16px 50px;
 }
 
 .page-heading {
-    text-align:center;
-    margin-bottom:32px;
+    text-align: center;
+    margin-bottom: 28px;
 }
 
-.eyebrow {
-    color:var(--gold);
-    letter-spacing:3px;
-    font-size:12px;
-    font-weight:bold;
+.page-heading h1 {
+    color: var(--deep-green);
+    margin-bottom: 5px;
+    font-size: 32px;
 }
 
-h1 {
-    color:var(--deep-green);
-    font-size:clamp(30px,5vw,44px);
-    margin:8px 0;
-}
-
-.page-heading p { color:var(--muted); margin:0; }
-
-.layout {
-    display:grid;
-    grid-template-columns:minmax(0,1.7fr) minmax(280px,.9fr);
-    gap:25px;
-    align-items:start;
+.page-heading p {
+    color: var(--muted);
+    margin-top: 0;
 }
 
 .card {
-    background:var(--white);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:25px;
-    box-shadow:var(--shadow);
-    margin-bottom:20px;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 22px;
+    box-shadow: 0 5px 20px rgba(41, 60, 46, 0.06);
+    border: 1px solid var(--border);
 }
 
 .card h2 {
-    color:var(--deep-green);
-    font-size:21px;
-    margin:0 0 18px;
+    margin-top: 0;
+    color: var(--deep-green);
+    font-size: 21px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
 }
 
-.muted { color:var(--muted); }
-
-.item {
-    border:1px solid var(--border);
-    border-radius:13px;
-    padding:18px;
-    margin-bottom:15px;
-    background:#fff;
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
 }
 
-.item:last-child { margin-bottom:0; }
-
-.item-top {
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    align-items:flex-start;
-}
-
-.item h3 {
-    margin:0;
-    color:var(--deep-green);
-    font-size:18px;
-}
-
-.badge {
-    display:inline-block;
-    border-radius:30px;
-    padding:4px 10px;
-    font-size:11px;
-    background:#f0eadc;
-    color:var(--deep-green);
-    font-weight:bold;
-}
-
-.badge.success { background:#e5f2e7; color:var(--success); }
-.badge.cancelled { background:#f8e7e5; color:var(--danger); }
-
-.details {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:10px;
-    margin-top:15px;
-    font-size:14px;
+.detail {
+    padding: 12px;
+    border-radius: 10px;
+    background: #faf8f3;
+    overflow-wrap: anywhere;
 }
 
 .detail-label {
-    display:block;
-    color:var(--muted);
-    font-size:12px;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: block;
+    margin-bottom: 4px;
 }
 
-.item-price {
-    font-weight:bold;
-    color:var(--deep-green);
-    font-size:18px;
-    margin-top:14px;
+.detail-value {
+    font-weight: 600;
 }
 
-.item-actions {
-    display:flex;
-    gap:9px;
-    flex-wrap:wrap;
-    margin-top:15px;
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-button,.button {
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    border:none;
-    border-radius:8px;
-    padding:12px 16px;
-    font-weight:bold;
-    font-size:13px;
-    cursor:pointer;
-    transition:.2s;
-    font-family:inherit;
+.price-row:last-child {
+    border-bottom: none;
 }
 
-button:disabled { opacity:.55; cursor:not-allowed; }
-
-.primary { background:var(--green); color:white; }
-.primary:hover:not(:disabled) { background:var(--deep-green); }
-
-.secondary {
-    background:var(--beige);
-    color:var(--deep-green);
-    border:1px solid var(--border);
+.price-total {
+    color: var(--deep-green);
+    font-weight: bold;
+    font-size: 23px;
+    margin-top: 10px;
 }
 
-.danger {
-    background:#fff0ee;
-    color:var(--danger);
-    border:1px solid #efd0cc;
+.muted {
+    color: var(--muted);
+    font-size: 13px;
 }
 
-.full { width:100%; }
-
-.summary-row {
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    padding:10px 0;
-    border-bottom:1px solid var(--border);
-    font-size:14px;
+.status {
+    display: inline-block;
+    padding: 6px 13px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: bold;
+    background: #e5efe4;
+    color: #28572c;
 }
 
-.summary-row.total {
-    font-size:19px;
-    font-weight:bold;
-    color:var(--deep-green);
-    border-bottom:0;
-    padding-top:18px;
+.status.cancelled {
+    background: #f8e5e2;
+    color: var(--red);
 }
 
-.note {
-    background:#f7f2e7;
-    border-left:4px solid var(--gold);
-    padding:13px;
-    border-radius:5px;
-    color:#62563f;
-    font-size:13px;
-    margin:15px 0;
+.status.pending {
+    background: #f6edda;
+    color: #795d21;
 }
 
 .message {
-    display:none;
-    padding:14px;
-    border-radius:9px;
-    margin-bottom:18px;
-    white-space:pre-line;
-    overflow-wrap:anywhere;
+    display: none;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow-wrap: anywhere;
 }
 
-.message.show { display:block; }
-.message.info { background:#edf2eb; color:var(--deep-green); }
-.message.error { background:#f8e7e5; color:var(--danger); }
-.message.success { background:#e5f2e7; color:var(--success); }
-
-.empty { text-align:center; padding:35px 10px; }
-.empty h3 { color:var(--deep-green); }
-
-.invoice {
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:22px;
-    margin-top:20px;
-    background:white;
+.message.success {
+    display: block;
+    background: #e7f2e5;
+    color: #28572c;
 }
 
-.invoice-header {
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    flex-wrap:wrap;
-    border-bottom:2px solid var(--green);
-    padding-bottom:15px;
-    margin-bottom:15px;
+.message.error {
+    display: block;
+    background: #f8e5e2;
+    color: #8c2823;
 }
 
-.invoice-header h3 { color:var(--deep-green); margin:0; }
-
-.invoice table {
-    width:100%;
-    border-collapse:collapse;
-    margin:15px 0;
-    font-size:14px;
+.message.info {
+    display: block;
+    background: #edf0ed;
+    color: var(--deep-green);
 }
 
-.invoice th,.invoice td {
-    border-bottom:1px solid var(--border);
-    text-align:left;
-    padding:9px 5px;
-    overflow-wrap:anywhere;
+.booking-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 18px;
 }
 
-.invoice th { color:var(--muted); }
+.booking-item:last-child {
+    margin-bottom: 0;
+}
+
+.booking-item h3 {
+    margin-top: 0;
+    color: var(--deep-green);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+button,
+.button {
+    display: inline-block;
+    padding: 13px 19px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: 0.2s;
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.primary {
+    background: var(--green);
+    color: white;
+}
+
+.primary:hover:not(:disabled) {
+    background: var(--deep-green);
+}
+
+.secondary {
+    background: #eee8db;
+    color: var(--deep-green);
+}
+
+.danger {
+    background: var(--red);
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
 
 footer {
-    background:var(--deep-green);
-    color:white;
-    padding:30px 20px;
-    text-align:center;
-    font-size:13px;
+    text-align: center;
+    padding: 25px 15px;
+    background: var(--deep-green);
+    color: white;
+    font-size: 13px;
 }
 
-footer a { color:#e8d3a6; }
+.invoice {
+    border: 2px solid var(--gold);
+}
 
-@media(max-width:800px) {
-    .layout { grid-template-columns:1fr; }
-    main { margin-top:28px; }
-    .card { padding:18px; }
-    .nav { align-items:flex-start; flex-direction:column; }
-    .nav-links { gap:14px; }
+.invoice-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.invoice-brand {
+    color: var(--deep-green);
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.invoice-number {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.invoice-note {
+    padding: 14px;
+    background: #f5f1e8;
+    border-radius: 8px;
+    margin-top: 18px;
+    font-size: 13px;
+}
+
+.loading {
+    text-align: center;
+    padding: 25px;
+    color: var(--muted);
+}
+
+@media (max-width: 600px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .page-heading h1 {
+        font-size: 26px;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions button,
+    .actions .button {
+        width: 100%;
+    }
+
+    .invoice-number {
+        text-align: left;
+    }
 }
 
 @media print {
-    body { background:white; }
-    header,footer,.page-heading,.layout,#statusMessage,
-    .no-print,.invoice-actions { display:none!important; }
-    main { max-width:none; margin:0; padding:0; }
-    #invoiceContainer { display:block!important; }
-    .invoice {
-        border:none;
-        margin:0;
-        padding:0;
-        page-break-after:always;
-        box-shadow:none;
+    body {
+        background: white;
+        color: black;
     }
-    .invoice:last-child { page-break-after:auto; }
+
+    header,
+    footer,
+    .no-print,
+    #messageBox,
+    #cartSection,
+    #bookingActions,
+    #confirmedBookingsSection {
+        display: none !important;
+    }
+
+    main {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page-heading {
+        display: none;
+    }
+
+    .card {
+        box-shadow: none;
+        border: none;
+        padding: 10px;
+        margin: 0;
+    }
+
+    #invoiceSection {
+        display: block !important;
+    }
+
+    .invoice {
+        border: 1px solid #aaa;
+    }
+
+    .booking-item {
+        page-break-inside: avoid;
+    }
 }
 </style>
 </head>
@@ -338,208 +389,293 @@ footer a { color:#e8d3a6; }
 <body>
 
 <header>
-    <nav class="nav">
-        <a class="logo" href="index.html">
-            ICELAND TRANSFER
-            <small>YOUR JOURNEY, OUR DRIVE</small>
+    <div class="header-inner">
+        <a href="index.html">
+            <div class="brand">ICELAND TRANSFER</div>
+            <div class="tagline">YOUR JOURNEY, OUR DRIVE</div>
         </a>
 
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="transfers.html">Transfers</a>
-            <a href="contact.html">Contact</a>
-        </div>
-    </nav>
+        <a href="index.html">Back to Home</a>
+    </div>
 </header>
 
 <main>
+
     <div class="page-heading">
-        <div class="eyebrow">YOUR JOURNEY STARTS HERE</div>
-        <h1>Order Overview</h1>
-        <p>Review your booking requests and confirm your travel details.</p>
+        <h1>Booking Overview</h1>
+        <p>Review your trip details and confirm your reservation.</p>
     </div>
 
-    <div id="statusMessage" class="message" role="status" aria-live="polite"></div>
+    <div id="messageBox" class="message" role="status" aria-live="polite"></div>
 
-    <div class="layout">
-        <section class="card">
-            <h2>Your Booking Requests</h2>
+    <!-- CART -->
+    <section id="cartSection" class="card">
+        <h2>Your Selected Trips</h2>
 
-            <div id="cartItems">
-                <p class="muted">Loading your requests...</p>
+        <div id="cartContainer">
+            <div class="loading">Loading your booking details...</div>
+        </div>
+
+        <div id="bookingActions" class="actions">
+            <button id="confirmBookingButton" class="primary" type="button">
+                Confirm Booking
+            </button>
+
+            <button id="clearCartButton" class="secondary" type="button">
+                Clear Selection
+            </button>
+
+            <a class="button secondary" href="index.html">
+                Continue Browsing
+            </a>
+        </div>
+
+        <p class="muted">
+            Your booking is not confirmed until the server successfully saves it.
+        </p>
+    </section>
+
+    <!-- INVOICE -->
+    <section id="invoiceSection" class="card invoice hidden">
+        <div class="invoice-top">
+            <div>
+                <div class="invoice-brand">ICELAND TRANSFER</div>
+                <div class="muted">YOUR JOURNEY, OUR DRIVE</div>
+                <p>Booking Invoice</p>
             </div>
 
-            <div id="cartActions" class="no-print" style="margin-top:20px">
-                <button id="confirmButton" class="primary full" type="button">
-                    Confirm Booking Requests
-                </button>
-
-                <p class="muted" style="font-size:12px">
-                    A booking is confirmed only after the server accepts it.
-                </p>
+            <div class="invoice-number">
+                <strong>Invoice / Booking ID</strong>
+                <div id="invoiceNumber">—</div>
+                <div id="invoiceStatus" class="status">Confirmed</div>
             </div>
+        </div>
 
-            <div id="invoiceContainer"></div>
-        </section>
+        <h2>Customer & Trip Details</h2>
 
-        <aside>
-            <section class="card">
-                <h2>Order Summary</h2>
+        <div id="invoiceDetails" class="details-grid"></div>
 
-                <div class="summary-row">
-                    <span>Pending requests</span>
-                    <strong id="itemCount">0</strong>
-                </div>
+        <h2 style="margin-top:25px;">Price Summary</h2>
 
-                <div class="summary-row">
-                    <span>Confirmed bookings</span>
-                    <strong id="confirmedCount">0</strong>
-                </div>
+        <div id="invoicePriceLines"></div>
 
-                <div class="summary-row">
-                    <span>Price status</span>
-                    <strong id="priceStatus">Pending</strong>
-                </div>
+        <div class="price-row price-total">
+            <span>Total</span>
+            <span id="invoiceTotal">ISK 0</span>
+        </div>
 
-                <div class="summary-row total">
-                    <span>Total</span>
-                    <span id="grandTotal">To be confirmed</span>
-                </div>
+        <div id="invoiceCancellationNote" class="invoice-note">
+            Cancellation is available more than 24 hours before departure.
+        </div>
 
-                <div class="note">
-                    Final prices are calculated by the booking server. Custom stops
-                    may need driver confirmation. No online payment is processed here.
-                </div>
+        <div class="actions no-print">
+            <button id="printInvoiceButton" class="primary" type="button">
+                Print / Save PDF
+            </button>
 
-                <button id="printButton" class="secondary full" type="button" disabled>
-                    Print / Save Invoice as PDF
-                </button>
+            <button id="cancelBookingButton" class="danger" type="button">
+                Cancel Booking
+            </button>
 
-                <button id="continueButton" class="primary full" type="button"
-                        style="margin-top:10px">
-                    Add Another Booking
-                </button>
-            </section>
+            <a href="index.html" class="button secondary">
+                Back to Home
+            </a>
+        </div>
+    </section>
 
-            <section class="card">
-                <h2>Need Help?</h2>
-                <p class="muted">Contact your driver if you need help with your booking.</p>
-                <p><strong>Phone:</strong> +354 833 3707</p>
+    <!-- CONFIRMED BOOKINGS -->
+    <section id="confirmedBookingsSection" class="card hidden">
+        <h2>Previous Confirmed Bookings</h2>
+        <div id="confirmedBookingsContainer"></div>
+    </section>
 
-                <a class="button secondary full"
-                   href="https://wa.me/3548333707"
-                   target="_blank" rel="noopener">
-                    Contact via WhatsApp
-                </a>
-            </section>
-        </aside>
-    </div>
 </main>
 
 <footer>
-    <p>© <span id="year"></span> Iceland Transfer. Your journey, our drive.</p>
-    <p><a href="contact.html">Contact Us</a> · +354 833 3707</p>
+    <p>© <span id="currentYear"></span> Iceland Transfer. All rights reserved.</p>
+    <p>For assistance, contact us at +354 833 3707.</p>
 </footer>
 
 <script>
 "use strict";
 
-const API_BASE = "https://iceland-transfer-server.onrender.com";
+/* =========================================
+   CONFIGURATION
+========================================= */
+
+const SERVER_URL =
+    "https://iceland-transfer-server.onrender.com";
+
 const CART_KEY = "icelandTransferCart";
 const CONFIRMED_KEY = "icelandTransferConfirmedBookings";
 
-const cartItemsElement = document.getElementById("cartItems");
-const statusMessage = document.getElementById("statusMessage");
-const confirmButton = document.getElementById("confirmButton");
-const printButton = document.getElementById("printButton");
-const invoiceContainer = document.getElementById("invoiceContainer");
+const CURRENCY = "ISK";
 
-let cart = readStorageArray(CART_KEY);
-let confirmedBookings = readStorageArray(CONFIRMED_KEY);
-let submitting = false;
+let cart = [];
+let confirmedBookings = [];
+let currentInvoice = null;
+let currentCancellationToken = null;
+let isSubmitting = false;
 
-document.getElementById("year").textContent = new Date().getFullYear();
+/* =========================================
+   ELEMENTS
+========================================= */
 
-function readStorageArray(key) {
+const messageBox =
+    document.getElementById("messageBox");
+
+const cartContainer =
+    document.getElementById("cartContainer");
+
+const confirmBookingButton =
+    document.getElementById("confirmBookingButton");
+
+const clearCartButton =
+    document.getElementById("clearCartButton");
+
+const invoiceSection =
+    document.getElementById("invoiceSection");
+
+const invoiceNumber =
+    document.getElementById("invoiceNumber");
+
+const invoiceStatus =
+    document.getElementById("invoiceStatus");
+
+const invoiceDetails =
+    document.getElementById("invoiceDetails");
+
+const invoicePriceLines =
+    document.getElementById("invoicePriceLines");
+
+const invoiceTotal =
+    document.getElementById("invoiceTotal");
+
+const cancelBookingButton =
+    document.getElementById("cancelBookingButton");
+
+const printInvoiceButton =
+    document.getElementById("printInvoiceButton");
+
+document.getElementById("currentYear").textContent =
+    new Date().getFullYear();
+
+/* =========================================
+   SAFE HELPERS
+========================================= */
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => {
+        const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        };
+
+        return entities[character];
+    });
+}
+
+function readStorage(key, fallback) {
     try {
-        const data = JSON.parse(localStorage.getItem(key) || "[]");
-        return Array.isArray(data) ? data : [];
-    } catch {
-        return [];
+        const raw = localStorage.getItem(key);
+
+        if (!raw) {
+            return fallback;
+        }
+
+        const parsed = JSON.parse(raw);
+
+        return parsed ?? fallback;
+    } catch (error) {
+        console.error("Storage read failed:", error);
+        return fallback;
     }
 }
 
-function saveCart() {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-}
+function writeStorage(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+    } catch (error) {
+        console.error("Storage write failed:", error);
 
-function saveConfirmedBookings() {
-    localStorage.setItem(CONFIRMED_KEY, JSON.stringify(confirmedBookings));
-}
+        showMessage(
+            "Your browser could not save the booking locally. Please keep your invoice details.",
+            "error"
+        );
 
-function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, character => ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#39;"
-    })[character]);
-}
-
-function money(amount) {
-    const value = Number(amount);
-
-    if (!Number.isFinite(value)) return "To be confirmed";
-
-    return new Intl.NumberFormat("en-US", {
-        maximumFractionDigits:0
-    }).format(value) + " ISK";
+        return false;
+    }
 }
 
 function showMessage(message, type = "info") {
-    statusMessage.className = "message show " + type;
-    statusMessage.textContent = message;
-    statusMessage.scrollIntoView({behavior:"smooth",block:"nearest"});
+    messageBox.textContent = message;
+    messageBox.className = "message " + type;
+    messageBox.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
 }
 
 function clearMessage() {
-    statusMessage.className = "message";
-    statusMessage.textContent = "";
+    messageBox.textContent = "";
+    messageBox.className = "message";
 }
 
-function getStoredPrice(item) {
-    if (item.priceConfirmed === false) return null;
+function formatMoney(value) {
+    const amount = Number(value);
 
-    const value = Number(item.total ?? item.price ?? 0);
-
-    return Number.isFinite(value) && value > 0 ? value : null;
+    return new Intl.NumberFormat("en-US", {
+        maximumFractionDigits: 0
+    }).format(Number.isFinite(amount) ? amount : 0) + " ISK";
 }
 
-/*
- * Identify the service using the fields stored by each booking page.
- * The server must support the resulting service_type values.
- */
+function formatDate(value) {
+    if (!value) {
+        return "Not provided";
+    }
+
+    const date = new Date(value + "T12:00:00");
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    return date.toLocaleDateString("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
+}
+
+function normalizeText(value) {
+    return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[_-]+/g, " ")
+        .replace(/\s+/g, " ");
+}
+
 function getServiceType(item) {
-    const text = [
-        item.serviceType,
-        item.service_type,
-        item.name,
-        item.title
-    ].filter(Boolean).join(" ").toLowerCase();
+    const type = normalizeText(item.service_type);
+    const name = normalizeText(
+        item.name || item.service_name || ""
+    );
 
     if (
-        text.includes("northern lights") ||
-        text.includes("northern_lights") ||
-        text.includes("aurora")
+        type.includes("northern") ||
+        type.includes("aurora") ||
+        name.includes("northern lights")
     ) {
         return "northern_lights_tour";
     }
 
     if (
-        text.includes("golden circle") ||
-        text.includes("golden_circle")
+        type.includes("golden") ||
+        name.includes("golden circle")
     ) {
         return "golden_circle_tour";
     }
@@ -547,307 +683,337 @@ function getServiceType(item) {
     return "transfer";
 }
 
-function getPackageType(item, serviceType) {
-    const raw = String(
-        item.packageType ||
-        item.package_type ||
-        item.package ||
+function getServiceLabel(item) {
+    const type = getServiceType(item);
+
+    if (type === "golden_circle_tour") {
+        return "Golden Circle Tour";
+    }
+
+    if (type === "northern_lights_tour") {
+        return "Northern Lights Tour";
+    }
+
+    return "Transfer";
+}
+
+function getItemPrice(item) {
+    const possiblePrices = [
+        item.total,
+        item.price,
+        item.unitPrice,
+        item.estimatedPrice
+    ];
+
+    for (const value of possiblePrices) {
+        if (
+            value !== undefined &&
+            value !== null &&
+            value !== "" &&
+            Number.isFinite(Number(value))
+        ) {
+            return Number(value);
+        }
+    }
+
+    return 0;
+}
+
+function getItemDate(item) {
+    return item.pickup_date || item.date || "";
+}
+
+function getItemTime(item) {
+    return item.pickup_time || item.time || "";
+}
+
+function getItemPickup(item) {
+    return (
+        item.pickup_location ||
+        item.pickup ||
+        item.pickupLocation ||
         ""
-    ).toLowerCase();
-
-    if (serviceType === "northern_lights_tour") {
-        if (["classic","comfort","premium"].includes(raw)) return raw;
-
-        const name = String(item.name || item.title || "").toLowerCase();
-
-        if (name.includes("premium")) return "premium";
-        if (name.includes("comfort")) return "comfort";
-
-        return "classic";
-    }
-
-    if (serviceType === "golden_circle_tour") {
-        if (["classic","extended","premium"].includes(raw)) return raw;
-
-        const name = String(item.name || item.title || "").toLowerCase();
-
-        if (name.includes("premium")) return "premium";
-        if (name.includes("extended")) return "extended";
-
-        return "classic";
-    }
-
-    return raw || "";
+    );
 }
 
-function normalizeExtras(item) {
-    const raw = item.extras;
-
-    if (!Array.isArray(raw)) return [];
-
-    return raw.map(extra => {
-        if (typeof extra === "string") {
-            return {id:extra};
-        }
-
-        if (extra && typeof extra === "object") {
-            return {id:String(extra.id || extra.value || extra.name || "")};
-        }
-
-        return null;
-    }).filter(extra => extra && extra.id);
+function getItemDestination(item) {
+    return (
+        item.destination ||
+        item.destination_location ||
+        item.destinationLocation ||
+        ""
+    );
 }
 
-function createPayload(item) {
+function getItemPassengers(item) {
+    return Number(
+        item.passengers ||
+        item.numberOfPassengers ||
+        item.count ||
+        1
+    );
+}
+
+function getItemCustomerName(item) {
+    return (
+        item.full_name ||
+        item.customerName ||
+        item.name_on_booking ||
+        ""
+    );
+}
+
+function getItemExtras(item) {
+    if (Array.isArray(item.extras)) {
+        return item.extras;
+    }
+
+    if (Array.isArray(item.addons)) {
+        return item.addons;
+    }
+
+    return [];
+}
+
+/* =========================================
+   CART LOADING
+========================================= */
+
+function loadCart() {
+    const saved = readStorage(CART_KEY, []);
+
+    if (Array.isArray(saved)) {
+        cart = saved;
+    } else if (saved && typeof saved === "object") {
+        cart = [saved];
+    } else {
+        cart = [];
+    }
+
+    confirmedBookings = readStorage(CONFIRMED_KEY, []);
+
+    if (!Array.isArray(confirmedBookings)) {
+        confirmedBookings = [];
+    }
+
+    renderCart();
+    renderConfirmedBookings();
+}
+
+function renderCart() {
+    if (!cart.length) {
+        cartContainer.innerHTML = `
+            <p>Your selection is empty.</p>
+            <p class="muted">
+                Choose a transfer or tour first, then return here to confirm your booking.
+            </p>
+        `;
+
+        confirmBookingButton.disabled = true;
+        clearCartButton.disabled = true;
+
+        return;
+    }
+
+    confirmBookingButton.disabled = false;
+    clearCartButton.disabled = false;
+
+    let html = "";
+    let estimatedTotal = 0;
+
+    cart.forEach((item, index) => {
+        const price = getItemPrice(item);
+
+        estimatedTotal += price;
+
+        const title =
+            item.name ||
+            item.service_name ||
+            getServiceLabel(item);
+
+        const date = getItemDate(item);
+        const time = getItemTime(item);
+        const pickup = getItemPickup(item);
+        const destination = getItemDestination(item);
+
+        html += `
+            <div class="booking-item">
+                <h3>${escapeHTML(title)}</h3>
+
+                <div class="details-grid">
+                    <div class="detail">
+                        <span class="detail-label">Service</span>
+                        <span class="detail-value">
+                            ${escapeHTML(getServiceLabel(item))}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Travel Date</span>
+                        <span class="detail-value">
+                            ${escapeHTML(formatDate(date))}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Departure Time</span>
+                        <span class="detail-value">
+                            ${escapeHTML(time || "Not provided")}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Passengers</span>
+                        <span class="detail-value">
+                            ${escapeHTML(getItemPassengers(item))}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Pickup</span>
+                        <span class="detail-value">
+                            ${escapeHTML(pickup || "Not provided")}
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Destination</span>
+                        <span class="detail-value">
+                            ${escapeHTML(destination || "Not provided")}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="price-row" style="margin-top:15px;">
+                    <strong>Estimated price</strong>
+                    <strong>${escapeHTML(formatMoney(price))}</strong>
+                </div>
+
+                <div class="actions no-print">
+                    <button
+                        type="button"
+                        class="secondary remove-item"
+                        data-index="${index}">
+                        Remove This Trip
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    html += `
+        <div class="price-row price-total">
+            <span>Estimated Total</span>
+            <span>${escapeHTML(formatMoney(estimatedTotal))}</span>
+        </div>
+    `;
+
+    html += `
+        <p class="muted">
+            Final prices are calculated and verified by the server.
+        </p>
+    `;
+
+    cartContainer.innerHTML = html;
+
+    cartContainer.querySelectorAll(".remove-item").forEach(button => {
+        button.addEventListener("click", () => {
+            const index = Number(button.dataset.index);
+
+            if (!Number.isInteger(index)) {
+                return;
+            }
+
+            cart.splice(index, 1);
+
+            writeStorage(CART_KEY, cart);
+
+            renderCart();
+            clearMessage();
+        });
+    });
+}
+
+/* =========================================
+   BOOKING PAYLOAD
+========================================= */
+
+function buildBookingPayload(item) {
     const serviceType = getServiceType(item);
 
     const payload = {
-        full_name: String(
-            item.full_name ||
-            item.fullName ||
-            item.customerName ||
-            ""
-        ).trim(),
+        full_name: getItemCustomerName(item),
 
-        email: String(item.email || "").trim(),
+        email: item.email || "",
 
-        phone: String(
-            item.phone ||
-            item.phone_number ||
-            item.customerPhone ||
-            ""
-        ).trim(),
+        phone: item.phone || "",
 
-        pickup_location: String(
-            item.pickup_location ||
-            item.pickup ||
-            item.pickupLocation ||
-            ""
-        ).trim(),
+        pickup_location: getItemPickup(item),
 
-        destination: String(
-            item.destination ||
-            item.dropoff_location ||
-            ""
-        ).trim(),
+        destination: getItemDestination(item),
 
-        pickup_date: String(
-            item.pickup_date ||
-            item.date ||
-            ""
-        ).trim(),
+        pickup_date: getItemDate(item),
 
-        pickup_time: String(
-            item.pickup_time ||
-            item.time ||
-            ""
-        ).trim(),
+        pickup_time: getItemTime(item),
 
-        passengers: Number(item.passengers || 1),
+        passengers: getItemPassengers(item),
+
         luggage: Number(item.luggage || 0),
+
+        flight_number: item.flight_number || "",
+
+        special_requests:
+            item.special_requests ||
+            item.notes ||
+            "",
 
         service_type: serviceType,
 
-        special_requests: String(
-            item.special_requests ||
-            item.notes ||
-            ""
-        ).trim()
+        package_type: item.package_type || "classic"
     };
 
-    if (item.flightNumber || item.flight_number) {
-        payload.flight_number = String(
-            item.flightNumber || item.flight_number
-        ).trim();
-    }
-
-    if (
-        serviceType === "golden_circle_tour" ||
-        serviceType === "northern_lights_tour"
-    ) {
-        payload.package_type = getPackageType(item, serviceType);
-    }
-
     if (serviceType === "golden_circle_tour") {
-        payload.addons = Array.isArray(item.addons) ? item.addons : [];
+        payload.addons = getItemExtras(item);
 
         payload.selected_stops = Array.isArray(item.selected_stops)
             ? item.selected_stops
             : [];
 
-        payload.other_stop = String(item.other_stop || "");
+        if (item.other_stop) {
+            payload.special_requests = [
+                payload.special_requests,
+                "Additional stop: " + item.other_stop
+            ].filter(Boolean).join("\n");
+        }
     }
 
     if (serviceType === "northern_lights_tour") {
-        payload.extras = normalizeExtras(item);
+        payload.extras = getItemExtras(item);
     }
 
     return payload;
 }
 
-function validateItem(item, index) {
-    const payload = createPayload(item);
-    const missing = [];
+/* =========================================
+   SERVER REQUESTS
+========================================= */
 
-    if (!payload.full_name) missing.push("customer name");
+async function requestJSON(url, options = {}) {
+    let response;
 
-    if (
-        !payload.email ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)
-    ) {
-        missing.push("valid email");
+    try {
+        response = await fetch(url, {
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...(options.headers || {})
+            }
+        });
+    } catch (error) {
+        throw new Error(
+            "Could not connect to the booking server. Please check your internet connection and try again."
+        );
     }
-
-    if (!payload.phone) missing.push("phone number");
-    if (!payload.pickup_location) missing.push("pickup location");
-    if (!payload.destination) missing.push("destination");
-    if (!payload.pickup_date) missing.push("date");
-    if (!payload.pickup_time) missing.push("time");
-
-    if (
-        !Number.isInteger(payload.passengers) ||
-        payload.passengers < 1
-    ) {
-        missing.push("valid passenger count");
-    }
-
-    if (missing.length) {
-        return `Request ${index + 1} is missing: ${missing.join(", ")}.`;
-    }
-
-    if (
-        payload.service_type === "transfer" &&
-        payload.pickup_location.toLowerCase() ===
-        payload.destination.toLowerCase()
-    ) {
-        return `Request ${index + 1}: pickup and destination must be different.`;
-    }
-
-    if (
-        payload.service_type === "northern_lights_tour" &&
-        !["classic","comfort","premium"].includes(payload.package_type)
-    ) {
-        return `Request ${index + 1}: please choose a valid Northern Lights package.`;
-    }
-
-    if (
-        payload.service_type === "golden_circle_tour" &&
-        !["classic","extended","premium"].includes(payload.package_type)
-    ) {
-        return `Request ${index + 1}: please choose a valid Golden Circle package.`;
-    }
-
-    return null;
-}
-
-function renderCart() {
-    cart = readStorageArray(CART_KEY);
-
-    document.getElementById("itemCount").textContent = String(cart.length);
-    document.getElementById("confirmedCount").textContent =
-        String(confirmedBookings.length);
-
-    if (!cart.length) {
-        cartItemsElement.innerHTML = `
-            <div class="empty">
-                <h3>No pending booking requests</h3>
-                <p class="muted">Add a transfer or tour to get started.</p>
-                <a class="button primary" href="transfers.html">Explore Transfers</a>
-            </div>`;
-
-        confirmButton.disabled = true;
-        confirmButton.textContent = "No Requests to Confirm";
-    } else {
-        confirmButton.disabled = submitting;
-        confirmButton.textContent = submitting
-            ? "Sending Requests..."
-            : "Confirm Booking Requests";
-
-        cartItemsElement.innerHTML = cart.map((item,index) => {
-            const price = getStoredPrice(item);
-
-            const state = item.bookingStatus === "confirmed"
-                ? '<span class="badge success">Confirmed</span>'
-                : '<span class="badge">Pending confirmation</span>';
-
-            return `
-                <article class="item">
-                    <div class="item-top">
-                        <div>
-                            <h3>${escapeHTML(item.name || "Transfer / Tour")}</h3>
-                            <div style="margin-top:8px">${state}</div>
-                        </div>
-                        <span class="badge">Request ${index + 1}</span>
-                    </div>
-
-                    <div class="details">
-                        <div>
-                            <span class="detail-label">Date</span>
-                            ${escapeHTML(item.date || item.pickup_date || "Not provided")}
-                        </div>
-
-                        <div>
-                            <span class="detail-label">Time</span>
-                            ${escapeHTML(item.time || item.pickup_time || "Not provided")}
-                        </div>
-
-                        <div>
-                            <span class="detail-label">Pickup</span>
-                            ${escapeHTML(item.pickup || item.pickup_location || "Not provided")}
-                        </div>
-
-                        <div>
-                            <span class="detail-label">Destination</span>
-                            ${escapeHTML(item.destination || "Not provided")}
-                        </div>
-
-                        <div>
-                            <span class="detail-label">Passengers</span>
-                            ${escapeHTML(item.passengers ?? 1)}
-                        </div>
-
-                        <div>
-                            <span class="detail-label">Customer</span>
-                            ${escapeHTML(item.full_name || item.customerName || "Not provided")}
-                        </div>
-                    </div>
-
-                    <div class="item-price">
-                        ${price === null ? "Final price calculated on confirmation" : money(price) + " (estimate)"}
-                    </div>
-
-                    ${item.invoiceNumber
-                        ? `<p class="muted" style="font-size:12px">Invoice: ${escapeHTML(item.invoiceNumber)}</p>`
-                        : ""}
-
-                    <div class="item-actions no-print">
-                        ${item.bookingStatus !== "confirmed"
-                            ? `<button class="danger remove-button" data-index="${index}" type="button">Remove Request</button>`
-                            : ""}
-                    </div>
-                </article>`;
-        }).join("");
-    }
-
-    const prices = cart.map(getStoredPrice);
-    const allPriced = prices.length > 0 &&
-        prices.every(price => price !== null);
-
-    document.getElementById("priceStatus").textContent =
-        allPriced ? "Estimates available" : "Final price pending";
-
-    document.getElementById("grandTotal").textContent =
-        allPriced
-            ? money(prices.reduce((sum,price) => sum + price,0)) + " (est.)"
-            : "To be confirmed";
-}
-
-async function sendBooking(payload) {
-    const response = await fetch(API_BASE + "/api/bookings", {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(payload)
-    });
 
     let data;
 
@@ -855,461 +1021,634 @@ async function sendBooking(payload) {
         data = await response.json();
     } catch {
         throw new Error(
-            "The server returned an unreadable response. Please try again later."
+            "The server returned an invalid response. Please try again later."
         );
     }
 
-    if (!response.ok || !data.success) {
-        const error = new Error(
-            data.message || data.error || "Booking could not be saved."
-        );
+    if (!response.ok || data.success === false) {
+        const message =
+            data.error ||
+            (
+                Array.isArray(data.errors)
+                    ? data.errors.join(" ")
+                    : ""
+            ) ||
+            "The request failed. Please try again.";
 
-        error.status = response.status;
-        error.code = data.code || "";
-
-        throw error;
+        throw new Error(message);
     }
 
     return data;
 }
 
-function addConfirmedBooking(item,result,payload) {
-    const booking = result.booking || {};
-    const invoice = result.invoice || {};
+/* =========================================
+   CONFIRM BOOKINGS
+========================================= */
 
-    const bookingId = booking.id ?? booking.booking_id ?? result.booking_id ?? "";
-
-    const entry = {
-        id:bookingId,
-
-        invoiceNumber:
-            invoice.invoice_number ||
-            result.invoice_number ||
-            ("IT-" + bookingId),
-
-        booking:booking,
-        invoice:invoice,
-
-        cancellationUrl:
-            result.cancellation_url ||
-            booking.cancellation_url ||
-            "",
-
-        cancellationPolicy:
-            result.cancellation_policy || "",
-
-        message:result.message || "",
-
-        serviceName:item.name || payload.service_type,
-
-        savedAt:new Date().toISOString()
-    };
-
-    confirmedBookings.push(entry);
-    saveConfirmedBookings();
-
-    return entry;
-}
-
-function buildInvoice(entry) {
-    const booking = entry.booking || {};
-    const invoice = entry.invoice || {};
-
-    const stops = Array.isArray(invoice.selected_stops)
-        ? invoice.selected_stops
-        : [];
-
-    const addons = Array.isArray(invoice.addons)
-        ? invoice.addons
-        : [];
-
-    const extras = Array.isArray(invoice.extras)
-        ? invoice.extras
-        : [];
-
-    const details = [
-        ["Customer",booking.full_name],
-        ["Email",booking.email],
-        ["Phone",booking.phone],
-        ["Service",entry.serviceName || booking.service_type],
-        ["Package",booking.package_type || invoice.package_type],
-        ["Pickup",booking.pickup_location],
-        ["Destination",booking.destination],
-        ["Date",booking.pickup_date],
-        ["Time",String(booking.pickup_time || "").slice(0,5)],
-        ["Passengers",booking.passengers],
-        ["Status",booking.status || "confirmed"]
-    ].filter(row => row[1] !== undefined && row[1] !== null && row[1] !== "");
-
-    let extraRows = "";
-
-    for (const addon of addons) {
-        extraRows += `
-            <tr>
-                <td>${escapeHTML(addon.name || addon.id || "Add-on")}</td>
-                <td>${money(addon.total ?? addon.price ?? addon.price_per_passenger ?? 0)}</td>
-            </tr>`;
-    }
-
-    for (const extra of extras) {
-        extraRows += `
-            <tr>
-                <td>${escapeHTML(extra.name || extra.id || "Extra")}</td>
-                <td>${money(extra.total ?? extra.price ?? 0)}</td>
-            </tr>`;
-    }
-
-    for (const stop of stops) {
-        extraRows += `
-            <tr>
-                <td>Selected stop: ${escapeHTML(stop.name || stop.id || "Stop")}</td>
-                <td>${stop.total == null ? "To be confirmed" : money(stop.total)}</td>
-            </tr>`;
-    }
-
-    const cancelURL = String(entry.cancellationUrl || "");
-
-    const cancelButton = cancelURL.startsWith(API_BASE + "/api/bookings/cancel/")
-        ? `<button class="danger cancel-booking-button no-print"
-                   data-booking-id="${escapeHTML(booking.id)}"
-                   data-cancel-url="${escapeHTML(cancelURL)}"
-                   type="button">Cancel This Booking</button>`
-        : `<p class="muted no-print">To cancel, please contact the driver.</p>`;
-
-    const bookingStatus = String(booking.status || "confirmed").toLowerCase();
-
-    return `
-        <section class="invoice" id="invoice-${escapeHTML(booking.id)}">
-            <div class="invoice-header">
-                <div>
-                    <h3>ICELAND TRANSFER</h3>
-                    <div class="muted">YOUR JOURNEY, OUR DRIVE</div>
-                </div>
-
-                <div>
-                    <strong>INVOICE</strong><br>
-                    ${escapeHTML(entry.invoiceNumber || ("IT-" + booking.id))}
-                </div>
-            </div>
-
-            <p>
-                <strong>Booking status:</strong>
-                <span class="badge ${bookingStatus === "cancelled" ? "cancelled" : "success"}">
-                    ${escapeHTML(bookingStatus)}
-                </span>
-            </p>
-
-            <table>
-                <tbody>
-                    ${details.map(([label,value]) => `
-                        <tr>
-                            <th>${escapeHTML(label)}</th>
-                            <td>${escapeHTML(value ?? "—")}</td>
-                        </tr>`).join("")}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                    <tr><th>Description</th><th>Amount</th></tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>${escapeHTML(entry.serviceName || booking.service_type || "Booking")}</td>
-                        <td>${money(invoice.base_price ?? invoice.base_amount ?? booking.price ?? invoice.amount)}</td>
-                    </tr>
-
-                    ${extraRows}
-
-                    <tr>
-                        <th>Total</th>
-                        <th>${money(invoice.amount ?? invoice.total ?? booking.price)}</th>
-                    </tr>
-                </tbody>
-            </table>
-
-            <p>
-                <strong>Payment status:</strong>
-                ${escapeHTML(invoice.payment_status || "Payment not processed")}
-            </p>
-
-            ${invoice.custom_stop_requires_confirmation
-                ? `<div class="note">The requested custom stop requires driver confirmation. Any additional price will be confirmed by the driver.</div>`
-                : ""}
-
-            <p class="muted" style="font-size:12px">
-                Cancellation is allowed only more than 24 hours before pickup,
-                subject to the server's cancellation rules. This invoice does not
-                indicate that online payment has been processed.
-            </p>
-
-            <div class="item-actions invoice-actions no-print">
-                <button class="primary print-single-button" type="button">
-                    Print This Invoice / Save PDF
-                </button>
-                ${bookingStatus !== "cancelled" ? cancelButton : ""}
-            </div>
-        </section>`;
-}
-
-function renderInvoices() {
-    if (!confirmedBookings.length) {
-        invoiceContainer.innerHTML = "";
-        printButton.disabled = true;
+async function confirmBookings() {
+    if (isSubmitting) {
         return;
     }
-
-    invoiceContainer.innerHTML = `
-        <h2 style="color:var(--deep-green);margin-top:30px">
-            Booking Invoices
-        </h2>
-        ${confirmedBookings.map(buildInvoice).join("")}`;
-
-    printButton.disabled = false;
-}
-
-async function confirmRequests() {
-    if (submitting) return;
-
-    cart = readStorageArray(CART_KEY);
 
     if (!cart.length) {
-        showMessage("There are no booking requests to send.","info");
+        showMessage(
+            "Your selection is empty. Please select a trip first.",
+            "error"
+        );
+
         return;
     }
 
-    for (let i = 0; i < cart.length; i++) {
-        if (cart[i].bookingStatus === "confirmed") continue;
+    const incomplete = cart.find(item => {
+        const payload = buildBookingPayload(item);
 
-        const validationError = validateItem(cart[i],i);
+        return (
+            !payload.full_name ||
+            !payload.email ||
+            !payload.phone ||
+            !payload.pickup_location ||
+            !payload.destination ||
+            !payload.pickup_date ||
+            !payload.pickup_time
+        );
+    });
 
-        if (validationError) {
-            showMessage(validationError,"error");
+    if (incomplete) {
+        showMessage(
+            "Some booking details are missing. Please return to the tour page and complete your name, email, phone, pickup, destination, date and time.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (cart.length > 1) {
+        const proceed = window.confirm(
+            "You have selected multiple trips. Each trip will be submitted separately. Continue?"
+        );
+
+        if (!proceed) {
             return;
         }
     }
 
-    submitting = true;
-    confirmButton.disabled = true;
-    confirmButton.textContent = "Sending Requests...";
+    isSubmitting = true;
+    confirmBookingButton.disabled = true;
+    confirmBookingButton.textContent = "Processing...";
+
     clearMessage();
 
-    const remaining = [];
-    const successes = [];
-    const failures = [];
+    const successfulBookings = [];
+    const failedBookings = [];
 
     try {
         for (let i = 0; i < cart.length; i++) {
             const item = cart[i];
 
-            if (item.bookingStatus === "confirmed") {
-                remaining.push(item);
-                continue;
-            }
-
-            const payload = createPayload(item);
-
             try {
-                const result = await sendBooking(payload);
-                const entry = addConfirmedBooking(item,result,payload);
+                const payload = buildBookingPayload(item);
 
-                item.bookingStatus = "confirmed";
-                item.serverBookingId = entry.id;
-                item.invoiceNumber = entry.invoiceNumber;
-
-                successes.push(
-                    `${item.name || "Booking"}: ${entry.invoiceNumber}`
+                const result = await requestJSON(
+                    SERVER_URL + "/api/bookings",
+                    {
+                        method: "POST",
+                        body: JSON.stringify(payload)
+                    }
                 );
+
+                successfulBookings.push({
+                    booking: result.booking,
+                    invoice: result.invoice,
+                    cancellation_url: result.cancellation_url,
+                    cancellation_policy: result.cancellation_policy,
+                    original_item: item
+                });
             } catch (error) {
-                remaining.push(item);
-
-                failures.push(
-                    `${item.name || "Request " + (i + 1)}: ${error.message}`
-                );
+                failedBookings.push({
+                    item,
+                    message: error.message
+                });
             }
         }
 
-        cart = remaining;
-        saveCart();
+        if (successfulBookings.length) {
+            const saved = successfulBookings.map(entry => ({
+                booking: entry.booking,
+                invoice: entry.invoice,
+                cancellation_url: entry.cancellation_url,
+                cancellation_policy: entry.cancellation_policy
+            }));
 
-        renderCart();
-        renderInvoices();
+            confirmedBookings = [
+                ...confirmedBookings,
+                ...saved
+            ];
 
-        if (successes.length && failures.length) {
-            showMessage(
-                "Some bookings were confirmed:\n" +
-                successes.join("\n") +
-                "\n\nThese requests were not confirmed and remain in your cart:\n" +
-                failures.join("\n"),
-                "info"
+            writeStorage(CONFIRMED_KEY, confirmedBookings);
+
+            currentInvoice = successfulBookings[0].invoice;
+
+            currentCancellationToken =
+                getCancellationToken(
+                    successfulBookings[0].cancellation_url
+                );
+
+            if (failedBookings.length === 0) {
+                cart = [];
+                writeStorage(CART_KEY, cart);
+                renderCart();
+
+                showMessage(
+                    successfulBookings.length === 1
+                        ? "Your booking has been confirmed successfully!"
+                        : "Your bookings have been processed successfully.",
+                    "success"
+                );
+            } else {
+                const successfulIds = new Set(
+                    successfulBookings.map(entry => entry.original_item.id)
+                );
+
+                cart = cart.filter(item => {
+                    return !successfulIds.has(item.id);
+                });
+
+                writeStorage(CART_KEY, cart);
+                renderCart();
+
+                showMessage(
+                    successfulBookings.length +
+                    " booking(s) confirmed. " +
+                    failedBookings.length +
+                    " booking(s) failed. Check the messages below.",
+                    "info"
+                );
+            }
+
+            renderConfirmedBookings();
+
+            displayInvoice(
+                successfulBookings[0].invoice,
+                successfulBookings[0].booking,
+                successfulBookings[0].cancellation_url
             );
-        } else if (successes.length) {
-            showMessage(
-                "Booking confirmation received:\n" +
-                successes.join("\n") +
-                "\n\nYour invoice is below. You can print it or save it as PDF.",
-                "success"
-            );
+
+            if (failedBookings.length) {
+                const errorsHTML = failedBookings.map(entry => {
+                    const title =
+                        entry.item.name ||
+                        getServiceLabel(entry.item);
+
+                    return `
+                        <p>
+                            <strong>${escapeHTML(title)}:</strong>
+                            ${escapeHTML(entry.message)}
+                        </p>
+                    `;
+                }).join("");
+
+                const errorsContainer =
+                    document.createElement("div");
+
+                errorsContainer.innerHTML = errorsHTML;
+
+                messageBox.appendChild(errorsContainer);
+            }
         } else {
+            const messages = failedBookings
+                .map(entry => entry.message)
+                .filter(Boolean);
+
             showMessage(
-                "No bookings were confirmed. Your requests remain in the cart.\n" +
-                failures.join("\n"),
+                messages.join(" | ") ||
+                "No bookings were confirmed. Please try again.",
                 "error"
             );
         }
+    } catch (error) {
+        console.error("Booking process failed:", error);
+
+        showMessage(
+            error.message ||
+            "An unexpected error occurred while confirming your booking.",
+            "error"
+        );
     } finally {
-        submitting = false;
-        confirmButton.disabled = cart.length === 0;
-        confirmButton.textContent = cart.length
-            ? "Confirm Booking Requests"
-            : "No Requests to Confirm";
+        isSubmitting = false;
+        confirmBookingButton.disabled = cart.length === 0;
+        confirmBookingButton.textContent = "Confirm Booking";
     }
 }
 
-async function cancelBooking(button) {
-    const url = button.dataset.cancelUrl;
+/* =========================================
+   INVOICE DISPLAY
+========================================= */
 
-    if (!url || !url.startsWith(API_BASE + "/api/bookings/cancel/")) {
+function createDetail(label, value) {
+    return `
+        <div class="detail">
+            <span class="detail-label">${escapeHTML(label)}</span>
+            <span class="detail-value">${escapeHTML(value || "Not provided")}</span>
+        </div>
+    `;
+}
+
+function displayInvoice(invoice, booking, cancellationUrl) {
+    if (!invoice) {
         showMessage(
-            "The cancellation link is invalid. Please contact the driver.",
+            "The booking was saved, but the invoice could not be displayed.",
             "error"
         );
+
         return;
     }
 
-    if (!window.confirm(
-        "Are you sure you want to cancel this booking?\n\n" +
-        "Cancellation is allowed only more than 24 hours before pickup."
-    )) {
+    currentInvoice = invoice;
+
+    currentCancellationToken =
+        getCancellationToken(cancellationUrl);
+
+    invoiceNumber.textContent =
+        invoice.invoice_number ||
+        invoice.booking_id ||
+        booking?.id ||
+        "Confirmed";
+
+    const status = String(
+        invoice.status || booking?.status || "confirmed"
+    ).toLowerCase();
+
+    invoiceStatus.textContent =
+        status.charAt(0).toUpperCase() + status.slice(1);
+
+    invoiceStatus.className = "status";
+
+    if (status === "cancelled") {
+        invoiceStatus.classList.add("cancelled");
+    } else if (status !== "confirmed") {
+        invoiceStatus.classList.add("pending");
+    }
+
+    invoiceDetails.innerHTML = [
+        createDetail("Customer", invoice.customer_name || invoice.full_name),
+        createDetail("Email", invoice.email),
+        createDetail("Phone", invoice.phone),
+        createDetail("Service", invoice.service_type),
+        createDetail("Package", invoice.package_type),
+        createDetail("Pickup", invoice.pickup_location),
+        createDetail("Destination", invoice.destination),
+        createDetail("Date", formatDate(invoice.pickup_date)),
+        createDetail("Time", invoice.pickup_time),
+        createDetail("Passengers", invoice.passengers),
+        createDetail("Luggage", invoice.luggage)
+    ].join("");
+
+    let priceHTML = "";
+
+    const basePrice = Number(
+        invoice.base_price ??
+        invoice.price ??
+        0
+    );
+
+    priceHTML += `
+        <div class="price-row">
+            <span>Base price</span>
+            <span>${escapeHTML(formatMoney(basePrice))}</span>
+        </div>
+    `;
+
+    const extras = Array.isArray(invoice.extras)
+        ? invoice.extras
+        : [];
+
+    extras.forEach(extra => {
+        priceHTML += `
+            <div class="price-row">
+                <span>
+                    ${escapeHTML(extra.name || extra.id || "Extra")}
+                </span>
+
+                <span>
+                    ${escapeHTML(formatMoney(extra.total || 0))}
+                </span>
+            </div>
+        `;
+    });
+
+    invoicePriceLines.innerHTML = priceHTML;
+
+    const total = Number(
+        invoice.total ??
+        invoice.price ??
+        booking?.price ??
+        0
+    );
+
+    invoiceTotal.textContent = formatMoney(total);
+
+    const departureDate = invoice.pickup_date;
+    const departureTime = String(
+        invoice.pickup_time || "00:00"
+    ).slice(0, 5);
+
+    const departure = new Date(
+        `${departureDate}T${departureTime}:00Z`
+    );
+
+    const remaining =
+        departure.getTime() - Date.now();
+
+    const canCancel =
+        status !== "cancelled" &&
+        Number.isFinite(remaining) &&
+        remaining > 24 * 60 * 60 * 1000 &&
+        Boolean(currentCancellationToken);
+
+    cancelBookingButton.classList.toggle(
+        "hidden",
+        !canCancel
+    );
+
+    if (status === "cancelled") {
+        document.getElementById(
+            "invoiceCancellationNote"
+        ).textContent = "This booking has been cancelled.";
+    } else if (!canCancel) {
+        document.getElementById(
+            "invoiceCancellationNote"
+        ).textContent =
+            "Online cancellation is unavailable within 24 hours of departure.";
+    } else {
+        document.getElementById(
+            "invoiceCancellationNote"
+        ).textContent =
+            "You can cancel this booking while more than 24 hours remain before departure.";
+    }
+
+    invoiceSection.classList.remove("hidden");
+
+    invoiceSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+/* =========================================
+   CANCELLATION
+========================================= */
+
+function getCancellationToken(url) {
+    if (!url || typeof url !== "string") {
+        return null;
+    }
+
+    const match = url.match(
+        /\/api\/bookings\/cancel\/([a-f0-9]{64})/i
+    );
+
+    return match ? match[1] : null;
+}
+
+async function cancelCurrentBooking() {
+    if (!currentCancellationToken) {
+        showMessage(
+            "The cancellation link is unavailable for this booking.",
+            "error"
+        );
+
         return;
     }
 
-    button.disabled = true;
-    button.textContent = "Cancelling...";
+    const confirmed = window.confirm(
+        "Are you sure you want to cancel this booking? This action cannot be undone."
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    cancelBookingButton.disabled = true;
+    cancelBookingButton.textContent = "Cancelling...";
 
     try {
-        const response = await fetch(url,{
-            method:"POST",
-            headers:{"Content-Type":"application/json"}
-        });
-
-        let result;
-
-        try {
-            result = await response.json();
-        } catch {
-            throw new Error("The server returned an unreadable response.");
-        }
-
-        if (!response.ok || !result.success) {
-            throw new Error(
-                result.message || result.error || "The booking could not be cancelled."
-            );
-        }
-
-        const id = button.dataset.bookingId;
-
-        const entry = confirmedBookings.find(saved =>
-            String(saved.booking && saved.booking.id) === String(id)
+        const result = await requestJSON(
+            SERVER_URL +
+            "/api/bookings/cancel/" +
+            currentCancellationToken,
+            {
+                method: "POST",
+                body: JSON.stringify({})
+            }
         );
 
-        if (entry && entry.booking) {
-            entry.booking.status = "cancelled";
-            entry.cancelledAt = new Date().toISOString();
-            saveConfirmedBookings();
-        }
-
-        renderInvoices();
-        renderCart();
-
         showMessage(
-            result.message || "Booking cancelled successfully.",
+            result.message || "Your booking has been cancelled.",
             "success"
         );
+
+        const bookingId =
+            currentInvoice?.booking_id ||
+            currentInvoice?.invoice_number;
+
+        confirmedBookings = confirmedBookings.map(entry => {
+            const savedBooking = entry.booking || {};
+            const savedInvoice = entry.invoice || {};
+
+            const matches =
+                String(savedBooking.id) === String(bookingId) ||
+                String(savedInvoice.booking_id) === String(bookingId) ||
+                String(savedInvoice.invoice_number) === String(bookingId);
+
+            if (!matches) {
+                return entry;
+            }
+
+            if (entry.booking) {
+                entry.booking.status = "cancelled";
+            }
+
+            if (entry.invoice) {
+                entry.invoice.status = "cancelled";
+            }
+
+            return entry;
+        });
+
+        writeStorage(CONFIRMED_KEY, confirmedBookings);
+
+        if (currentInvoice) {
+            currentInvoice.status = "cancelled";
+        }
+
+        invoiceStatus.textContent = "Cancelled";
+        invoiceStatus.className = "status cancelled";
+
+        cancelBookingButton.classList.add("hidden");
+
+        document.getElementById(
+            "invoiceCancellationNote"
+        ).textContent = "This booking has been cancelled.";
+
+        renderConfirmedBookings();
     } catch (error) {
         showMessage(
-            error.message || "Could not cancel this booking.",
+            error.message ||
+            "Unable to cancel this booking. Please try again.",
             "error"
         );
-
-        button.disabled = false;
-        button.textContent = "Cancel This Booking";
+    } finally {
+        cancelBookingButton.disabled = false;
+        cancelBookingButton.textContent = "Cancel Booking";
     }
 }
 
-cartItemsElement.addEventListener("click",event => {
-    const button = event.target.closest(".remove-button");
+/* =========================================
+   PREVIOUS BOOKINGS
+========================================= */
 
-    if (!button) return;
+function renderConfirmedBookings() {
+    const section =
+        document.getElementById("confirmedBookingsSection");
 
-    const index = Number(button.dataset.index);
+    const container =
+        document.getElementById("confirmedBookingsContainer");
 
-    if (!Number.isInteger(index) || index < 0 || index >= cart.length) {
+    if (!confirmedBookings.length) {
+        section.classList.add("hidden");
+        container.innerHTML = "";
         return;
     }
 
-    if (!window.confirm("Remove this unconfirmed request from your cart?")) {
+    section.classList.remove("hidden");
+
+    container.innerHTML = confirmedBookings
+        .map((entry, index) => {
+            const booking = entry.booking || {};
+            const invoice = entry.invoice || {};
+
+            const status = String(
+                booking.status ||
+                invoice.status ||
+                "confirmed"
+            ).toLowerCase();
+
+            const id =
+                invoice.invoice_number ||
+                invoice.booking_id ||
+                booking.id ||
+                "Booking";
+
+            return `
+                <div class="booking-item">
+                    <h3>Booking ${escapeHTML(id)}</h3>
+
+                    <p>
+                        <strong>Service:</strong>
+                        ${escapeHTML(invoice.service_type || booking.service_type || "Transfer")}
+                    </p>
+
+                    <p>
+                        <strong>Date:</strong>
+                        ${escapeHTML(formatDate(invoice.pickup_date || booking.pickup_date))}
+                    </p>
+
+                    <p>
+                        <strong>Total:</strong>
+                        ${escapeHTML(formatMoney(invoice.total ?? booking.price ?? 0))}
+                    </p>
+
+                    <p>
+                        <span class="status ${status === "cancelled" ? "cancelled" : ""}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </p>
+
+                    <div class="actions no-print">
+                        <button
+                            type="button"
+                            class="secondary view-booking"
+                            data-index="${index}">
+                            View Invoice
+                        </button>
+                    </div>
+                </div>
+            `;
+        })
+        .join("");
+
+    container.querySelectorAll(".view-booking").forEach(button => {
+        button.addEventListener("click", () => {
+            const index = Number(button.dataset.index);
+
+            const entry = confirmedBookings[index];
+
+            if (!entry) {
+                return;
+            }
+
+            displayInvoice(
+                entry.invoice,
+                entry.booking,
+                entry.cancellation_url
+            );
+        });
+    });
+}
+
+/* =========================================
+   BUTTON EVENTS
+========================================= */
+
+confirmBookingButton.addEventListener(
+    "click",
+    confirmBookings
+);
+
+clearCartButton.addEventListener("click", () => {
+    if (!cart.length) {
         return;
     }
 
-    cart.splice(index,1);
-    saveCart();
+    const confirmed = window.confirm(
+        "Do you want to clear all selected trips?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    cart = [];
+
+    writeStorage(CART_KEY, cart);
+
     renderCart();
     clearMessage();
 });
 
-invoiceContainer.addEventListener("click",async event => {
-    const cancelButton = event.target.closest(".cancel-booking-button");
+printInvoiceButton.addEventListener("click", () => {
+    if (!currentInvoice) {
+        showMessage(
+            "There is no invoice to print yet.",
+            "error"
+        );
 
-    if (cancelButton) {
-        await cancelBooking(cancelButton);
-        return;
-    }
-
-    const printButtonSingle = event.target.closest(".print-single-button");
-
-    if (printButtonSingle) {
-        const invoice = printButtonSingle.closest(".invoice");
-
-        if (!invoice) return;
-
-        document.querySelectorAll(".invoice").forEach(section => {
-            section.dataset.wasHidden =
-                section.style.display === "none" ? "yes" : "no";
-
-            section.style.display =
-                section === invoice ? "block" : "none";
-        });
-
-        window.print();
-
-        document.querySelectorAll(".invoice").forEach(section => {
-            section.style.display =
-                section.dataset.wasHidden === "yes" ? "none" : "";
-
-            delete section.dataset.wasHidden;
-        });
-    }
-});
-
-confirmButton.addEventListener("click",confirmRequests);
-
-printButton.addEventListener("click",() => {
-    if (!confirmedBookings.length) {
-        showMessage("There are no confirmed invoices to print.","info");
         return;
     }
 
     window.print();
 });
 
-document.getElementById("continueButton").addEventListener("click",() => {
-    window.location.href = "transfers.html";
-});
+cancelBookingButton.addEventListener(
+    "click",
+    cancelCurrentBooking
+);
 
-renderCart();
-renderInvoices();
+/* =========================================
+   INITIALIZE
+========================================= */
+
+loadCart();
 </script>
 
 </body>
