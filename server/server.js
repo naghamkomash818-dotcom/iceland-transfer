@@ -4,8 +4,7 @@ const http = require("http");
 const crypto = require("crypto");
 const { createClient } = require("@supabase/supabase-js");
 
-const PORT = process.env.PORT || 3000;
-
+const PORT = Number(process.env.PORT) || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 
@@ -14,6 +13,8 @@ const PUBLIC_SERVER_URL =
 
 const WORK_START_HOUR = 6;
 const LAST_TRIP_START_HOUR = 22;
+const CANCELLATION_LIMIT_HOURS = 24;
+const MAX_REQUEST_SIZE = 100000;
 
 const SERVICE_DURATIONS = {
     transfer: 1,
@@ -21,15 +22,10 @@ const SERVICE_DURATIONS = {
     northern_lights_tour: 5
 };
 
-const CANCELLATION_LIMIT_HOURS = 24;
-
-const MAX_REQUEST_SIZE = 100000;
-
 if (!SUPABASE_URL || !SUPABASE_SECRET_KEY) {
     console.error(
         "ERROR: SUPABASE_URL and SUPABASE_SECRET_KEY must be configured."
     );
-
     process.exit(1);
 }
 
@@ -54,8 +50,7 @@ function sendJSON(res, statusCode, data) {
         "Cache-Control": "no-store",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers":
-            "Content-Type, Authorization"
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
     });
 
     res.end(JSON.stringify(data));
@@ -65,11 +60,14 @@ function readBody(req) {
     return new Promise((resolve, reject) => {
         let body = "";
         let size = 0;
+        let tooLarge = false;
 
         req.on("data", chunk => {
             size += chunk.length;
 
             if (size > MAX_REQUEST_SIZE) {
+                tooLarge = true;
+
                 reject(
                     Object.assign(
                         new Error("Request body is too large."),
@@ -77,16 +75,27 @@ function readBody(req) {
                     )
                 );
 
-                req.destroy();
                 return;
             }
 
-            body += chunk.toString();
+            body += chunk.toString("utf8");
         });
 
         req.on("end", () => {
+            if (tooLarge) return;
+
             try {
-                resolve(body ? JSON.parse(body) : {});
+                const parsed = body ? JSON.parse(body) : {};
+
+                if (
+                    !parsed ||
+                    typeof parsed !== "object" ||
+                    Array.isArray(parsed)
+                ) {
+                    throw new Error("Invalid request body.");
+                }
+
+                resolve(parsed);
             } catch {
                 reject(
                     Object.assign(
@@ -117,29 +126,10 @@ function normalizeText(value) {
         .replace(/\s+/g, " ");
 }
 
-function canonicalLocation(value) {
-    const text = normalizeText(value);
-
-    const aliases = {
-        "keflavik": "keflavik airport",
-        "keflavik airport": "keflavik airport",
-        "kef airport": "keflavik airport",
-        "reykjavik": "reykjavik",
-        "reykjavík": "reykjavik",
-        "blue lagoon": "blue lagoon",
-        "sky lagoon": "sky lagoon",
-        "cruise port": "cruise port"
-    };
-
-    return aliases[text] || text;
-}
-
 function safeNumber(value, defaultValue = 0) {
     const number = Number(value);
 
-    return Number.isFinite(number)
-        ? number
-        : defaultValue;
+    return Number.isFinite(number) ? number : defaultValue;
 }
 
 function isValidDate(date) {
@@ -150,7 +140,7 @@ function isValidDate(date) {
         return false;
     }
 
-    const parsed = new Date(`${date}T00:00:00Z`);
+    const parsed = new Date(`${date}T00:00:00.000Z`);
 
     return (
         !Number.isNaN(parsed.getTime()) &&
@@ -159,18 +149,19 @@ function isValidDate(date) {
 }
 
 function isValidTime(time) {
-    if (
-        typeof time !== "string" ||
-        !/^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(time)
-    ) {
-        return false;
-    }
-
-    return true;
+    return (
+        typeof time === "string" &&
+        /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(time)
+    );
 }
 
+/*
+ * Booking dates and times are interpreted as Iceland local time.
+ * Iceland uses UTC year-round, so UTC calculations are appropriate.
+ */
+
 function getPickupDateTime(date, time) {
-    return new Date(`${date}T${time.slice(0, 5)}:00Z`);
+    return new Date(`${date}T${time.slice(0, 5)}:00.000Z`);
 }
 
 function getDuration(serviceType) {
@@ -178,10 +169,9 @@ function getDuration(serviceType) {
 }
 
 function getTripEndDateTime(date, time, duration) {
-    const start = getPickupDateTime(date, time);
-
     return new Date(
-        start.getTime() + duration * 60 * 60 * 1000
+        getPickupDateTime(date, time).getTime() +
+        duration * 60 * 60 * 1000
     );
 }
 
@@ -196,13 +186,37 @@ function isValidPassengers(value) {
 function isValidEmail(email) {
     return (
         typeof email === "string" &&
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
-        email.length <= 254
+        email.length <= 254 &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
     );
 }
 
+function normalizePackage(value) {
+    return normalizeText(value).replace(/\s+/g, "_");
+}
+
 /* =========================================
-   PRICING: REGULAR TRANSFERS
+   LOCATION NORMALIZATION
+========================================= */
+
+function canonicalLocation(value) {
+    const text = normalizeText(value);
+
+    const aliases = {
+        "keflavik": "keflavik airport",
+        "keflavik airport": "keflavik airport",
+        "kef airport": "keflavik airport",
+        "reykjavik": "reykjavik",
+        "blue lagoon": "blue lagoon",
+        "sky lagoon": "sky lagoon",
+        "cruise port": "cruise port"
+    };
+
+    return aliases[text] || text;
+}
+
+/* =========================================
+   TRANSFER PRICING — ISK
 ========================================= */
 
 const TRANSFER_PRICES = {
@@ -229,11 +243,15 @@ function calculateTransferPrice(pickup, destination) {
     const key =
         `${canonicalLocation(pickup)}|${canonicalLocation(destination)}`;
 
+    /*
+     * Keep the existing default estimate for locations
+     * not explicitly listed in the table.
+     */
     return TRANSFER_PRICES[key] || 30000;
 }
 
 /* =========================================
-   PRICING: GOLDEN CIRCLE
+   GOLDEN CIRCLE PRICING
 ========================================= */
 
 const GOLDEN_CIRCLE_PACKAGES = {
@@ -276,18 +294,12 @@ const GOLDEN_CIRCLE_ADDONS = {
     }
 };
 
-function normalizePackage(value) {
-    return normalizeText(value)
-        .replace(/\s+/g, "_");
-}
-
 function calculateGoldenCirclePrice(booking) {
     const packageType = normalizePackage(
         booking.package_type || "classic"
     );
 
-    const basePrice =
-        GOLDEN_CIRCLE_PACKAGES[packageType];
+    const basePrice = GOLDEN_CIRCLE_PACKAGES[packageType];
 
     if (basePrice === undefined) {
         throw new Error("Invalid Golden Circle package.");
@@ -305,24 +317,27 @@ function calculateGoldenCirclePrice(booking) {
 
     let extrasTotal = 0;
     const extras = [];
+    const seen = new Set();
 
     for (const item of selectedAddons) {
         const id = typeof item === "string"
             ? item
             : item && item.id;
 
-        if (!id || !GOLDEN_CIRCLE_ADDONS[id]) {
+        if (
+            !id ||
+            !GOLDEN_CIRCLE_ADDONS[id] ||
+            seen.has(id)
+        ) {
             continue;
         }
 
+        seen.add(id);
+
         const addon = GOLDEN_CIRCLE_ADDONS[id];
 
-        const quantity = addon.perBooking
-            ? 1
-            : passengers;
-
-        const lineTotal =
-            addon.pricePerPassenger * quantity;
+        const quantity = addon.perBooking ? 1 : passengers;
+        const lineTotal = addon.pricePerPassenger * quantity;
 
         extrasTotal += lineTotal;
 
@@ -345,7 +360,7 @@ function calculateGoldenCirclePrice(booking) {
 }
 
 /* =========================================
-   PRICING: NORTHERN LIGHTS
+   NORTHERN LIGHTS PRICING
 ========================================= */
 
 const NORTHERN_LIGHTS_PACKAGES = {
@@ -386,8 +401,7 @@ function calculateNorthernLightsPrice(booking) {
         booking.package_type || "classic"
     );
 
-    const packageInfo =
-        NORTHERN_LIGHTS_PACKAGES[packageType];
+    const packageInfo = NORTHERN_LIGHTS_PACKAGES[packageType];
 
     if (!packageInfo) {
         throw new Error("Invalid Northern Lights package.");
@@ -411,24 +425,27 @@ function calculateNorthernLightsPrice(booking) {
 
     let extrasTotal = 0;
     const extras = [];
+    const seen = new Set();
 
     for (const item of selectedExtras) {
         const id = typeof item === "string"
             ? item
             : item && item.id;
 
-        if (!id || !NORTHERN_LIGHTS_EXTRAS[id]) {
+        if (
+            !id ||
+            !NORTHERN_LIGHTS_EXTRAS[id] ||
+            seen.has(id)
+        ) {
             continue;
         }
 
+        seen.add(id);
+
         const extra = NORTHERN_LIGHTS_EXTRAS[id];
 
-        const quantity = extra.perBooking
-            ? 1
-            : passengers;
-
-        const lineTotal =
-            extra.pricePerPassenger * quantity;
+        const quantity = extra.perBooking ? 1 : passengers;
+        const lineTotal = extra.pricePerPassenger * quantity;
 
         extrasTotal += lineTotal;
 
@@ -458,18 +475,18 @@ function calculateNorthernLightsPrice(booking) {
 function normalizeServiceType(value, booking = {}) {
     const raw = normalizeText(value);
 
-    const packageType = normalizePackage(
-        booking.package_type || ""
-    );
-
     const name = normalizeText(
-        booking.name || booking.service_name || ""
+        booking.name ||
+        booking.service_name ||
+        booking.service ||
+        ""
     );
 
     if (
         raw.includes("northern") ||
         raw.includes("aurora") ||
-        name.includes("northern lights")
+        name.includes("northern lights") ||
+        name.includes("aurora")
     ) {
         return "northern_lights_tour";
     }
@@ -479,14 +496,6 @@ function normalizeServiceType(value, booking = {}) {
         name.includes("golden circle")
     ) {
         return "golden_circle_tour";
-    }
-
-    if (
-        packageType &&
-        booking.extras &&
-        name.includes("lights")
-    ) {
-        return "northern_lights_tour";
     }
 
     return "transfer";
@@ -528,115 +537,22 @@ function calculateBookingPrice(booking) {
 }
 
 /* =========================================
-   AVAILABILITY
-========================================= */
-
-async function checkSlotAvailable(
-    date,
-    time,
-    duration,
-    serviceType,
-    excludeBookingId = null
-) {
-    const requestedStart = getPickupDateTime(date, time);
-
-    const requestedEnd = new Date(
-        requestedStart.getTime() +
-        duration * 60 * 60 * 1000
-    );
-
-    const dayStart = new Date(`${date}T00:00:00Z`);
-
-    const previousDay = new Date(
-        dayStart.getTime() - 24 * 60 * 60 * 1000
-    );
-
-    const nextDay = new Date(
-        dayStart.getTime() + 24 * 60 * 60 * 1000
-    );
-
-    const searchStart = previousDay.toISOString().slice(0, 10);
-    const searchEnd = nextDay.toISOString().slice(0, 10);
-
-    let query = supabase
-        .from("bookings")
-        .select(
-            "id,pickup_date,pickup_time,trip_end_time,service_duration_hours,status"
-        )
-        .gte("pickup_date", searchStart)
-        .lte("pickup_date", searchEnd)
-        .neq("status", "cancelled");
-
-    if (excludeBookingId) {
-        query = query.neq("id", excludeBookingId);
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-        console.error("Availability database error:", error.message);
-
-        throw new Error(
-            "Unable to check availability. Please try again later."
-        );
-    }
-
-    for (const booking of data || []) {
-        if (!booking.pickup_date || !booking.pickup_time) {
-            continue;
-        }
-
-        const existingStart = getPickupDateTime(
-            booking.pickup_date,
-            booking.pickup_time
-        );
-
-        let existingEnd;
-
-        if (booking.trip_end_time) {
-            existingEnd = new Date(booking.trip_end_time);
-        } else {
-            const existingDuration = safeNumber(
-                booking.service_duration_hours,
-                1
-            );
-
-            existingEnd = new Date(
-                existingStart.getTime() +
-                existingDuration * 60 * 60 * 1000
-            );
-        }
-
-        if (
-            requestedStart < existingEnd &&
-            requestedEnd > existingStart
-        ) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/* =========================================
-   BOOKING VALIDATION
+   VALIDATION
 ========================================= */
 
 function validateBooking(booking) {
     const errors = [];
 
-    if (
-        !isValidString(
-            booking.full_name || booking.customerName,
-            150
-        )
-    ) {
+    const fullName =
+        booking.full_name ||
+        booking.customerName ||
+        booking.customer_name;
+
+    if (!isValidString(fullName, 150)) {
         errors.push("Please enter your full name.");
     }
 
-    const email = booking.email;
-
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(booking.email)) {
         errors.push("Please enter a valid email address.");
     }
 
@@ -653,12 +569,12 @@ function validateBooking(booking) {
     }
 
     if (
-        normalizeText(booking.pickup_location) ===
-        normalizeText(booking.destination)
+        isValidString(booking.pickup_location, 250) &&
+        isValidString(booking.destination, 250) &&
+        canonicalLocation(booking.pickup_location) ===
+        canonicalLocation(booking.destination)
     ) {
-        errors.push(
-            "Pickup and destination must be different."
-        );
+        errors.push("Pickup and destination must be different.");
     }
 
     if (!isValidDate(booking.pickup_date)) {
@@ -724,6 +640,96 @@ function validateBooking(booking) {
 }
 
 /* =========================================
+   AVAILABILITY CHECK
+========================================= */
+
+async function checkSlotAvailable(
+    date,
+    time,
+    duration,
+    excludeBookingId = null
+) {
+    const requestedStart = getPickupDateTime(date, time);
+
+    const requestedEnd = new Date(
+        requestedStart.getTime() +
+        duration * 60 * 60 * 1000
+    );
+
+    const dayStart = new Date(`${date}T00:00:00.000Z`);
+
+    const previousDay = new Date(
+        dayStart.getTime() - 24 * 60 * 60 * 1000
+    );
+
+    const nextDay = new Date(
+        dayStart.getTime() + 24 * 60 * 60 * 1000
+    );
+
+    const searchStart = previousDay.toISOString().slice(0, 10);
+    const searchEnd = nextDay.toISOString().slice(0, 10);
+
+    let query = supabase
+        .from("bookings")
+        .select(
+            "id,pickup_date,pickup_time,trip_end_time,service_duration_hours,status"
+        )
+        .gte("pickup_date", searchStart)
+        .lte("pickup_date", searchEnd)
+        .neq("status", "cancelled");
+
+    if (excludeBookingId) {
+        query = query.neq("id", excludeBookingId);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error("Availability database error:", error.message);
+
+        throw new Error(
+            "Unable to check availability. Please try again later."
+        );
+    }
+
+    for (const existing of data || []) {
+        if (!existing.pickup_date || !existing.pickup_time) {
+            continue;
+        }
+
+        const existingStart = getPickupDateTime(
+            existing.pickup_date,
+            existing.pickup_time
+        );
+
+        let existingEnd;
+
+        if (existing.trip_end_time) {
+            existingEnd = new Date(existing.trip_end_time);
+        } else {
+            const oldDuration = safeNumber(
+                existing.service_duration_hours,
+                1
+            );
+
+            existingEnd = new Date(
+                existingStart.getTime() +
+                oldDuration * 60 * 60 * 1000
+            );
+        }
+
+        if (
+            requestedStart < existingEnd &&
+            requestedEnd > existingStart
+        ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/* =========================================
    CREATE BOOKING
 ========================================= */
 
@@ -746,7 +752,6 @@ async function createBooking(booking) {
     );
 
     const duration = getDuration(serviceType);
-
     const passengers = Number(booking.passengers);
 
     let pricing;
@@ -767,12 +772,23 @@ async function createBooking(booking) {
         };
     }
 
-    const available = await checkSlotAvailable(
-        booking.pickup_date,
-        booking.pickup_time,
-        duration,
-        serviceType
-    );
+    let available;
+
+    try {
+        available = await checkSlotAvailable(
+            booking.pickup_date,
+            booking.pickup_time,
+            duration
+        );
+    } catch (error) {
+        return {
+            status: 503,
+            body: {
+                success: false,
+                error: error.message
+            }
+        };
+    }
 
     if (!available) {
         return {
@@ -795,11 +811,6 @@ async function createBooking(booking) {
         duration
     );
 
-    /*
-      The addons column stores the selected extras as JSON.
-      This avoids requiring a separate "extras" database column.
-    */
-
     const storedAddons = pricing.extras.map(extra => ({
         id: extra.id,
         name: extra.name,
@@ -810,24 +821,26 @@ async function createBooking(booking) {
 
     const selectedStops = Array.isArray(booking.selected_stops)
         ? booking.selected_stops
+            .filter(item => typeof item === "string")
+            .map(item => item.trim())
+            .filter(Boolean)
+            .slice(0, 30)
         : [];
 
     const insertData = {
         full_name: String(
-            booking.full_name || booking.customerName
+            booking.full_name ||
+            booking.customerName ||
+            booking.customer_name
         ).trim(),
 
         email: String(booking.email).trim(),
 
         phone: String(booking.phone).trim(),
 
-        pickup_location: String(
-            booking.pickup_location
-        ).trim(),
+        pickup_location: String(booking.pickup_location).trim(),
 
-        destination: String(
-            booking.destination
-        ).trim(),
+        destination: String(booking.destination).trim(),
 
         pickup_date: booking.pickup_date,
 
@@ -910,17 +923,12 @@ async function createBooking(booking) {
         package_type: data.package_type,
 
         base_price: pricing.base_price,
-
         extras: pricing.extras,
-
         extras_total: pricing.extras_total,
-
         total: pricing.total,
 
         currency: "ISK",
-
         status: data.status,
-
         created_at: data.created_at
     };
 
@@ -929,9 +937,7 @@ async function createBooking(booking) {
         body: {
             success: true,
             message: "Booking confirmed successfully.",
-
             booking: data,
-
             invoice,
 
             cancellation_url:
@@ -996,13 +1002,22 @@ async function cancelBooking(token) {
         };
     }
 
+    if (booking.status !== "confirmed") {
+        return {
+            status: 409,
+            body: {
+                success: false,
+                error: "This booking cannot be cancelled in its current status."
+            }
+        };
+    }
+
     const departure = getPickupDateTime(
         booking.pickup_date,
         booking.pickup_time
     );
 
-    const remainingTime =
-        departure.getTime() - Date.now();
+    const remainingTime = departure.getTime() - Date.now();
 
     const requiredTime =
         CANCELLATION_LIMIT_HOURS * 60 * 60 * 1000;
@@ -1084,7 +1099,6 @@ async function getAvailability(url, res) {
     );
 
     const duration = getDuration(serviceType);
-
     const availableTimes = [];
 
     for (
@@ -1092,8 +1106,7 @@ async function getAvailability(url, res) {
         hour <= LAST_TRIP_START_HOUR;
         hour++
     ) {
-        const time =
-            `${String(hour).padStart(2, "0")}:00`;
+        const time = `${String(hour).padStart(2, "0")}:00`;
 
         const departure = getPickupDateTime(date, time);
 
@@ -1105,8 +1118,7 @@ async function getAvailability(url, res) {
             const available = await checkSlotAvailable(
                 date,
                 time,
-                duration,
-                serviceType
+                duration
             );
 
             availableTimes.push({
@@ -1119,7 +1131,7 @@ async function getAvailability(url, res) {
                 error.message
             );
 
-            return sendJSON(res, 500, {
+            return sendJSON(res, 503, {
                 success: false,
                 error: "Unable to check availability."
             });
@@ -1135,7 +1147,7 @@ async function getAvailability(url, res) {
 }
 
 /* =========================================
-   SERVER
+   HTTP SERVER
 ========================================= */
 
 const server = http.createServer(async (req, res) => {
@@ -1143,8 +1155,7 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(204, {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-            "Access-Control-Allow-Headers":
-                "Content-Type, Authorization",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
             "Access-Control-Max-Age": "86400"
         });
 
@@ -1180,7 +1191,7 @@ const server = http.createServer(async (req, res) => {
         });
     }
 
-    /* Check availability */
+    /* Availability */
 
     if (
         req.method === "GET" &&
@@ -1197,7 +1208,6 @@ const server = http.createServer(async (req, res) => {
     ) {
         try {
             const body = await readBody(req);
-
             const result = await createBooking(body);
 
             return sendJSON(
@@ -1219,7 +1229,9 @@ const server = http.createServer(async (req, res) => {
                     error:
                         error.statusCode === 413
                             ? "Request body is too large."
-                            : "An unexpected server error occurred."
+                            : error.statusCode === 400
+                                ? "Invalid request data."
+                                : "An unexpected server error occurred."
                 }
             );
         }
