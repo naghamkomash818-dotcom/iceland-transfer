@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Keflavik KEF Shuttle | Iceland Transfer</title>
-<meta name="description" content="Book a private transfer from Keflavik Airport to your destination in Iceland.">
+<meta name="description" content="Book a private transfer from Keflavik International Airport with Iceland Transfer.">
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -13,27 +13,27 @@ body{font-family:Arial,Helvetica,sans-serif;background:var(--white);color:var(--
 a{color:inherit;text-decoration:none}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-.site-header{background:var(--white);border-bottom:1px solid var(--border)}
+.site-header{background:var(--white);border-bottom:1px solid var(--border);position:relative;z-index:5}
 .nav-container{width:min(1180px,92%);margin:auto;min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:24px}
 .brand{color:var(--deep-green);font-size:21px;font-weight:800;letter-spacing:1.5px;line-height:1.3}
 .brand span{display:block;color:var(--gold);font-size:10px;letter-spacing:2.4px;font-weight:600;margin-top:4px}
-.nav-links{display:flex;align-items:center;gap:22px;font-size:14px;flex-wrap:wrap}
+.nav-links{display:flex;align-items:center;gap:25px;font-size:14px}
 .nav-links a:hover{color:var(--gold)}
 .nav-links .nav-book{background:var(--green);color:white;padding:11px 17px;border-radius:4px}
 .hero{min-height:290px;background:linear-gradient(90deg,rgba(20,35,27,.82),rgba(20,35,27,.35)),url("images2/airport-transfer.jpg") center/cover no-repeat,var(--deep-green);display:flex;align-items:center;color:white}
 .hero-content{width:min(1180px,92%);margin:auto;padding:58px 0}
 .eyebrow{color:#e1c991;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:13px}
 .hero h1{max-width:720px;font-size:clamp(32px,5vw,49px);line-height:1.15;margin-bottom:15px}
-.hero p{max-width:650px;color:#f2f1eb}
+.hero p{max-width:620px;color:#f2f1eb;font-size:16px}
 .page-container{width:min(1180px,92%);margin:48px auto 70px}
 .intro{max-width:780px;margin-bottom:30px}
 .intro h2{font-size:clamp(25px,3vw,34px);color:var(--deep-green);margin-bottom:10px}
-.intro p,.section-description{color:var(--muted)}
+.intro p{color:var(--muted)}
 .booking-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(270px,.8fr);gap:28px;align-items:start}
 .booking-card,.summary-card{background:white;border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 28px rgba(41,60,46,.06)}
 .booking-card{padding:clamp(20px,4vw,34px)}
 .section-heading{color:var(--deep-green);font-size:20px;margin-bottom:7px}
-.section-description{font-size:13px;margin-bottom:25px}
+.section-description{color:var(--muted);font-size:13px;margin-bottom:25px}
 .form-section{padding-bottom:25px;margin-bottom:25px;border-bottom:1px solid var(--border)}
 .form-section:last-of-type{border-bottom:none;margin-bottom:0}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
@@ -42,7 +42,7 @@ button{cursor:pointer}
 .form-group.full-width{grid-column:1/-1}
 label{display:block;font-size:13px;font-weight:700;margin-bottom:7px;color:var(--deep-green)}
 .required{color:#a34a3c}
-input,select,textarea{display:block;width:100%;min-height:47px;padding:11px 12px;border:1px solid #dcd8ce;border-radius:5px;color:var(--text);background:#fff;outline:none}
+input,select,textarea{display:block;width:100%;min-height:47px;padding:11px 12px;border:1px solid #dcd8ce;border-radius:5px;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s}
 textarea{min-height:100px;resize:vertical}
 input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(70,91,69,.1)}
 .field-hint{display:block;color:var(--muted);font-size:11px;margin-top:5px}
@@ -50,40 +50,57 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 .custom-location.visible{display:block}
 .passenger-control{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:47px;border:1px solid #dcd8ce;border-radius:5px;padding:6px 10px}
 .passenger-buttons{display:flex;align-items:center;gap:17px}
-.passenger-buttons button{width:32px;height:32px;border:1px solid var(--border);border-radius:50%;background:var(--beige);color:var(--deep-green);font-size:20px}
+.passenger-buttons button{width:32px;height:32px;border:1px solid var(--border);border-radius:50%;background:var(--beige);color:var(--deep-green);font-size:20px;line-height:1}
 .passenger-buttons button:disabled{opacity:.4;cursor:not-allowed}
-.passenger-number{min-width:18px;text-align:center;font-weight:700}
 .summary-card{padding:25px;position:sticky;top:20px}
 .summary-card h3{color:var(--deep-green);font-size:21px;margin-bottom:19px}
 .summary-image{width:100%;height:155px;object-fit:cover;border-radius:6px;margin-bottom:18px;background:var(--beige)}
-.summary-line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13px}
+.summary-line{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13px}
 .summary-line span:first-child{color:var(--muted)}
 .summary-line span:last-child{font-weight:700;text-align:right;overflow-wrap:anywhere}
 .price-box{background:var(--beige);padding:17px;border-radius:6px;margin-top:18px}
-.price-title{color:var(--muted);font-size:12px;margin-bottom:4px}
-.price{color:var(--deep-green);font-size:23px;font-weight:800}
+.price-box .price-title{color:var(--muted);font-size:12px;margin-bottom:4px}
+.price-box .price{color:var(--deep-green);font-size:23px;font-weight:800}
 .price-box p{color:var(--muted);font-size:12px;margin-top:6px}
-.submit-button{width:100%;margin-top:20px;min-height:50px;padding:13px 18px;background:var(--green);color:white;border:none;border-radius:5px;font-weight:700}
+.submit-button{width:100%;margin-top:20px;min-height:50px;padding:13px 18px;background:var(--green);color:white;border:none;border-radius:5px;font-weight:700;transition:background .2s,opacity .2s}
 .submit-button:hover{background:var(--deep-green)}
 .submit-button:disabled{opacity:.65;cursor:wait}
 .secure-note{color:var(--muted);font-size:11px;margin-top:13px;text-align:center}
 .message{display:none;padding:14px 16px;margin:0 0 20px;border-radius:5px;background:#eaf3e8;border:1px solid #c9dfc5;color:#25472a;overflow-wrap:anywhere;font-size:14px}
 .message.error{background:#fff0ee;border-color:#e7c1bb;color:#8a3025}
-.invoice-box{display:none;padding:22px;margin-bottom:25px;border:1px solid var(--border);border-radius:8px;background:#fffdf9}
+.invoice-box{display:none;padding:20px;margin:0 0 24px;border-radius:8px;background:#fffdf8;border:1px solid var(--gold);overflow-wrap:anywhere}
 .invoice-box h3{color:var(--deep-green);margin-bottom:12px}
-.invoice-details p{padding:5px 0;overflow-wrap:anywhere}
-.invoice-total{font-size:20px;font-weight:800;color:var(--deep-green);border-top:1px solid var(--border);margin-top:10px;padding-top:12px}
+.invoice-box p{margin:5px 0;font-size:14px}
 .invoice-actions{display:flex;gap:10px;flex-wrap:wrap}
-.invoice-actions button{flex:1;min-width:150px}
+.invoice-actions button{flex:1;min-width:160px}
 .info-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:30px}
 .info-item{padding:20px;background:var(--beige);border-radius:7px}
 .info-item h3{color:var(--deep-green);font-size:15px;margin-bottom:6px}
 .info-item p{color:var(--muted);font-size:12px}
 .site-footer{background:var(--deep-green);color:white;padding:35px 4%;text-align:center}
 .site-footer p{color:#d9dfd6;font-size:13px;margin-top:7px}
-@media(max-width:850px){.booking-layout{grid-template-columns:1fr}.summary-card{position:static}.nav-container{align-items:flex-start;flex-direction:column;padding:18px 0;gap:15px}}
-@media(max-width:560px){.form-grid,.info-strip{grid-template-columns:1fr}.form-group.full-width{grid-column:auto}.hero{min-height:250px}.page-container{margin-top:30px}.booking-card,.summary-card{padding:20px}.nav-links{font-size:12px;gap:13px}}
-@media print{.site-header,.hero,.booking-card,.info-strip,.site-footer,.summary-card,.invoice-actions,.invoice-policy{display:none!important}.page-container{width:100%;margin:0}.invoice-box{display:block!important;border:0}.invoice-box h3{font-size:25px}}
+
+@media(max-width:850px){
+.booking-layout{grid-template-columns:1fr}
+.summary-card{position:static}
+.nav-container{align-items:flex-start;flex-direction:column;padding:18px 0;gap:15px}
+.nav-links{flex-wrap:wrap;gap:13px 18px}
+}
+@media(max-width:560px){
+.form-grid,.info-strip{grid-template-columns:1fr}
+.form-group.full-width{grid-column:auto}
+.hero{min-height:250px}
+.page-container{margin-top:30px}
+.booking-card,.summary-card{padding:20px}
+.nav-links{font-size:12px}
+}
+@media print{
+.site-header,.hero,.info-strip,.site-footer,.summary-card,.intro,#bookingForm,#bookingMessage{display:none!important}
+.page-container{width:100%;margin:0}
+.booking-layout{display:block}
+.booking-card{display:block!important;border:0;box-shadow:none;padding:0}
+.invoice-box{display:block!important;border:0;padding:0;margin:0}
+}
 </style>
 </head>
 
@@ -92,7 +109,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 <div class="nav-container">
 <a class="brand" href="index.html">ICELAND TRANSFER<span>YOUR JOURNEY, OUR DRIVE</span></a>
 <nav class="nav-links" aria-label="Main navigation">
-<a href="index.html">Home</a><a href="about.html">About</a><a href="transfers.html">Transfers</a><a href="contact.html">Contact</a><a class="nav-book" href="#booking">Book a Transfer</a>
+<a href="index.html">Home</a>
+<a href="about.html">About</a>
+<a href="transfers.html">Transfers</a>
+<a href="contact.html">Contact</a>
+<a class="nav-book" href="#booking">Book a Transfer</a>
 </nav>
 </div>
 </header>
@@ -101,25 +122,24 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 <div class="hero-content">
 <div class="eyebrow">Private Airport Transfers</div>
 <h1>Keflavik KEF Shuttle</h1>
-<p>Book your transfer in Iceland. Choose an available time and receive your booking details and invoice after successful confirmation.</p>
+<p>Start your Iceland journey with a comfortable transfer. Choose an available time and receive your booking details and invoice after successful confirmation.</p>
 </div>
 </section>
 
 <main class="page-container">
 <div class="intro">
 <h2>Book Your Transfer</h2>
-<p>Enter your journey details below. Available pickup times are shown for your selected date. Your booking price is calculated by the booking server.</p>
+<p>Enter your journey details below. The price is calculated by the booking server. Your booking is confirmed after it is successfully saved.</p>
 </div>
 
 <div class="booking-layout">
 <section class="booking-card" id="booking">
 <div id="bookingMessage" class="message" role="status" aria-live="polite"></div>
 
-<div id="invoiceBox" class="invoice-box">
+<div id="invoiceBox" class="invoice-box" aria-live="polite">
 <h3>Your Booking Invoice</h3>
-<div id="invoiceDetails" class="invoice-details"></div>
-<p id="cancellationPolicy" class="invoice-policy" style="margin-top:12px"></p>
-<p id="cancellationResult" style="margin-top:8px"></p>
+<div id="invoiceDetails"></div>
+<p id="cancellationPolicy"></p>
 <div class="invoice-actions">
 <button type="button" id="cancelBookingButton" class="submit-button" style="display:none">Cancel Booking</button>
 <button type="button" id="printInvoiceButton" class="submit-button" style="background:#293c2e">Print / Save Invoice as PDF</button>
@@ -129,19 +149,23 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 <form id="bookingForm">
 <div class="form-section">
 <h3 class="section-heading">Your Details</h3>
-<p class="section-description">Please provide your contact information.</p>
+<p class="section-description">Please provide your contact information so the driver can reach you.</p>
 <div class="form-grid">
 <div class="form-group full-width">
 <label for="fullName">Full Name <span class="required">*</span></label>
-<input id="fullName" type="text" autocomplete="name" maxlength="150" required placeholder="Enter your full name">
+<input type="text" id="fullName" autocomplete="name" maxlength="150" required placeholder="Enter your full name">
 </div>
 <div class="form-group">
 <label for="email">Email Address <span class="required">*</span></label>
-<input id="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com">
+<input type="email" id="email" autocomplete="email" maxlength="254" required placeholder="you@example.com">
 </div>
 <div class="form-group">
 <label for="phone">Phone Number <span class="required">*</span></label>
-<input id="phone" type="tel" autocomplete="tel" maxlength="40" required placeholder="+354 ...">
+<input type="tel" id="phone" autocomplete="tel" maxlength="40" required placeholder="+354 ...">
+</div>
+<div class="form-group full-width">
+<label for="countryOfOrigin">Country of Origin <span class="required">*</span></label>
+<input type="text" id="countryOfOrigin" autocomplete="country-name" maxlength="100" required placeholder="Which country are you travelling from?">
 </div>
 </div>
 </div>
@@ -150,58 +174,234 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 <h3 class="section-heading">Journey Details</h3>
 <p class="section-description">Choose your pickup point, destination, date and an available hourly time.</p>
 <div class="form-grid">
+
 <div class="form-group full-width">
 <label for="pickup">Pickup Location <span class="required">*</span></label>
-<select id="pickup" required><option value="">Choose pickup location</option></select>
+<select id="pickup" required>
+<option value="">Choose pickup location</option>
+<optgroup label="Airport and Capital Area">
+<option>Keflavik International Airport (KEF)</option>
+<option>Reykjavik Domestic Airport</option>
+<option>Reykjavik City Centre</option>
+<option>Reykjavik Harbour / Old Harbour</option>
+<option>BSI Bus Terminal</option>
+<option>Smaralind Shopping Centre</option>
+<option>Kopavogur</option>
+<option>Hafnarfjordur</option>
+<option>Gardabaer</option>
+<option>Mosfellsbaer</option>
+</optgroup>
+<optgroup label="Reykjanes Peninsula">
+<option>Blue Lagoon</option>
+<option>Grindavik</option>
+<option>Keflavik Town</option>
+<option>Reykjanesbaer</option>
+<option>Sandgerdi</option>
+<option>Garður</option>
+<option>Reykjanes Lighthouse</option>
+</optgroup>
+<optgroup label="South Iceland">
+<option>Hveragerdi</option>
+<option>Selfoss</option>
+<option>Hella</option>
+<option>Hvolsvollur</option>
+<option>Skogar</option>
+<option>Vik</option>
+<option>Kirkjubaejarklaustur</option>
+<option>Hof</option>
+<option>Skaftafell</option>
+<option>Jokulsarlon Glacier Lagoon</option>
+</optgroup>
+<optgroup label="Golden Circle">
+<option>Thingvellir National Park</option>
+<option>Geysir</option>
+<option>Gullfoss</option>
+<option>Laugarvatn</option>
+<option>Fludir</option>
+<option>Kerid Crater</option>
+</optgroup>
+<optgroup label="West Iceland">
+<option>Borgarnes</option>
+<option>Reykholt, West Iceland</option>
+<option>Husafell</option>
+<option>Stykkisholmur</option>
+<option>Grundarfjordur</option>
+<option>Arnarstapi</option>
+<option>Hellnar</option>
+<option>Snaefellsnes Peninsula</option>
+</optgroup>
+<optgroup label="North Iceland">
+<option>Akureyri</option>
+<option>Husavik</option>
+<option>Myvatn</option>
+<option>Siglufjordur</option>
+<option>Dalvik</option>
+<option>Varmahlid</option>
+</optgroup>
+<optgroup label="East Iceland">
+<option>Egilsstadir</option>
+<option>Seydisfjordur</option>
+<option>Djupivogur</option>
+<option>Hofn</option>
+</optgroup>
+<option value="OTHER">Other location (enter below)</option>
+</select>
 <div class="custom-location" id="pickupCustomBox">
 <label for="pickupCustom">Enter Pickup Location <span class="required">*</span></label>
-<input id="pickupCustom" maxlength="200" placeholder="Enter the full pickup address or place">
+<input type="text" id="pickupCustom" maxlength="200" placeholder="Enter the full pickup address or place">
 </div>
 </div>
+
 <div class="form-group full-width">
 <label for="destination">Destination <span class="required">*</span></label>
-<select id="destination" required><option value="">Choose destination</option></select>
+<select id="destination" required>
+<option value="">Choose destination</option>
+<optgroup label="Airport and Capital Area">
+<option>Keflavik International Airport (KEF)</option>
+<option>Reykjavik Domestic Airport</option>
+<option>Reykjavik City Centre</option>
+<option>Reykjavik Harbour / Old Harbour</option>
+<option>BSI Bus Terminal</option>
+<option>Smaralind Shopping Centre</option>
+<option>Kopavogur</option>
+<option>Hafnarfjordur</option>
+<option>Gardabaer</option>
+<option>Mosfellsbaer</option>
+</optgroup>
+<optgroup label="Reykjanes Peninsula">
+<option>Blue Lagoon</option>
+<option>Grindavik</option>
+<option>Keflavik Town</option>
+<option>Reykjanesbaer</option>
+<option>Sandgerdi</option>
+<option>Garður</option>
+<option>Reykjanes Lighthouse</option>
+</optgroup>
+<optgroup label="South Iceland">
+<option>Hveragerdi</option>
+<option>Selfoss</option>
+<option>Hella</option>
+<option>Hvolsvollur</option>
+<option>Skogar</option>
+<option>Vik</option>
+<option>Kirkjubaejarklaustur</option>
+<option>Hof</option>
+<option>Skaftafell</option>
+<option>Jokulsarlon Glacier Lagoon</option>
+</optgroup>
+<optgroup label="Golden Circle">
+<option>Thingvellir National Park</option>
+<option>Geysir</option>
+<option>Gullfoss</option>
+<option>Laugarvatn</option>
+<option>Fludir</option>
+<option>Kerid Crater</option>
+</optgroup>
+<optgroup label="West Iceland">
+<option>Borgarnes</option>
+<option>Reykholt, West Iceland</option>
+<option>Husafell</option>
+<option>Stykkisholmur</option>
+<option>Grundarfjordur</option>
+<option>Arnarstapi</option>
+<option>Hellnar</option>
+<option>Snaefellsnes Peninsula</option>
+</optgroup>
+<optgroup label="North Iceland">
+<option>Akureyri</option>
+<option>Husavik</option>
+<option>Myvatn</option>
+<option>Siglufjordur</option>
+<option>Dalvik</option>
+<option>Varmahlid</option>
+</optgroup>
+<optgroup label="East Iceland">
+<option>Egilsstadir</option>
+<option>Seydisfjordur</option>
+<option>Djupivogur</option>
+<option>Hofn</option>
+</optgroup>
+<option value="OTHER">Other location (enter below)</option>
+</select>
 <div class="custom-location" id="destinationCustomBox">
 <label for="destinationCustom">Enter Destination <span class="required">*</span></label>
-<input id="destinationCustom" maxlength="200" placeholder="Enter the full destination address or place">
+<input type="text" id="destinationCustom" maxlength="200" placeholder="Enter the full destination address or place">
 </div>
 </div>
+
 <div class="form-group">
 <label for="travelDate">Pickup Date <span class="required">*</span></label>
 <input type="date" id="travelDate" required>
 </div>
 <div class="form-group">
 <label for="travelTime">Pickup Time <span class="required">*</span></label>
-<select id="travelTime" required disabled><option value="">Choose a date first</option></select>
-<span class="field-hint">Hourly slots, Iceland local time. Operating hours: 06:00–22:00.</span>
+<select id="travelTime" required disabled>
+<option value="">Choose a date first</option>
+</select>
+<span class="field-hint">Hourly slots, Iceland local time. Night break: 23:00–05:00.</span>
 </div>
 </div>
 </div>
 
 <div class="form-section">
-<h3 class="section-heading">Passengers and Luggage</h3>
-<p class="section-description">Tell us how many people and bags will travel.</p>
+<h3 class="section-heading">Vehicle, Passengers and Luggage</h3>
+<p class="section-description">Choose a vehicle. Prices are per vehicle for the transfer, not per person.</p>
 <div class="form-grid">
+<div class="form-group full-width">
+<label for="vehicleType">Choose Your Vehicle <span class="required">*</span></label>
+<select id="vehicleType" required>
+<option value="" selected disabled>Choose a vehicle to see its price</option>
+<option value="sedan">Sedan — up to 4 passengers</option>
+<option value="mpv4">MPV4 — up to 4 passengers</option>
+<option value="van">Van — up to 8 passengers</option>
+<option value="vip_van">VIP VAN — up to 5 passengers</option>
+</select>
+<span class="field-hint">Vehicle capacity is enforced automatically.</span>
+</div>
+
 <div class="form-group">
 <label>Number of Passengers</label>
 <div class="passenger-control">
 <span>Passengers</span>
 <div class="passenger-buttons">
 <button type="button" id="decreasePassengers" aria-label="Decrease passengers">−</button>
-<span class="passenger-number" id="passengerCount">1</span>
+<span id="passengerCount">1</span>
 <button type="button" id="increasePassengers" aria-label="Increase passengers">+</button>
 </div>
 </div>
-<span class="field-hint">Maximum 20 passengers per request.</span>
+<span class="field-hint" id="passengerCapacityHint">Choose a vehicle to see its passenger capacity.</span>
 </div>
+
 <div class="form-group">
 <label for="luggage">Number of Bags</label>
 <input type="number" id="luggage" min="0" max="100" value="0" required>
 </div>
+
+<div class="form-group full-width">
+<label><input type="checkbox" id="travellingWithChildren" style="display:inline-block;width:auto;min-height:0;margin-right:8px"> I am travelling with children</label>
+</div>
+
+<div class="form-group full-width" id="childrenCountBox" style="display:none">
+<label for="childrenCount">Number of Children</label>
+<select id="childrenCount">
+<option value="1">1 child</option>
+<option value="2">2 children</option>
+<option value="3">3 children</option>
+<option value="4">4 children</option>
+<option value="5">5 children</option>
+<option value="6">6 children</option>
+<option value="7">7 children</option>
+<option value="8">8 children</option>
+</select>
+<div id="childrenAges" class="form-grid" style="margin-top:12px"></div>
+<span class="field-hint">Please provide the age of each child.</span>
+</div>
+
 <div class="form-group full-width">
 <label for="flightNumber">Flight Number (optional)</label>
 <input type="text" id="flightNumber" maxlength="50" placeholder="For example, FI123">
 </div>
+
 <div class="form-group full-width">
 <label for="specialRequests">Special Requests (optional)</label>
 <textarea id="specialRequests" maxlength="2000" placeholder="Any additional information for your driver"></textarea>
@@ -210,7 +410,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 </div>
 
 <button type="submit" class="submit-button">Confirm Booking</button>
-<p class="secure-note">Your booking is confirmed after the server successfully saves it. Cancellation is allowed only more than 24 hours before pickup.</p>
+<p class="secure-note">Your booking is confirmed after successful saving. Cancellation is allowed only more than 24 hours before pickup.</p>
 </form>
 </section>
 
@@ -218,23 +418,24 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 <h3>Your Transfer</h3>
 <img class="summary-image" src="images2/airport-transfer.jpg" alt="Airport transfer in Iceland" onerror="this.onerror=null;this.src='images2/transfers-hero.jpg';">
 <div class="summary-line"><span>Service</span><span>Keflavik KEF Shuttle</span></div>
+<div class="summary-line"><span>Vehicle</span><span id="summaryVehicle">Not selected</span></div>
 <div class="summary-line"><span>Passengers</span><span id="summaryPassengers">1</span></div>
 <div class="summary-line"><span>Pickup</span><span id="summaryPickup">Not selected</span></div>
 <div class="summary-line"><span>Destination</span><span id="summaryDestination">Not selected</span></div>
 <div class="summary-line"><span>Date</span><span id="summaryDate">Not selected</span></div>
 <div class="summary-line"><span>Time</span><span id="summaryTime">Not selected</span></div>
 <div class="price-box">
-<div class="price-title">Transfer Price</div>
-<div class="price" id="summaryPrice">Calculated at booking</div>
-<p>The booking server calculates the price. No online payment is taken on this page.</p>
+<div class="price-title">Vehicle Transfer Price</div>
+<div class="price" id="estimatedPrice">Choose a vehicle</div>
+<p>Displayed prices are per vehicle. The server will validate the final price when the booking is saved. No online payment is taken on this page.</p>
 </div>
 </aside>
 </div>
 
 <div class="info-strip">
-<div class="info-item"><h3>Private Transfer</h3><p>Choose your pickup location and destination.</p></div>
-<div class="info-item"><h3>Available Times</h3><p>Only available hourly slots are offered for the selected date.</p></div>
-<div class="info-item"><h3>Booking Invoice</h3><p>Print or save your booking invoice after successful confirmation.</p></div>
+<div class="info-item"><h3>Automatic Confirmation</h3><p>Your booking is confirmed after it is successfully saved.</p></div>
+<div class="info-item"><h3>Flexible Destinations</h3><p>Choose from the listed locations or enter another Iceland destination.</p></div>
+<div class="info-item"><h3>Cancellation Policy</h3><p>Cancellation is available only more than 24 hours before pickup.</p></div>
 </div>
 </main>
 
@@ -243,120 +444,205 @@ input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0
 <p>Your Journey, Our Drive</p>
 <p>© <span id="currentYear"></span> Iceland Transfer. All rights reserved.</p>
 </footer>
-
 <script>
 const API_BASE = "https://iceland-transfer-server.onrender.com";
 const API_URL = `${API_BASE}/api/bookings`;
 
 const form = document.getElementById("bookingForm");
-const bookingMessage = document.getElementById("bookingMessage");
-const travelDate = document.getElementById("travelDate");
-const travelTime = document.getElementById("travelTime");
-const passengerCount = document.getElementById("passengerCount");
+const messageBox = document.getElementById("bookingMessage");
 const invoiceBox = document.getElementById("invoiceBox");
 const invoiceDetails = document.getElementById("invoiceDetails");
+const cancellationPolicy = document.getElementById("cancellationPolicy");
 const cancelButton = document.getElementById("cancelBookingButton");
+const printButton = document.getElementById("printInvoiceButton");
 
-let passengers = 1;
-let cancellationUrl = "";
-let availabilityRequest = 0;
+const pickupSelect = document.getElementById("pickup");
+const destinationSelect = document.getElementById("destination");
+const pickupCustom = document.getElementById("pickupCustom");
+const destinationCustom = document.getElementById("destinationCustom");
+const pickupCustomBox = document.getElementById("pickupCustomBox");
+const destinationCustomBox = document.getElementById("destinationCustomBox");
+
+const dateInput = document.getElementById("travelDate");
+const timeSelect = document.getElementById("travelTime");
+const vehicleSelect = document.getElementById("vehicleType");
+const luggageInput = document.getElementById("luggage");
+
+const passengerCountDisplay = document.getElementById("passengerCount");
+const decreasePassengersButton = document.getElementById("decreasePassengers");
+const increasePassengersButton = document.getElementById("increasePassengers");
+const passengerCapacityHint = document.getElementById("passengerCapacityHint");
+
+const summaryVehicle = document.getElementById("summaryVehicle");
+const summaryPassengers = document.getElementById("summaryPassengers");
+const summaryPickup = document.getElementById("summaryPickup");
+const summaryDestination = document.getElementById("summaryDestination");
+const summaryDate = document.getElementById("summaryDate");
+const summaryTime = document.getElementById("summaryTime");
+const estimatedPrice = document.getElementById("estimatedPrice");
+
+const travellingWithChildren = document.getElementById("travellingWithChildren");
+const childrenCountBox = document.getElementById("childrenCountBox");
+const childrenCountSelect = document.getElementById("childrenCount");
+const childrenAgesContainer = document.getElementById("childrenAges");
 
 document.getElementById("currentYear").textContent = new Date().getFullYear();
 
-const locationGroups = {
-    "Airport and Capital Area": [
-        "Keflavik International Airport (KEF)",
-        "Reykjavik Domestic Airport",
-        "Reykjavik City Centre",
-        "Reykjavik Harbour / Old Harbour",
-        "BSI Bus Terminal",
-        "Smaralind Shopping Centre",
-        "Kopavogur",
-        "Hafnarfjordur",
-        "Gardabaer",
-        "Mosfellsbaer"
-    ],
-    "Reykjanes Peninsula": [
-        "Blue Lagoon",
-        "Grindavik",
-        "Keflavik Town",
-        "Reykjanesbaer",
-        "Sandgerdi",
-        "Garður",
-        "Reykjanes Lighthouse"
-    ],
-    "South Iceland": [
-        "Hveragerdi",
-        "Selfoss",
-        "Hella",
-        "Hvolsvollur",
-        "Skogar",
-        "Vik",
-        "Kirkjubaejarklaustur",
-        "Hof",
-        "Skaftafell",
-        "Jokulsarlon Glacier Lagoon"
-    ],
-    "Golden Circle": [
-        "Thingvellir National Park",
-        "Geysir",
-        "Gullfoss",
-        "Laugarvatn",
-        "Fludir",
-        "Kerid Crater"
-    ],
-    "West Iceland": [
-        "Borgarnes",
-        "Reykholt, West Iceland",
-        "Husafell",
-        "Stykkisholmur",
-        "Grundarfjordur",
-        "Arnarstapi",
-        "Hellnar",
-        "Snaefellsnes Peninsula"
-    ],
-    "North Iceland": [
-        "Akureyri",
-        "Husavik",
-        "Myvatn",
-        "Siglufjordur",
-        "Dalvik",
-        "Varmahlid"
-    ],
-    "East Iceland": [
-        "Egilsstadir",
-        "Seydisfjordur",
-        "Djupivogur",
-        "Hofn"
-    ]
+const vehicleOptions = {
+    sedan: {
+        label: "Sedan",
+        capacity: 4,
+        price: 17900
+    },
+    mpv4: {
+        label: "MPV4",
+        capacity: 4,
+        price: 21900
+    },
+    van: {
+        label: "Van",
+        capacity: 8,
+        price: 26900
+    },
+    vip_van: {
+        label: "VIP VAN",
+        capacity: 5,
+        price: 32000
+    }
 };
 
-function populateLocations(selectId, placeholder) {
-    const select = document.getElementById(selectId);
-    select.innerHTML = "";
-    select.add(new Option(placeholder, ""));
+let passengerCount = 1;
+let cancellationUrl = "";
+let currentBooking = null;
 
-    Object.entries(locationGroups).forEach(([groupName, locations]) => {
-        const group = document.createElement("optgroup");
-        group.label = groupName;
-
-        locations.forEach(location => {
-            group.appendChild(new Option(location, location));
-        });
-
-        select.appendChild(group);
-    });
-
-    const otherGroup = document.createElement("optgroup");
-    otherGroup.label = "Other";
-    otherGroup.appendChild(new Option("Other location (enter below)", "OTHER"));
-    select.appendChild(otherGroup);
+function showMessage(message, isError = false) {
+    messageBox.textContent = message;
+    messageBox.classList.toggle("error", isError);
+    messageBox.style.display = "block";
+    messageBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-populateLocations("pickup", "Choose pickup location");
-populateLocations("destination", "Choose destination");
+function hideMessage() {
+    messageBox.style.display = "none";
+    messageBox.textContent = "";
+    messageBox.classList.remove("error");
+}
 
-function icelandToday() {
+function formatISK(amount) {
+    const value = Number(amount);
+    if (!Number.isFinite(value)) return "Price unavailable";
+    return `${value.toLocaleString("en-US")} ISK`;
+}
+
+function getSelectedLocation(selectElement, customInput) {
+    if (selectElement.value === "OTHER") {
+        return customInput.value.trim();
+    }
+    return selectElement.value.trim();
+}
+
+function configureCustomLocation(selectElement, customBox, customInput) {
+    const isOther = selectElement.value === "OTHER";
+
+    customBox.classList.toggle("visible", isOther);
+    customInput.required = isOther;
+
+    if (!isOther) {
+        customInput.value = "";
+    }
+
+    updateSummary();
+}
+
+pickupSelect.addEventListener("change", () => {
+    configureCustomLocation(pickupSelect, pickupCustomBox, pickupCustom);
+});
+
+destinationSelect.addEventListener("change", () => {
+    configureCustomLocation(destinationSelect, destinationCustomBox, destinationCustom);
+});
+
+pickupCustom.addEventListener("input", updateSummary);
+destinationCustom.addEventListener("input", updateSummary);
+
+function updateVehicleDisplay() {
+    const selectedVehicle = vehicleOptions[vehicleSelect.value];
+
+    if (!selectedVehicle) {
+        summaryVehicle.textContent = "Not selected";
+        estimatedPrice.textContent = "Choose a vehicle";
+        passengerCapacityHint.textContent =
+            "Choose a vehicle to see its passenger capacity.";
+        increasePassengersButton.disabled = true;
+        decreasePassengersButton.disabled = passengerCount <= 1;
+        updateSummary();
+        return;
+    }
+
+    summaryVehicle.textContent = selectedVehicle.label;
+    estimatedPrice.textContent = formatISK(selectedVehicle.price);
+
+    passengerCapacityHint.textContent =
+        `Maximum ${selectedVehicle.capacity} passengers for this vehicle.`;
+
+    if (passengerCount > selectedVehicle.capacity) {
+        passengerCount = selectedVehicle.capacity;
+        passengerCountDisplay.textContent = passengerCount;
+    }
+
+    decreasePassengersButton.disabled = passengerCount <= 1;
+    increasePassengersButton.disabled =
+        passengerCount >= selectedVehicle.capacity;
+
+    updateSummary();
+}
+
+vehicleSelect.addEventListener("change", updateVehicleDisplay);
+
+decreasePassengersButton.addEventListener("click", () => {
+    if (passengerCount > 1) {
+        passengerCount--;
+        passengerCountDisplay.textContent = passengerCount;
+        updateVehicleDisplay();
+    }
+});
+
+increasePassengersButton.addEventListener("click", () => {
+    const selectedVehicle = vehicleOptions[vehicleSelect.value];
+
+    if (!selectedVehicle) {
+        showMessage("Please choose a vehicle first.", true);
+        return;
+    }
+
+    if (passengerCount < selectedVehicle.capacity) {
+        passengerCount++;
+        passengerCountDisplay.textContent = passengerCount;
+        updateVehicleDisplay();
+    }
+});
+
+function updateSummary() {
+    summaryPassengers.textContent = passengerCount;
+
+    summaryPickup.textContent =
+        getSelectedLocation(pickupSelect, pickupCustom) || "Not selected";
+
+    summaryDestination.textContent =
+        getSelectedLocation(destinationSelect, destinationCustom) || "Not selected";
+
+    summaryDate.textContent = dateInput.value || "Not selected";
+    summaryTime.textContent = timeSelect.value || "Not selected";
+}
+
+dateInput.addEventListener("change", () => {
+    updateSummary();
+    loadAvailableTimes();
+});
+
+timeSelect.addEventListener("change", updateSummary);
+
+function getTodayInIceland() {
     const parts = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Atlantic/Reykjavik",
         year: "numeric",
@@ -364,417 +650,309 @@ function icelandToday() {
         day: "2-digit"
     }).formatToParts(new Date());
 
-    const data = {};
+    const values = {};
     parts.forEach(part => {
-        if (part.type !== "literal") data[part.type] = part.value;
+        if (part.type !== "literal") values[part.type] = part.value;
     });
 
-    return `${data.year}-${data.month}-${data.day}`;
+    return `${values.year}-${values.month}-${values.day}`;
 }
 
-travelDate.min = icelandToday();
+dateInput.min = getTodayInIceland();
 
-function showMessage(message, isError = false) {
-    bookingMessage.className = isError ? "message error" : "message";
-    bookingMessage.style.display = "block";
-    bookingMessage.textContent = message;
-    bookingMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
-}
+async function loadAvailableTimes() {
+    const selectedDate = dateInput.value;
 
-function setupCustomLocation(selectId, boxId, inputId) {
-    const select = document.getElementById(selectId);
-    const box = document.getElementById(boxId);
-    const input = document.getElementById(inputId);
+    timeSelect.innerHTML = "";
+    timeSelect.disabled = true;
 
-    function update() {
-        const isOther = select.value === "OTHER";
-        box.classList.toggle("visible", isOther);
-        input.required = isOther;
-
-        if (!isOther) input.value = "";
-
-        updateLocationSummary();
-    }
-
-    select.addEventListener("change", update);
-    input.addEventListener("input", updateLocationSummary);
-    update();
-}
-
-setupCustomLocation("pickup", "pickupCustomBox", "pickupCustom");
-setupCustomLocation("destination", "destinationCustomBox", "destinationCustom");
-
-function getLocationValue(selectId, inputId) {
-    const select = document.getElementById(selectId);
-
-    return select.value === "OTHER"
-        ? document.getElementById(inputId).value.trim()
-        : select.value.trim();
-}
-
-function updatePassengers() {
-    passengerCount.textContent = passengers;
-    document.getElementById("summaryPassengers").textContent = passengers;
-    document.getElementById("decreasePassengers").disabled = passengers <= 1;
-    document.getElementById("increasePassengers").disabled = passengers >= 20;
-}
-
-function updateLocationSummary() {
-    document.getElementById("summaryPickup").textContent =
-        getLocationValue("pickup", "pickupCustom") || "Not selected";
-
-    document.getElementById("summaryDestination").textContent =
-        getLocationValue("destination", "destinationCustom") || "Not selected";
-
-    document.getElementById("summaryDate").textContent =
-        travelDate.value || "Not selected";
-
-    document.getElementById("summaryTime").textContent =
-        travelTime.value || "Not selected";
-}
-
-document.getElementById("pickup").addEventListener("change", updateLocationSummary);
-document.getElementById("destination").addEventListener("change", updateLocationSummary);
-
-travelDate.addEventListener("change", () => {
-    updateLocationSummary();
-    loadAvailability();
-});
-
-travelTime.addEventListener("change", updateLocationSummary);
-
-document.getElementById("decreasePassengers").addEventListener("click", () => {
-    if (passengers > 1) passengers--;
-    updatePassengers();
-});
-
-document.getElementById("increasePassengers").addEventListener("click", () => {
-    if (passengers < 20) passengers++;
-    updatePassengers();
-});
-
-function makeHourlySlots() {
-    const slots = [];
-
-    for (let hour = 6; hour <= 22; hour++) {
-        slots.push(`${String(hour).padStart(2, "0")}:00`);
-    }
-
-    return slots;
-}
-
-/*
-  FIX:
-  The server returns objects such as:
-  { "time": "06:00", "available": true }
-
-  Read the object's time property instead of converting
-  the entire object to a string.
-*/
-function extractTime(value) {
-    if (typeof value === "string" || typeof value === "number") {
-        const text = String(value).trim();
-        const match = text.match(/(?:^|\D)([01]?\d|2[0-3]):([0-5]\d)(?:\D|$)/);
-
-        return match
-            ? `${match[1].padStart(2, "0")}:${match[2]}`
-            : "";
-    }
-
-    if (value && typeof value === "object") {
-        const possibleKeys = [
-            "time",
-            "pickup_time",
-            "available_time",
-            "start_time",
-            "slot",
-            "value",
-            "label",
-            "pickupTime",
-            "start"
-        ];
-
-        for (const key of possibleKeys) {
-            if (value[key] !== undefined && value[key] !== null) {
-                const extracted = extractTime(value[key]);
-                if (extracted) return extracted;
-            }
-        }
-    }
-
-    return "";
-}
-
-function normalizeTimeList(list) {
-    if (!Array.isArray(list)) return [];
-
-    return [...new Set(
-        list.map(extractTime).filter(Boolean)
-    )].sort();
-}
-
-async function loadAvailability() {
-    const date = travelDate.value;
-    const thisRequest = ++availabilityRequest;
-
-    travelTime.innerHTML = "";
-    travelTime.disabled = true;
-
-    if (!date) {
-        travelTime.add(new Option("Choose a date first", ""));
-        updateLocationSummary();
+    if (!selectedDate) {
+        timeSelect.innerHTML =
+            '<option value="">Choose a date first</option>';
         return;
     }
 
-    if (date < icelandToday()) {
-        travelTime.add(new Option("Choose today or a future date", ""));
-        showMessage("Please choose today or a future date in Iceland.", true);
+    if (selectedDate < getTodayInIceland()) {
+        timeSelect.innerHTML =
+            '<option value="">Choose today or a future date</option>';
+        showMessage("Please select today or a future date.", true);
         return;
     }
 
-    travelTime.add(new Option("Loading available times...", ""));
+    timeSelect.innerHTML =
+        '<option value="">Loading available times...</option>';
 
     try {
         const response = await fetch(
-            `${API_BASE}/api/availability?date=${encodeURIComponent(date)}&service_type=transfer`
+            `${API_BASE}/api/availability?date=${encodeURIComponent(selectedDate)}&service_type=transfer`
         );
 
-        let result;
+        const result = await response.json();
 
-        try {
-            result = await response.json();
-        } catch {
-            throw new Error("The availability server returned an unreadable response.");
-        }
-
-        if (thisRequest !== availabilityRequest) return;
-
-        if (!response.ok || !result.success) {
+        if (!response.ok) {
             throw new Error(result.message || "Could not load available times.");
         }
 
-        const allSlots = makeHourlySlots();
-        let availableSlots = [];
+        const availableTimes =
+            result.available_times ||
+            result.availableTimes ||
+            result.times ||
+            result.availableSlots ||
+            result.available_slots ||
+            [];
 
-        if (Array.isArray(result.available_times)) {
-            /*
-              This is the exact response structure from your server.
-              Only include entries where available is true.
-            */
-            availableSlots = result.available_times
-                .filter(item => item && typeof item === "object" && item.available === true)
-                .map(item => extractTime(item.time))
-                .filter(Boolean);
-        } else if (Array.isArray(result.availableTimes)) {
-            availableSlots = result.availableTimes
-                .filter(item => !item || typeof item !== "object" || item.available !== false)
-                .map(item => extractTime(item))
-                .filter(Boolean);
-        } else {
-            const booked = new Set(
-                normalizeTimeList(result.booked_times || result.bookedTimes || [])
-            );
+        timeSelect.innerHTML = "";
 
-            availableSlots = allSlots.filter(time => !booked.has(time));
-        }
-
-        availableSlots = [...new Set(availableSlots)]
-            .filter(time => allSlots.includes(time))
+        const hourlyTimes = availableTimes
+            .map(item => {
+                if (typeof item === "string") return item;
+                return item.time || item.pickup_time || item.start_time || "";
+            })
+            .filter(Boolean)
+            .map(item => item.slice(0, 5))
+            .filter(item => /^\d{2}:00$/.test(item))
+            .filter((item, index, array) => array.indexOf(item) === index)
             .sort();
 
-        if (date === icelandToday()) {
-            const icelandTime = new Intl.DateTimeFormat("en-GB", {
-                timeZone: "Atlantic/Reykjavik",
-                hour: "2-digit",
-                minute: "2-digit",
-                hourCycle: "h23"
-            }).format(new Date());
-
-            availableSlots = availableSlots.filter(time => time > icelandTime);
+        if (hourlyTimes.length === 0) {
+            timeSelect.innerHTML =
+                '<option value="">No available times for this date</option>';
+            timeSelect.disabled = true;
+            updateSummary();
+            return;
         }
 
-        travelTime.innerHTML = "";
-        travelTime.add(new Option("Choose an available time", ""));
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Choose an available time";
+        timeSelect.appendChild(placeholder);
 
-        availableSlots.forEach(time => {
-            travelTime.add(new Option(time, time));
+        hourlyTimes.forEach(time => {
+            const option = document.createElement("option");
+            option.value = time;
+            option.textContent = time;
+            timeSelect.appendChild(option);
         });
 
-        if (availableSlots.length === 0) {
-            travelTime.innerHTML = "";
-            travelTime.add(new Option("No times available", ""));
-            travelTime.disabled = true;
-
-            showMessage(
-                "There are no available hourly slots for this date. Please choose another date."
-            );
-        } else {
-            travelTime.disabled = false;
-        }
-
-        updateLocationSummary();
-
+        timeSelect.disabled = false;
+        updateSummary();
     } catch (error) {
-        if (thisRequest !== availabilityRequest) return;
-
-        travelTime.innerHTML = "";
-        travelTime.add(new Option("Could not load times — try again", ""));
-        travelTime.disabled = true;
+        timeSelect.innerHTML =
+            '<option value="">Could not load times — try again</option>';
+        timeSelect.disabled = true;
 
         showMessage(
-            error.message || "Could not load available times.",
+            error.message || "Could not load available times. Please try again.",
             true
         );
     }
 }
 
-function escapeHTML(value) {
-    return String(value ?? "").replace(/[&<>"']/g, character => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-    })[character]);
+travellingWithChildren.addEventListener("change", () => {
+    const enabled = travellingWithChildren.checked;
+    childrenCountBox.style.display = enabled ? "block" : "none";
+
+    if (enabled) {
+        renderChildrenAgeFields();
+    } else {
+        childrenAgesContainer.innerHTML = "";
+    }
+});
+
+childrenCountSelect.addEventListener("change", renderChildrenAgeFields);
+
+function renderChildrenAgeFields() {
+    childrenAgesContainer.innerHTML = "";
+
+    if (!travellingWithChildren.checked) return;
+
+    const count = Number(childrenCountSelect.value);
+
+    for (let i = 1; i <= count; i++) {
+        const group = document.createElement("div");
+        group.className = "form-group";
+
+        const label = document.createElement("label");
+        label.htmlFor = `childAge${i}`;
+        label.textContent = `Child ${i} age`;
+
+        const select = document.createElement("select");
+        select.id = `childAge${i}`;
+        select.required = true;
+
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Choose age";
+        select.appendChild(placeholder);
+
+        for (let age = 0; age <= 17; age++) {
+            const option = document.createElement("option");
+            option.value = String(age);
+            option.textContent = age === 0 ? "Under 1 year" : `${age} years`;
+            select.appendChild(option);
+        }
+
+        group.appendChild(label);
+        group.appendChild(select);
+        childrenAgesContainer.appendChild(group);
+    }
 }
 
-function formatPrice(amount, currency = "ISK") {
-    return new Intl.NumberFormat("en", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: 0
-    }).format(amount);
+function getChildrenAges() {
+    if (!travellingWithChildren.checked) return [];
+
+    const ages = [];
+    const count = Number(childrenCountSelect.value);
+
+    for (let i = 1; i <= count; i++) {
+        const field = document.getElementById(`childAge${i}`);
+        if (!field || field.value === "") {
+            throw new Error(`Please choose the age of child ${i}.`);
+        }
+        ages.push(Number(field.value));
+    }
+
+    return ages;
 }
 
-function displayInvoice(result, booking) {
-    const saved = result.booking || result.data || result;
-    const invoice = result.invoice || {};
-
-    const rawPrice = invoice.amount ?? invoice.total ?? saved.price;
-    const price = rawPrice === null || rawPrice === undefined || rawPrice === ""
-        ? null
-        : Number(rawPrice);
-
-    const currency = invoice.currency || "ISK";
-
-    cancellationUrl =
-        result.cancellation_url ||
-        saved.cancellation_url ||
-        "";
+function createInvoice(booking) {
+    invoiceDetails.innerHTML = "";
 
     const rows = [
-        ["Invoice number", "IT-" + (saved.id ?? "N/A")],
-        ["Booking status", saved.status || "confirmed"],
-        ["Name", saved.full_name || booking.full_name],
-        ["Email", saved.email || booking.email],
-        ["Phone", saved.phone || booking.phone],
-        ["Service", "Keflavik KEF Shuttle"],
-        ["Pickup", saved.pickup_location || booking.pickup_location],
-        ["Destination", saved.destination || booking.destination],
-        ["Date", saved.pickup_date || booking.pickup_date],
-        ["Time", String(saved.pickup_time || booking.pickup_time).slice(0, 5)],
-        ["Passengers", saved.passengers ?? booking.passengers],
-        ["Luggage", saved.luggage ?? booking.luggage]
+        ["Booking Reference", booking.id || booking.booking_id || "Confirmed"],
+        ["Name", booking.full_name || ""],
+        ["Email", booking.email || ""],
+        ["Phone", booking.phone || ""],
+        ["Service", booking.service || booking.service_type || "Keflavik KEF Shuttle"],
+        ["Vehicle", booking.vehicle_type || vehicleOptions[vehicleSelect.value]?.label || ""],
+        ["Pickup", booking.pickup_location || ""],
+        ["Destination", booking.destination || ""],
+        ["Date", booking.pickup_date || ""],
+        ["Time", booking.pickup_time || ""],
+        ["Passengers", booking.passengers ?? passengerCount],
+        ["Luggage", booking.luggage ?? luggageInput.value],
+        ["Total Price", formatISK(
+            booking.invoice?.total ??
+            booking.invoice?.amount ??
+            booking.price ??
+            vehicleOptions[vehicleSelect.value]?.price
+        )],
+        ["Status", booking.status || "confirmed"]
     ];
 
-    invoiceDetails.innerHTML = rows.map(([label, value]) =>
-        `<p><strong>${escapeHTML(label)}:</strong> ${escapeHTML(value)}</p>`
-    ).join("");
-
-    invoiceDetails.innerHTML += `
-        <p class="invoice-total"><strong>Total:</strong> ${
-            price !== null && Number.isFinite(price)
-                ? escapeHTML(formatPrice(price, currency))
-                : "Price not returned by server"
-        }</p>
-        <p><strong>Payment:</strong> ${
-            escapeHTML(invoice.payment_status || "Not paid online")
-        }</p>
-    `;
-
-    document.getElementById("cancellationPolicy").textContent =
-        "Cancellation is permitted only when more than 24 hours remain before pickup. Keep this page and your booking information.";
-
-    cancelButton.style.display = cancellationUrl ? "block" : "none";
-
-    document.getElementById("cancellationResult").textContent = "";
+    rows.forEach(([label, value]) => {
+        const paragraph = document.createElement("p");
+        const strong = document.createElement("strong");
+        strong.textContent = `${label}: `;
+        paragraph.appendChild(strong);
+        paragraph.appendChild(document.createTextNode(String(value ?? "")));
+        invoiceDetails.appendChild(paragraph);
+    });
 
     invoiceBox.style.display = "block";
+    cancellationPolicy.textContent =
+        "Cancellation is available only more than 24 hours before pickup.";
+}
 
-    document.getElementById("summaryPrice").textContent =
-        price !== null && Number.isFinite(price)
-            ? formatPrice(price, currency)
-            : "Price not returned";
+function getVehicleTypeForServer(value) {
+    const aliases = {
+        sedan: "sedan",
+        mpv4: "mpv",
+        van: "van",
+        vip_van: "vip_van"
+    };
 
-    document.getElementById("printInvoiceButton").onclick = () => window.print();
-
-    invoiceBox.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+    return aliases[value] || value;
 }
 
 form.addEventListener("submit", async event => {
     event.preventDefault();
+    hideMessage();
 
-    const submitButton = form.querySelector('button[type="submit"]');
+    if (!form.reportValidity()) return;
 
-    const pickup = getLocationValue("pickup", "pickupCustom");
-    const destination = getLocationValue("destination", "destinationCustom");
-    const luggage = Number(document.getElementById("luggage").value);
+    const selectedVehicle = vehicleOptions[vehicleSelect.value];
 
-    if (!pickup || !destination) {
-        showMessage("Please choose your pickup and destination.", true);
+    if (!selectedVehicle) {
+        showMessage("Please choose a vehicle.", true);
         return;
     }
 
-    if (pickup.toLowerCase() === destination.toLowerCase()) {
-        showMessage("Pickup and destination must be different.", true);
+    if (passengerCount > selectedVehicle.capacity) {
+        showMessage(
+            `This vehicle can carry a maximum of ${selectedVehicle.capacity} passengers.`,
+            true
+        );
         return;
     }
 
-    if (!Number.isInteger(luggage) || luggage < 0 || luggage > 100) {
-        showMessage("Please enter a valid number of bags.", true);
+    if (dateInput.value < getTodayInIceland()) {
+        showMessage("Please select today or a future date.", true);
         return;
     }
 
-    if (!travelDate.value || travelDate.value < icelandToday()) {
-        showMessage("Please choose today or a future date in Iceland.", true);
-        return;
-    }
-
-    if (!travelTime.value) {
+    if (!timeSelect.value) {
         showMessage("Please choose an available pickup time.", true);
         return;
     }
 
-    const flightNumber = document.getElementById("flightNumber").value.trim();
-    const specialRequests = document.getElementById("specialRequests").value.trim();
+    if (
+        getSelectedLocation(pickupSelect, pickupCustom) ===
+        getSelectedLocation(destinationSelect, destinationCustom)
+    ) {
+        showMessage("Pickup and destination must be different.", true);
+        return;
+    }
 
-    const requestParts = ["Service: Keflavik KEF Shuttle"];
+    let childrenAges;
 
-    if (flightNumber) requestParts.push("Flight number: " + flightNumber);
-    if (specialRequests) requestParts.push("Customer requests: " + specialRequests);
+    try {
+        childrenAges = getChildrenAges();
+    } catch (error) {
+        showMessage(error.message, true);
+        return;
+    }
 
-    const booking = {
+    const specialRequestParts = [];
+    const userSpecialRequests =
+        document.getElementById("specialRequests").value.trim();
+
+    if (userSpecialRequests) {
+        specialRequestParts.push(userSpecialRequests);
+    }
+
+    if (travellingWithChildren.checked) {
+        specialRequestParts.push(
+            `Travelling with ${childrenAges.length} children. Ages: ${childrenAges.join(", ")}.`
+        );
+    }
+
+    const payload = {
         full_name: document.getElementById("fullName").value.trim(),
         email: document.getElementById("email").value.trim(),
         phone: document.getElementById("phone").value.trim(),
-        pickup_location: pickup,
-        destination,
-        pickup_date: travelDate.value,
-        pickup_time: travelTime.value,
-        passengers,
-        luggage,
-        flight_number: flightNumber || null,
-        special_requests: requestParts.join("\n")
+        pickup_location: getSelectedLocation(pickupSelect, pickupCustom),
+        destination: getSelectedLocation(destinationSelect, destinationCustom),
+        pickup_date: dateInput.value,
+        pickup_time: timeSelect.value,
+        passengers: passengerCount,
+        luggage: Number(luggageInput.value),
+        vehicle_type: getVehicleTypeForServer(vehicleSelect.value),
+        vehicle_price: selectedVehicle.price,
+        country_of_origin: document.getElementById("countryOfOrigin").value.trim(),
+        children_count: travellingWithChildren.checked ? childrenAges.length : 0,
+        children_ages: childrenAges,
+        flight_number: document.getElementById("flightNumber").value.trim(),
+        special_requests: specialRequestParts.join("\n"),
+        service: "Keflavik KEF Shuttle",
+        service_type: "transfer"
     };
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
 
     submitButton.disabled = true;
     submitButton.textContent = "Confirming Booking...";
-
-    showMessage("Saving your booking. Please wait...");
-    invoiceBox.style.display = "none";
 
     try {
         const response = await fetch(API_URL, {
@@ -782,92 +960,163 @@ form.addEventListener("submit", async event => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(booking)
+            body: JSON.stringify(payload)
         });
 
-        let result;
-
-        try {
-            result = await response.json();
-        } catch {
-            throw new Error("The server returned an unreadable response. Please try again.");
-        }
+        const result = await response.json();
 
         if (!response.ok || result.success === false) {
-            if (response.status === 409) await loadAvailability();
-
-            throw new Error(result.message || "Could not save your booking.");
-        }
-
-        const savedBooking = result.booking || result.data || result;
-
-        if (!savedBooking.id) {
             throw new Error(
-                "The server did not return a booking number. Please check the booking database before submitting again."
+                result.message ||
+                result.error ||
+                "Booking failed. Please check availability and try again."
             );
         }
 
-        displayInvoice(result, booking);
-        showMessage("Your booking has been saved. Check the invoice below.");
+        const booking =
+            result.booking ||
+            result.data?.booking ||
+            result.data ||
+            result;
 
-        await loadAvailability();
+        currentBooking = booking;
+        cancellationUrl =
+            result.cancellation_url ||
+            result.cancellationUrl ||
+            booking.cancellation_url ||
+            booking.cancellationUrl ||
+            "";
 
+        createInvoice({
+            ...booking,
+            full_name: booking.full_name || payload.full_name,
+            email: booking.email || payload.email,
+            phone: booking.phone || payload.phone,
+            pickup_location: booking.pickup_location || payload.pickup_location,
+            destination: booking.destination || payload.destination,
+            pickup_date: booking.pickup_date || payload.pickup_date,
+            pickup_time: booking.pickup_time || payload.pickup_time,
+            passengers: booking.passengers ?? payload.passengers,
+            luggage: booking.luggage ?? payload.luggage,
+            vehicle_type: booking.vehicle_type || selectedVehicle.label,
+            price:
+                booking.price ??
+                result.invoice?.total ??
+                result.invoice?.amount ??
+                selectedVehicle.price,
+            invoice: result.invoice || booking.invoice
+        });
+
+        cancelButton.style.display = cancellationUrl ? "block" : "none";
+
+        showMessage(
+            "Your booking was confirmed successfully. Please review your invoice below."
+        );
+
+        invoiceBox.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
         showMessage(
-            error.message || "Could not connect to the booking server.",
+            error.message ||
+            "We could not complete your booking. Please try again.",
             true
         );
     } finally {
         submitButton.disabled = false;
-        submitButton.textContent = "Confirm Booking";
+        submitButton.textContent = originalButtonText;
     }
 });
 
 cancelButton.addEventListener("click", async () => {
     if (!cancellationUrl) {
-        showMessage("A cancellation link was not returned by the server.", true);
+        showMessage("The cancellation link is unavailable.", true);
         return;
     }
 
-    if (!window.confirm("Are you sure you want to cancel this booking?")) return;
+    const confirmed = window.confirm(
+        "Are you sure you want to cancel this booking?"
+    );
 
+    if (!confirmed) return;
+
+    const originalText = cancelButton.textContent;
     cancelButton.disabled = true;
     cancelButton.textContent = "Cancelling...";
 
     try {
-        const response = await fetch(cancellationUrl, {
-            method: "POST"
+        let cancelEndpoint;
+
+        if (cancellationUrl.startsWith("http")) {
+            const parsedURL = new URL(cancellationUrl);
+            cancelEndpoint = API_BASE + parsedURL.pathname;
+        } else {
+            cancelEndpoint =
+                API_BASE +
+                (cancellationUrl.startsWith("/")
+                    ? cancellationUrl
+                    : "/" + cancellationUrl);
+        }
+
+        const response = await fetch(cancelEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
 
         const result = await response.json();
 
-        if (!response.ok || !result.success) {
-            throw new Error(result.message || "Cancellation failed.");
+        if (!response.ok || result.success !== true) {
+            throw new Error(
+                result.message ||
+                "The booking could not be cancelled."
+            );
         }
 
-        document.getElementById("cancellationResult").textContent =
-            result.message || "Your booking has been cancelled.";
-
-        showMessage(result.message || "Your booking has been cancelled.");
+        showMessage("Your booking has been cancelled successfully.");
 
         cancelButton.style.display = "none";
-        cancellationUrl = "";
 
-        await loadAvailability();
+        const statusParagraph = Array.from(
+            invoiceDetails.querySelectorAll("p")
+        ).find(paragraph =>
+            paragraph.textContent.startsWith("Status:")
+        );
 
+        if (statusParagraph) {
+            statusParagraph.innerHTML = "";
+            const strong = document.createElement("strong");
+            strong.textContent = "Status: ";
+            statusParagraph.appendChild(strong);
+            statusParagraph.appendChild(
+                document.createTextNode("cancelled")
+            );
+        }
+
+        cancellationPolicy.textContent =
+            "This booking has been cancelled.";
     } catch (error) {
         showMessage(
-            error.message || "Could not cancel this booking.",
+            error.message ||
+            "Could not cancel the booking. Please try again.",
             true
         );
     } finally {
         cancelButton.disabled = false;
-        cancelButton.textContent = "Cancel Booking";
+        cancelButton.textContent = originalText;
     }
 });
 
-updatePassengers();
-updateLocationSummary();
+printButton.addEventListener("click", () => {
+    if (invoiceBox.style.display === "none") {
+        showMessage("There is no invoice to print yet.", true);
+        return;
+    }
+
+    window.print();
+});
+
+updateVehicleDisplay();
+updateSummary();
 </script>
 </body>
 </html>

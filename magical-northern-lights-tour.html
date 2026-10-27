@@ -4,1427 +4,284 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magical Northern Lights Tour | Iceland Transfer</title>
-
 <style>
-:root {
-    --green: #465b45;
-    --deep-green: #293c2e;
-    --beige: #f5f1e8;
-    --gold: #b99b61;
-    --white: #fffdf9;
-    --text: #3d4239;
-    --muted: #777a70;
-}
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--white);
-    color: var(--text);
-    line-height: 1.7;
-}
-
-a { color: inherit; text-decoration: none; }
-
-button, input, select, textarea { font: inherit; }
-button, .button { cursor: pointer; }
-
-.top-bar {
-    background: var(--deep-green);
-    color: white;
-    text-align: center;
-    padding: 9px 15px;
-    font-size: 13px;
-    letter-spacing: .4px;
-}
-
-header {
-    background: var(--white);
-    border-bottom: 1px solid #e9e3d7;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.navbar {
-    max-width: 1200px;
-    margin: auto;
-    padding: 18px 25px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.logo {
-    color: var(--deep-green);
-    font-size: 23px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-.logo span { color: var(--gold); }
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 23px;
-    font-size: 14px;
-}
-
-.nav-links a:hover { color: var(--gold); }
-
-.nav-book {
-    background: var(--green);
-    color: white !important;
-    padding: 11px 18px;
-    border-radius: 4px;
-}
-
-.breadcrumb {
-    max-width: 1150px;
-    margin: auto;
-    padding: 22px 25px 8px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
-.breadcrumb a:hover { color: var(--green); }
-
-.hero {
-    max-width: 1150px;
-    margin: 12px auto 45px;
-    padding: 0 25px;
-}
-
-.hero-image {
-    min-height: 430px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 15px;
-    background: var(--deep-green);
-}
-
-.hero-image img {
-    width: 100%;
-    height: 470px;
-    object-fit: cover;
-    display: block;
-}
-
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 45px;
-    color: white;
-    background: linear-gradient(
-        to top,
-        rgba(20,34,25,.88),
-        rgba(20,34,25,.18) 75%,
-        rgba(20,34,25,.04)
-    );
-}
-
-.eyebrow {
-    color: #e4c88f;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-}
-
-.hero h1 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(34px, 5vw, 57px);
-    font-weight: normal;
-    line-height: 1.15;
-    max-width: 700px;
-    margin: 12px 0;
-}
-
-.hero p {
-    max-width: 650px;
-    font-size: 16px;
-    margin: 0;
-    color: #f3f0e9;
-}
-
-.hero-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 22px;
-}
-
-.badge {
-    padding: 7px 13px;
-    border: 1px solid rgba(255,255,255,.5);
-    border-radius: 30px;
-    font-size: 12px;
-    background: rgba(255,255,255,.09);
-}
-
-.main-layout {
-    max-width: 1150px;
-    margin: 0 auto 75px;
-    padding: 0 25px;
-    display: grid;
-    grid-template-columns: minmax(0,1.2fr) minmax(320px,.8fr);
-    gap: 35px;
-    align-items: start;
-}
-
-.section-label {
-    color: var(--gold);
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-h2 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 32px;
-    line-height: 1.25;
-    color: var(--deep-green);
-    font-weight: normal;
-    margin: 8px 0 18px;
-}
-
-.description {
-    color: #666b61;
-    font-size: 15px;
-    margin-bottom: 27px;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin: 25px 0 30px;
-}
-
-.feature {
-    background: var(--beige);
-    padding: 19px;
-    border-radius: 8px;
-}
-
-.feature-icon { font-size: 23px; margin-bottom: 7px; }
-
-.feature h3 {
-    color: var(--deep-green);
-    font-size: 15px;
-    margin: 0 0 5px;
-}
-
-.feature p {
-    color: var(--muted);
-    font-size: 13px;
-    margin: 0;
-}
-
-.info-box {
-    border-left: 4px solid var(--gold);
-    background: #f8f5ee;
-    padding: 17px 20px;
-    margin: 25px 0;
-    font-size: 14px;
-    color: #65685e;
-    border-radius: 0 7px 7px 0;
-}
-
-.info-box strong { color: var(--deep-green); }
-
-.booking-card {
-    background: white;
-    border: 1px solid #e7e1d5;
-    border-radius: 12px;
-    padding: 28px;
-    box-shadow: 0 12px 35px rgba(41,60,46,.08);
-}
-
-.booking-card h2 { font-size: 27px; margin-bottom: 7px; }
-
-.booking-subtitle {
-    font-size: 13px;
-    color: var(--muted);
-    margin: 0 0 22px;
-}
-
-.price-display {
-    background: var(--beige);
-    padding: 17px;
-    border-radius: 8px;
-    margin-bottom: 22px;
-}
-
-.price-label { color: var(--muted); font-size: 12px; }
-
-.price-value {
-    font-family: Georgia, "Times New Roman", serif;
-    color: var(--deep-green);
-    font-size: 30px;
-    font-weight: bold;
-    line-height: 1.4;
-}
-
-.price-note { font-size: 12px; color: var(--muted); }
-
-.form-group { margin-bottom: 17px; }
-
-.form-group label {
-    display: block;
-    font-weight: bold;
-    color: var(--deep-green);
-    font-size: 13px;
-    margin-bottom: 7px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #dcd7cc;
-    border-radius: 5px;
-    background: #fffefa;
-    color: var(--text);
-    outline: none;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: var(--green);
-    box-shadow: 0 0 0 2px rgba(70,91,69,.1);
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 13px;
-}
-
-.extra-option {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    border: 1px solid #e8e2d7;
-    border-radius: 7px;
-    padding: 13px;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.extra-option input {
-    margin-top: 5px;
-    accent-color: var(--green);
-    width: auto;
-}
-
-.extra-option span { flex: 1; font-size: 13px; }
-
-.extra-option strong {
-    display: block;
-    color: var(--deep-green);
-    font-size: 13px;
-}
-
-.extra-option small {
-    display: block;
-    color: var(--muted);
-    margin-top: 3px;
-}
-
-.total-box {
-    border-top: 1px solid #e5dfd3;
-    margin-top: 20px;
-    padding-top: 18px;
-}
-
-.total-line {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 9px;
-    font-size: 14px;
-}
-
-.total-line.final {
-    font-size: 19px;
-    font-weight: bold;
-    color: var(--deep-green);
-    padding-top: 10px;
-    border-top: 1px dashed #d9d2c5;
-}
-
-.submit-button {
-    display: block;
-    width: 100%;
-    background: var(--green);
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 5px;
-    font-weight: bold;
-    margin-top: 20px;
-    transition: background .2s;
-}
-
-.submit-button:hover { background: var(--deep-green); }
-
-.submit-button:disabled {
-    opacity: .65;
-    cursor: wait;
-}
-
-.secure-note {
-    text-align: center;
-    font-size: 11px;
-    color: var(--muted);
-    margin: 13px 0 0;
-}
-
-.why-section { background: var(--beige); padding: 65px 25px; }
-
-.why-inner { max-width: 1100px; margin: auto; }
-
-.why-heading { max-width: 650px; margin-bottom: 30px; }
-
-.why-grid {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 22px;
-}
-
-.why-card {
-    background: var(--white);
-    padding: 24px;
-    border-radius: 8px;
-}
-
-.why-card h3 {
-    color: var(--deep-green);
-    font-size: 17px;
-    margin: 8px 0;
-}
-
-.why-card p {
-    color: var(--muted);
-    font-size: 14px;
-    margin: 0;
-}
-
-.other-tours {
-    max-width: 1100px;
-    margin: 65px auto;
-    padding: 0 25px;
-    text-align: center;
-}
-
-.other-tours p { color: var(--muted); }
-
-.tour-links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 22px;
-}
-
-.tour-link {
-    display: inline-block;
-    border: 1px solid #d8d1c4;
-    border-radius: 5px;
-    padding: 12px 20px;
-    color: var(--deep-green);
-    background: white;
-    font-size: 14px;
-}
-
-.tour-link:hover { background: var(--beige); }
-
-footer {
-    background: var(--deep-green);
-    color: white;
-    padding: 38px 25px;
-}
-
-.footer-inner {
-    max-width: 1100px;
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-}
-
-.footer-logo { font-size: 21px; font-weight: bold; }
-.footer-logo span { color: #d9bd82; }
-
-footer p { color: #d8dfd5; font-size: 13px; margin: 5px 0 0; }
-
-.footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px;
-    font-size: 13px;
-}
-
-.footer-links a:hover { color: #d9bd82; }
-
-.whatsapp-button {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 200;
-    background: #278b58;
-    color: white;
-    border-radius: 30px;
-    padding: 12px 17px;
-    box-shadow: 0 5px 18px rgba(0,0,0,.2);
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.whatsapp-button:hover { background: #206d45; }
-
-.hidden { display: none !important; }
-
-@media (max-width:850px) {
-    .navbar {
-        flex-direction: column;
-        padding: 15px;
-    }
-
-    .nav-links {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 13px;
-    }
-
-    .main-layout { grid-template-columns: 1fr; }
-    .hero-image img { height: 420px; }
-    .hero-overlay { padding: 28px; }
-    .why-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width:520px) {
-    .nav-links { font-size: 12px; gap: 10px; }
-    .nav-book { padding: 8px 11px; }
-    .hero { padding: 0 14px; }
-    .hero-image { min-height: 380px; }
-    .hero-image img { height: 400px; }
-    .hero-overlay { padding: 22px; }
-    .hero p { font-size: 14px; }
-    .main-layout { padding: 0 14px; gap: 25px; }
-    .booking-card { padding: 20px; }
-    .form-row, .feature-grid { grid-template-columns: 1fr; }
-    .breadcrumb { padding-left: 15px; padding-right: 15px; }
-    .why-section { padding: 45px 15px; }
-}
+:root{--green:#465b45;--deep-green:#293c2e;--beige:#f5f1e8;--gold:#b99b61;--white:#fffdf9;--text:#3d4239;--muted:#777a70}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--white);color:var(--text);line-height:1.7}
+a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button,.button{cursor:pointer}
+.top-bar{background:var(--deep-green);color:white;text-align:center;padding:9px 15px;font-size:13px;letter-spacing:.4px}
+header{background:var(--white);border-bottom:1px solid #e9e3d7;position:sticky;top:0;z-index:100}
+.navbar{max-width:1200px;margin:auto;padding:18px 25px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{color:var(--deep-green);font-size:23px;font-weight:bold;white-space:nowrap}.logo span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:23px;font-size:14px}.nav-links a:hover{color:var(--gold)}.nav-book{background:var(--green);color:white!important;padding:11px 18px;border-radius:4px}
+.breadcrumb{max-width:1150px;margin:auto;padding:22px 25px 8px;color:var(--muted);font-size:13px}.breadcrumb a:hover{color:var(--green)}
+.hero{max-width:1150px;margin:12px auto 45px;padding:0 25px}.hero-image{min-height:430px;position:relative;overflow:hidden;border-radius:15px;background:var(--deep-green)}
+.hero-image img{width:100%;height:470px;object-fit:cover;display:block}.hero-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:45px;color:white;background:linear-gradient(to top,rgba(20,34,25,.88),rgba(20,34,25,.18) 75%,rgba(20,34,25,.04))}
+.eyebrow{color:#e4c88f;font-size:12px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase}.hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(34px,5vw,57px);font-weight:normal;line-height:1.15;max-width:700px;margin:12px 0}.hero p{max-width:650px;font-size:16px;margin:0;color:#f3f0e9}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.badge{padding:7px 13px;border:1px solid rgba(255,255,255,.5);border-radius:30px;font-size:12px;background:rgba(255,255,255,.09)}
+.main-layout{max-width:1150px;margin:0 auto 75px;padding:0 25px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:35px;align-items:start}
+.section-label{color:var(--gold);text-transform:uppercase;font-size:12px;font-weight:bold;letter-spacing:2px}h2{font-family:Georgia,"Times New Roman",serif;font-size:32px;line-height:1.25;color:var(--deep-green);font-weight:normal;margin:8px 0 18px}
+.description{color:#666b61;font-size:15px;margin-bottom:27px}.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:25px 0 30px}.feature{background:var(--beige);padding:19px;border-radius:8px}.feature-icon{font-size:23px;margin-bottom:7px}.feature h3{color:var(--deep-green);font-size:15px;margin:0 0 5px}.feature p{color:var(--muted);font-size:13px;margin:0}
+.info-box{border-left:4px solid var(--gold);background:#f8f5ee;padding:17px 20px;margin:25px 0;font-size:14px;color:#65685e;border-radius:0 7px 7px 0}.info-box strong{color:var(--deep-green)}
+.booking-card{background:white;border:1px solid #e7e1d5;border-radius:12px;padding:28px;box-shadow:0 12px 35px rgba(41,60,46,.08)}.booking-card h2{font-size:27px;margin-bottom:7px}.booking-subtitle{font-size:13px;color:var(--muted);margin:0 0 22px}
+.price-display{background:var(--beige);padding:17px;border-radius:8px;margin-bottom:22px}.price-label{color:var(--muted);font-size:12px}.price-value{font-family:Georgia,"Times New Roman",serif;color:var(--deep-green);font-size:30px;font-weight:bold;line-height:1.4}.price-note{font-size:12px;color:var(--muted)}
+.form-group{margin-bottom:17px}.form-group label{display:block;font-weight:bold;color:var(--deep-green);font-size:13px;margin-bottom:7px}.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:1px solid #dcd7cc;border-radius:5px;background:#fffefa;color:var(--text);outline:none}.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(70,91,69,.1)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px}.extra-option{display:flex;align-items:flex-start;gap:10px;border:1px solid #e8e2d7;border-radius:7px;padding:13px;margin-bottom:10px;cursor:pointer}.extra-option input{margin-top:5px;accent-color:var(--green);width:auto}.extra-option span{flex:1;font-size:13px}.extra-option strong{display:block;color:var(--deep-green);font-size:13px}.extra-option small{display:block;color:var(--muted);margin-top:3px}
+.total-box{border-top:1px solid #e5dfd3;margin-top:20px;padding-top:18px}.total-line{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:9px;font-size:14px}.total-line.final{font-size:19px;font-weight:bold;color:var(--deep-green);padding-top:10px;border-top:1px dashed #d9d2c5}
+.submit-button{display:block;width:100%;background:var(--green);color:white;border:none;padding:15px;border-radius:5px;font-weight:bold;margin-top:20px;transition:background .2s}.submit-button:hover{background:var(--deep-green)}.submit-button:disabled{opacity:.65;cursor:wait}.secure-note{text-align:center;font-size:11px;color:var(--muted);margin:13px 0 0}
+.why-section{background:var(--beige);padding:65px 25px}.why-inner{max-width:1100px;margin:auto}.why-heading{max-width:650px;margin-bottom:30px}.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.why-card{background:var(--white);padding:24px;border-radius:8px}.why-card h3{color:var(--deep-green);font-size:17px;margin:8px 0}.why-card p{color:var(--muted);font-size:14px;margin:0}
+.other-tours{max-width:1100px;margin:65px auto;padding:0 25px;text-align:center}.other-tours p{color:var(--muted)}.tour-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:22px}.tour-link{display:inline-block;border:1px solid #d8d1c4;border-radius:5px;padding:12px 20px;color:var(--deep-green);background:white;font-size:14px}.tour-link:hover{background:var(--beige)}
+footer{background:var(--deep-green);color:white;padding:38px 25px}.footer-inner{max-width:1100px;margin:auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px}.footer-logo{font-size:21px;font-weight:bold}.footer-logo span{color:#d9bd82}footer p{color:#d8dfd5;font-size:13px;margin:5px 0 0}.footer-links{display:flex;flex-wrap:wrap;gap:18px;font-size:13px}.footer-links a:hover{color:#d9bd82}
+.whatsapp-button{position:fixed;right:20px;bottom:20px;z-index:200;background:#278b58;color:white;border-radius:30px;padding:12px 17px;box-shadow:0 5px 18px rgba(0,0,0,.2);font-size:13px;font-weight:bold}.whatsapp-button:hover{background:#206d45}.hidden{display:none!important}
+@media(max-width:850px){.navbar{flex-direction:column;padding:15px}.nav-links{justify-content:center;flex-wrap:wrap;gap:13px}.main-layout{grid-template-columns:1fr}.hero-image img{height:420px}.hero-overlay{padding:28px}.why-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.nav-links{font-size:12px;gap:10px}.nav-book{padding:8px 11px}.hero{padding:0 14px}.hero-image{min-height:380px}.hero-image img{height:400px}.hero-overlay{padding:22px}.hero p{font-size:14px}.main-layout{padding:0 14px;gap:25px}.booking-card{padding:20px}.form-row,.feature-grid{grid-template-columns:1fr}.breadcrumb{padding-left:15px;padding-right:15px}.why-section{padding:45px 15px}}
 </style>
 </head>
-
 <body>
-
-<div class="top-bar">
-    PRIVATE TRANSFERS &amp; TOURS IN ICELAND
-</div>
-
-<header>
-    <nav class="navbar">
-        <a href="index.html" class="logo">
-            ICELAND <span>TRANSFER</span>
-        </a>
-
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="airport-transportation.html">Airport Transfers</a>
-            <a href="transfers.html">Transfers</a>
-            <a href="golden-circle-tour.html">Golden Circle</a>
-            <a href="about.html">About</a>
-            <a href="#booking" class="nav-book">Book Your Tour</a>
-        </div>
-    </nav>
-</header>
-
-<div class="breadcrumb">
-    <a href="index.html">Home</a> &nbsp; / &nbsp;
-    <a href="transfers.html">Tours</a> &nbsp; / &nbsp;
-    Magical Northern Lights Tour
-</div>
-
-<section class="hero">
-    <div class="hero-image">
-        <img
-            src="images2/aurora2.jpg"
-            alt="Magical Northern Lights dancing over Iceland"
-            onerror="this.onerror=null;this.src='images2/aurora-transfer.jpg';"
-        >
-
-        <div class="hero-overlay">
-            <div class="eyebrow">Discover Iceland After Dark</div>
-            <h1>Magical Northern Lights Tour</h1>
-            <p>
-                Escape the city lights and explore Iceland's beautiful winter
-                landscapes on a private journey in search of the magical
-                Northern Lights.
-            </p>
-
-            <div class="hero-badges">
-                <span class="badge">✦ Private Experience</span>
-                <span class="badge">✦ Flexible Pickup</span>
-                <span class="badge">✦ Winter Adventure</span>
-            </div>
-        </div>
-    </div>
-</section>
-
+<div class="top-bar">PRIVATE TRANSFERS &amp; TOURS IN ICELAND</div>
+<header><nav class="navbar">
+<a href="index.html" class="logo">ICELAND <span>TRANSFER</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a><a href="airport-transportation.html">Airport Transfers</a><a href="transfers.html">Transfers</a><a href="golden-circle-tour.html">Golden Circle</a><a href="about.html">About</a><a href="#booking" class="nav-book">Book Your Tour</a>
+</div></nav></header>
+<div class="breadcrumb"><a href="index.html">Home</a> &nbsp; / &nbsp; <a href="transfers.html">Tours</a> &nbsp; / &nbsp; Magical Northern Lights Tour</div>
+<section class="hero"><div class="hero-image">
+<img src="images2/aurora2.jpg" alt="Northern Lights over Iceland" onerror="this.onerror=null;this.src='images2/aurora-transfer.jpg';">
+<div class="hero-overlay"><div class="eyebrow">Discover Iceland After Dark</div><h1>Magical Northern Lights Tour</h1><p>Escape the city lights and explore Iceland's beautiful winter landscapes on a private journey in search of the magical Northern Lights.</p><div class="hero-badges"><span class="badge">✦ Private Experience</span><span class="badge">✦ Flexible Pickup</span><span class="badge">✦ Winter Adventure</span></div></div>
+</div></section>
 <main class="main-layout">
-
 <section>
-    <div class="section-label">A Night to Remember</div>
-    <h2>Chase the Northern Lights in Iceland</h2>
-
-    <p class="description">
-        Experience one of Iceland's most extraordinary natural wonders.
-        Your private driver will take you away from bright city lights
-        toward suitable viewing locations, depending on the weather,
-        road conditions and aurora forecast.
-    </p>
-
-    <div class="feature-grid">
-        <div class="feature">
-            <div class="feature-icon">🌌</div>
-            <h3>Search for the Aurora</h3>
-            <p>Explore suitable viewing areas away from city lights whenever conditions allow.</p>
-        </div>
-
-        <div class="feature">
-            <div class="feature-icon">🚘</div>
-            <h3>Private Transportation</h3>
-            <p>Enjoy a private journey with pickup arranged around your chosen location.</p>
-        </div>
-
-        <div class="feature">
-            <div class="feature-icon">📍</div>
-            <h3>Flexible Route</h3>
-            <p>The route can adapt to the forecast and local weather conditions on the evening.</p>
-        </div>
-
-        <div class="feature">
-            <div class="feature-icon">📸</div>
-            <h3>Photo Stops</h3>
-            <p>Take time to enjoy the scenery and capture memories when it is safe to stop.</p>
-        </div>
-    </div>
-
-    <div class="section-label">Before You Go</div>
-    <h2>Make the Most of Your Night</h2>
-
-    <p class="description">
-        The Northern Lights are a natural phenomenon, so sightings depend
-        on solar activity, darkness, cloud cover and weather. A sighting
-        cannot be guaranteed.
-    </p>
-
-    <div class="info-box">
-        <strong>Important information</strong><br>
-        This tour is weather-dependent. If conditions are unsuitable,
-        your driver may need to adjust the route or discuss alternative
-        arrangements with you. Please dress warmly and bring suitable
-        winter clothing.
-    </div>
-
-    <div class="info-box">
-        <strong>Pickup and destination</strong><br>
-        Choose your pickup and drop-off locations in the booking form.
-        If your location is not listed, select “Other location” and enter
-        the address or place name.
-    </div>
+<div class="section-label">A Night to Remember</div><h2>Chase the Northern Lights in Iceland</h2><p class="description">Experience one of Iceland's most extraordinary natural wonders. Your private driver will take you away from bright city lights toward suitable viewing locations, depending on the weather, road conditions and aurora forecast.</p>
+<div class="feature-grid">
+<div class="feature"><div class="feature-icon">🌌</div><h3>Search for the Aurora</h3><p>Explore suitable viewing areas away from city lights whenever conditions allow.</p></div>
+<div class="feature"><div class="feature-icon">🚘</div><h3>Private Transportation</h3><p>Enjoy a private journey with pickup arranged around your chosen location.</p></div>
+<div class="feature"><div class="feature-icon">📍</div><h3>Flexible Route</h3><p>The route can adapt to the forecast and local weather conditions on the evening.</p></div>
+<div class="feature"><div class="feature-icon">📸</div><h3>Photo Stops</h3><p>Take time to enjoy the scenery and capture memories when it is safe to stop.</p></div>
+</div>
+<div class="section-label">Before You Go</div><h2>Make the Most of Your Night</h2><p class="description">The Northern Lights are a natural phenomenon, so sightings depend on solar activity, darkness, cloud cover and weather. A sighting cannot be guaranteed.</p>
+<div class="info-box"><strong>Important information</strong><br>This tour is weather-dependent. If conditions are unsuitable, your driver may need to adjust the route or discuss alternative arrangements with you. Please dress warmly and bring suitable winter clothing.</div>
+<div class="info-box"><strong>Pickup and destination</strong><br>Choose your pickup and drop-off locations in the booking form. If your location is not listed, select “Other location” and enter the address or place name.</div>
 </section>
-
 <aside id="booking" class="booking-card">
-    <div class="section-label">Reserve Your Experience</div>
-    <h2>Book Your Tour</h2>
-
-    <p class="booking-subtitle">Choose your package and trip details below.</p>
-
-    <div class="price-display">
-        <div class="price-label">Starting from</div>
-        <div class="price-value" id="startingPrice">89,900 ISK</div>
-        <div class="price-note">Per vehicle · Estimated price</div>
-    </div>
-
-    <form id="tourBookingForm">
-        <div class="form-group">
-            <label for="tourPackage">Choose Your Experience *</label>
-            <select id="tourPackage" required>
-                <option value="classic">Classic Aurora Chase — up to 3 passengers</option>
-                <option value="comfort">Comfort Private Tour — up to 7 passengers</option>
-                <option value="premium">Premium Group Tour — up to 20 passengers</option>
-            </select>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="tourDate">Tour Date *</label>
-                <input type="date" id="tourDate" required>
-            </div>
-
-            <div class="form-group">
-                <label for="tourTime">Pickup Time *</label>
-                <select id="tourTime" required>
-                    <option value="">Loading available times...</option>
-                </select>
-                <small id="availabilityMessage" style="display:block;margin-top:6px;color:#777a70;font-size:12px;">
-                    Choose a date to check available pickup times.
-                </small>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="fullName">Full Name *</label>
-            <input type="text" id="fullName" autocomplete="name" maxlength="100" required placeholder="Enter your full name">
-        </div>
-
-        <div class="form-group">
-            <label for="phone">Phone Number *</label>
-            <input type="tel" id="phone" autocomplete="tel" maxlength="30" required placeholder="+country code and phone number">
-        </div>
-
-        <div class="form-group">
-            <label for="pickup">Pickup Location *</label>
-            <select id="pickup" required>
-                <option value="">Choose pickup location</option>
-                <option>Reykjavik City Centre</option>
-                <option>Keflavik International Airport (KEF)</option>
-                <option>Keflavik Town</option>
-                <option>Reykjanesbær</option>
-                <option>Hafnarfjordur</option>
-                <option>Gardabaer</option>
-                <option>Kopavogur</option>
-                <option>Mosfellsbaer</option>
-                <option>Selfoss</option>
-                <option>Hveragerdi</option>
-                <option>Grindavik</option>
-                <option>Blue Lagoon</option>
-                <option>Other location</option>
-            </select>
-        </div>
-
-        <div class="form-group hidden" id="pickupOtherGroup">
-            <label for="pickupOther">Enter Your Pickup Location *</label>
-            <input type="text" id="pickupOther" maxlength="200" placeholder="Enter address or place name">
-        </div>
-
-        <div class="form-group">
-            <label for="destination">Drop-off Location *</label>
-            <select id="destination" required>
-                <option value="">Choose drop-off location</option>
-                <option>Reykjavik City Centre</option>
-                <option>Keflavik International Airport (KEF)</option>
-                <option>Keflavik Town</option>
-                <option>Reykjanesbær</option>
-                <option>Hafnarfjordur</option>
-                <option>Gardabaer</option>
-                <option>Kopavogur</option>
-                <option>Mosfellsbaer</option>
-                <option>Selfoss</option>
-                <option>Hveragerdi</option>
-                <option>Grindavik</option>
-                <option>Blue Lagoon</option>
-                <option value="same_as_pickup">Same as pickup location</option>
-                <option>Other location</option>
-            </select>
-        </div>
-
-        <div class="form-group hidden" id="destinationOtherGroup">
-            <label for="destinationOther">Enter Your Drop-off Location *</label>
-            <input type="text" id="destinationOther" maxlength="200" placeholder="Enter address or place name">
-        </div>
-
-        <div class="form-group">
-            <label for="passengers">Number of Passengers *</label>
-            <select id="passengers" required>
-                <option value="1">1 passenger</option>
-                <option value="2">2 passengers</option>
-                <option value="3">3 passengers</option>
-                <option value="4">4 passengers</option>
-                <option value="5">5 passengers</option>
-                <option value="6">6 passengers</option>
-                <option value="7">7 passengers</option>
-                <option value="8">8 passengers</option>
-                <option value="9">9 passengers</option>
-                <option value="10">10 passengers</option>
-                <option value="11">11 passengers</option>
-                <option value="12">12 passengers</option>
-                <option value="13">13 passengers</option>
-                <option value="14">14 passengers</option>
-                <option value="15">15 passengers</option>
-                <option value="16">16 passengers</option>
-                <option value="17">17 passengers</option>
-                <option value="18">18 passengers</option>
-                <option value="19">19 passengers</option>
-                <option value="20">20 passengers</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Optional Extras</label>
-
-            <label class="extra-option">
-                <input type="checkbox" id="warmDrinks">
-                <span>
-                    <strong>Warm Drinks Stop</strong>
-                    <small>2,500 ISK per passenger</small>
-                </span>
-            </label>
-
-            <label class="extra-option">
-                <input type="checkbox" id="photoStop">
-                <span>
-                    <strong>Extended Photo Stop</strong>
-                    <small>15,000 ISK per booking</small>
-                </span>
-            </label>
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email Address *</label>
-            <input type="email" id="email" autocomplete="email" maxlength="254" required placeholder="your@email.com">
-        </div>
-
-        <div class="form-group">
-            <label for="notes">Additional Requests</label>
-            <textarea id="notes" rows="3" maxlength="1500" placeholder="Anything we should know before your trip?"></textarea>
-        </div>
-
-        <div class="total-box">
-            <div class="total-line">
-                <span>Tour package</span>
-                <span id="packageTotal">89,900 ISK</span>
-            </div>
-
-            <div class="total-line">
-                <span>Optional extras</span>
-                <span id="extrasTotal">0 ISK</span>
-            </div>
-
-            <div class="total-line final">
-                <span>Estimated Total</span>
-                <span id="grandTotal">89,900 ISK</span>
-            </div>
-        </div>
-
-        <button type="submit" class="submit-button" id="submitButton">
-            ADD TO BOOKING
-        </button>
-
-        <p class="secure-note">
-            Your selected tour will be added to your booking overview.
-            Payment is not collected on this page.
-        </p>
-    </form>
-</aside>
-
-</main>
-
-<section class="why-section">
-    <div class="why-inner">
-        <div class="why-heading">
-            <div class="section-label">Your Iceland Experience</div>
-            <h2>A More Personal Way to Explore</h2>
-            <p class="description">
-                Enjoy a flexible private journey designed around your
-                pickup location, group size and the conditions of the night.
-            </p>
-        </div>
-
-        <div class="why-grid">
-            <div class="why-card">
-                <div class="feature-icon">🚘</div>
-                <h3>Private Journey</h3>
-                <p>Travel with your own group instead of joining a large shared bus tour.</p>
-            </div>
-
-            <div class="why-card">
-                <div class="feature-icon">🌠</div>
-                <h3>Nature Comes First</h3>
-                <p>The route can be adjusted according to weather, road safety and aurora forecasts.</p>
-            </div>
-
-            <div class="why-card">
-                <div class="feature-icon">🤝</div>
-                <h3>Personal Service</h3>
-                <p>Share your requests in advance so your driver can understand your group's needs.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="other-tours">
-    <div class="section-label">Explore More</div>
-    <h2>Discover More of Iceland</h2>
-    <p>Make your Iceland journey even more memorable.</p>
-
-    <div class="tour-links">
-        <a href="golden-circle-tour.html" class="tour-link">Golden Circle Tour</a>
-        <a href="airport-transportation.html" class="tour-link">Airport Transportation</a>
-        <a href="transfers.html" class="tour-link">All Transfers</a>
-        <a href="order-overview.html" class="tour-link">View Booking Overview</a>
-    </div>
-</section>
-
-<footer>
-    <div class="footer-inner">
-        <div>
-            <div class="footer-logo">ICELAND <span>TRANSFER</span></div>
-            <p>Private transportation and tours in Iceland.</p>
-        </div>
-
-        <div class="footer-links">
-            <a href="index.html">Home</a>
-            <a href="about.html">About Us</a>
-            <a href="airport-transportation.html">Airport Transfers</a>
-            <a href="order-overview.html">My Booking</a>
-        </div>
-    </div>
-</footer>
-
-<a class="whatsapp-button"
-   href="https://wa.me/3548333707"
-   target="_blank"
-   rel="noopener noreferrer">WhatsApp Us</a>
-   <script>
+<div class="section-label">Reserve Your Tour</div><h2>Book Your Tour</h2><p class="booking-subtitle">Enter your details to add the tour to your booking overview.</p>
+<div class="price-display"><div class="price-label">Selected vehicle price</div><div class="price-value" id="startingPrice">17,900 ISK</div><div class="price-note" id="vehiclePriceNote">Sedan · Up to 4 passengers · Estimated price per vehicle</div></div>
+<form id="tourBookingForm">
+<div class="form-group"><label for="vehicleType">Choose Vehicle *</label><select id="vehicleType" required><option value="sedan">Sedan — up to 4 passengers</option><option value="mpv4">MPV4 — up to 4 passengers</option><option value="van">Van — up to 8 passengers</option><option value="vip_van">VIP VAN — up to 5 passengers</option></select><small style="display:block;color:var(--muted);font-size:12px;margin-top:6px">The price updates automatically when you select a vehicle.</small></div>
+<div class="form-row"><div class="form-group"><label for="tourDate">Tour Date *</label><input type="date" id="tourDate" required></div><div class="form-group"><label for="tourTime">Pickup Time (Iceland time) *</label><select id="tourTime" required><option value="">Choose time</option></select><small id="timeHelp" style="display:block;color:#777a70;font-size:11px;margin-top:5px">Loading available times…</small></div></div>
+<div class="form-group"><label for="fullName">Full Name *</label><input type="text" id="fullName" autocomplete="name" maxlength="100" required placeholder="Enter your full name"></div>
+<div class="form-group"><label for="phone">Phone Number *</label><input type="tel" id="phone" autocomplete="tel" maxlength="30" required placeholder="+country code and phone number"></div>
+<div class="form-group"><label for="pickup">Pickup Location *</label><select id="pickup" required><option value="">Choose pickup location</option><option>Reykjavik City Centre</option><option>Keflavik International Airport (KEF)</option><option>Keflavik Town</option><option>Reykjanesbær</option><option>Hafnarfjordur</option><option>Gardabaer</option><option>Kopavogur</option><option>Mosfellsbaer</option><option>Selfoss</option><option>Hveragerdi</option><option>Grindavik</option><option>Blue Lagoon</option><option>Other location</option></select></div>
+<div class="form-group hidden" id="pickupOtherGroup"><label for="pickupOther">Enter Your Pickup Location *</label><input type="text" id="pickupOther" maxlength="200" placeholder="Enter address or place name"></div>
+<div class="form-group"><label for="destination">Drop-off Location *</label><select id="destination" required><option value="">Choose drop-off location</option><option>Reykjavik City Centre</option><option>Keflavik International Airport (KEF)</option><option>Keflavik Town</option><option>Reykjanesbær</option><option>Hafnarfjordur</option><option>Gardabaer</option><option>Kopavogur</option><option>Mosfellsbaer</option><option>Selfoss</option><option>Hveragerdi</option><option>Grindavik</option><option>Blue Lagoon</option><option value="same_as_pickup">Same as pickup location</option><option>Other location</option></select></div>
+<div class="form-group hidden" id="destinationOtherGroup"><label for="destinationOther">Enter Your Drop-off Location *</label><input type="text" id="destinationOther" maxlength="200" placeholder="Enter address or place name"></div>
+<div class="form-group"><label for="passengers">Number of Passengers *</label><select id="passengers" required>
+<option value="1">1 passenger</option><option value="2">2 passengers</option><option value="3">3 passengers</option><option value="4">4 passengers</option><option value="5">5 passengers</option><option value="6">6 passengers</option><option value="7">7 passengers</option><option value="8">8 passengers</option><option value="9">9 passengers</option><option value="10">10 passengers</option><option value="11">11 passengers</option><option value="12">12 passengers</option><option value="13">13 passengers</option><option value="14">14 passengers</option><option value="15">15 passengers</option><option value="16">16 passengers</option><option value="17">17 passengers</option><option value="18">18 passengers</option><option value="19">19 passengers</option><option value="20">20 passengers</option>
+</select></div>
+<div class="form-group">
+<label class="extra-option" for="travellingWithChildren" style="margin-bottom:0">
+<input type="checkbox" id="travellingWithChildren" style="margin-top:5px;accent-color:var(--green);width:auto">
+<span><strong>I am travelling with children</strong><small>Tell us how many children are in your group and their ages.</small></span>
+</label>
+</div>
+<div class="form-group hidden" id="childrenCountGroup">
+<label for="childrenCount">Number of Children *</label>
+<select id="childrenCount">
+<option value="1">1 child</option><option value="2">2 children</option><option value="3">3 children</option><option value="4">4 children</option><option value="5">5 children</option><option value="6">6 children</option><option value="7">7 children</option><option value="8">8 children</option>
+</select>
+</div>
+<div class="form-group hidden" id="childrenAgesGroup">
+<label>Children's Ages *</label>
+<div id="childrenAgesFields" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px"></div>
+<small style="display:block;color:var(--muted);font-size:12px;margin-top:7px">Choose each child's age. Select “Under 1 year” for babies under 12 months.</small>
+</div>
+<div class="form-group"><label for="email">Email Address *</label><input type="email" id="email" autocomplete="email" maxlength="254" required placeholder="your@email.com"></div>
+<div class="form-group"><label for="notes">Additional Requests</label><textarea id="notes" rows="3" maxlength="1500" placeholder="Anything we should know before your trip?"></textarea></div>
+<div class="total-box"><div class="total-line"><span>Selected vehicle</span><span id="vehicleTotal">17,900 ISK</span></div><div class="total-line final"><span>Estimated Total</span><span id="grandTotal">17,900 ISK</span></div></div>
+<button type="submit" class="submit-button" id="submitButton">ADD TO BOOKING</button><p class="secure-note">Your selected tour will be added to your booking overview. Payment is not collected on this page.</p>
+</form></aside></main>
+<section class="why-section"><div class="why-inner"><div class="why-heading"><div class="section-label">Your Iceland Experience</div><h2>A More Personal Way to Explore</h2><p class="description">Enjoy a flexible private journey designed around your pickup location, group size and the conditions of the night.</p></div><div class="why-grid">
+<div class="why-card"><div class="feature-icon">🚘</div><h3>Private Journey</h3><p>Travel with your own group instead of joining a large shared bus tour.</p></div><div class="why-card"><div class="feature-icon">🌠</div><h3>Nature Comes First</h3><p>The route can be adjusted according to weather, road safety and aurora forecasts.</p></div><div class="why-card"><div class="feature-icon">🤝</div><h3>Personal Service</h3><p>Share your requests in advance so your driver can understand your group's needs.</p></div>
+</div></div></section>
+<section class="other-tours"><div class="section-label">Explore More</div><h2>Discover More of Iceland</h2><p>Make your Iceland journey even more memorable.</p><div class="tour-links"><a href="golden-circle-tour.html" class="tour-link">Golden Circle Tour</a><a href="airport-transportation.html" class="tour-link">Airport Transportation</a><a href="transfers.html" class="tour-link">All Transfers</a><a href="order-overview.html" class="tour-link">View Booking Overview</a></div></section>
+<footer><div class="footer-inner"><div><div class="footer-logo">ICELAND <span>TRANSFER</span></div><p>Private transportation and tours in Iceland.</p></div><div class="footer-links"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="airport-transportation.html">Airport Transfers</a><a href="order-overview.html">My Booking</a></div></div></footer>
+<a class="whatsapp-button" href="https://wa.me/3548333707" target="_blank" rel="noopener noreferrer">WhatsApp Us</a>
+<script>
 "use strict";
-
-/* ==========================================
-   ICELAND TRANSFER
-   MAGICAL NORTHERN LIGHTS TOUR
-========================================== */
-
+const API_BASE_URL = "https://iceland-transfer-server.onrender.com";
+const VEHICLES = {
+ sedan: { name: "Sedan", price: 17900, maxPassengers: 4 },
+ mpv4: { name: "MPV4", price: 21900, maxPassengers: 4 },
+ van: { name: "Van", price: 26900, maxPassengers: 8 },
+ vip_van: { name: "VIP VAN", price: 32000, maxPassengers: 5 }
+};
 const form = document.getElementById("tourBookingForm");
-
-const packageSelect = document.getElementById("tourPackage");
-const dateInput = document.getElementById("tourDate");
-const timeSelect = document.getElementById("tourTime");
-const passengersSelect = document.getElementById("passengers");
-
-const pickupSelect = document.getElementById("pickup");
-const destinationSelect = document.getElementById("destination");
-
+const passengers = document.getElementById("passengers");
+const vehicleType = document.getElementById("vehicleType");
+const vehiclePriceNote = document.getElementById("vehiclePriceNote");
+const vehicleTotal = document.getElementById("vehicleTotal");
+const travellingWithChildren = document.getElementById("travellingWithChildren");
+const childrenCount = document.getElementById("childrenCount");
+const childrenCountGroup = document.getElementById("childrenCountGroup");
+const childrenAgesGroup = document.getElementById("childrenAgesGroup");
+const childrenAgesFields = document.getElementById("childrenAgesFields");
+const pickup = document.getElementById("pickup");
+const destination = document.getElementById("destination");
 const pickupOtherGroup = document.getElementById("pickupOtherGroup");
 const destinationOtherGroup = document.getElementById("destinationOtherGroup");
-
-const pickupOtherInput = document.getElementById("pickupOther");
-const destinationOtherInput = document.getElementById("destinationOther");
-
-const warmDrinksCheckbox = document.getElementById("warmDrinks");
-const photoStopCheckbox = document.getElementById("photoStop");
-
-const startingPriceElement = document.getElementById("startingPrice");
-const packageTotalElement = document.getElementById("packageTotal");
-const extrasTotalElement = document.getElementById("extrasTotal");
-const grandTotalElement = document.getElementById("grandTotal");
-
-const availabilityMessage = document.getElementById("availabilityMessage");
+const pickupOther = document.getElementById("pickupOther");
+const destinationOther = document.getElementById("destinationOther");
+const tourDate = document.getElementById("tourDate");
+const tourTime = document.getElementById("tourTime");
+const timeHelp = document.getElementById("timeHelp");
 const submitButton = document.getElementById("submitButton");
-
-/* ==========================================
-   PACKAGE PRICES
-========================================== */
-
-const packages = {
-    classic: {
-        name: "Classic Aurora Chase",
-        price: 89900,
-        maxPassengers: 3,
-        durationHours: 4
-    },
-
-    comfort: {
-        name: "Comfort Private Tour",
-        price: 129900,
-        maxPassengers: 7,
-        durationHours: 4
-    },
-
-    premium: {
-        name: "Premium Group Tour",
-        price: 189900,
-        maxPassengers: 20,
-        durationHours: 4
-    }
-};
-
-const WARM_DRINKS_PRICE_PER_PASSENGER = 2500;
-const PHOTO_STOP_PRICE = 15000;
-
-/* ==========================================
-   FORMAT PRICE
-========================================== */
-
-function formatISK(amount) {
-    return Math.round(amount).toLocaleString("en-US") + " ISK";
+const money = amount => Math.round(amount).toLocaleString("en-US") + " ISK";
+function selectedVehicle(){ return VEHICLES[vehicleType.value] || VEHICLES.sedan; }
+function updateVehicleAndPassengers(){
+ const vehicle=selectedVehicle();
+ const current=Number(passengers.value)||1;
+ Array.from(passengers.options).forEach(option=>{
+  const disabled=Number(option.value)>vehicle.maxPassengers;
+  option.disabled=disabled; option.hidden=disabled;
+ });
+ if(current>vehicle.maxPassengers) passengers.value=String(vehicle.maxPassengers);
+ document.getElementById("startingPrice").textContent=money(vehicle.price);
+ vehiclePriceNote.textContent=vehicle.name+" · Up to "+vehicle.maxPassengers+" passengers · Estimated price per vehicle";
+ vehicleTotal.textContent=money(vehicle.price);
+ document.getElementById("grandTotal").textContent=money(vehicle.price);
 }
 
-/* ==========================================
-   DATE LIMITS
-========================================== */
+function localDateString(date){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,"0"),d=String(date.getDate()).padStart(2,"0");return `${y}-${m}-${d}`;}
+tourDate.min=localDateString(new Date());
 
-function getLocalDateString(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
+function updateChildrenFields(){
+ const enabled=travellingWithChildren.checked;
+ childrenCountGroup.classList.toggle("hidden",!enabled);
+ childrenAgesGroup.classList.toggle("hidden",!enabled);
+ if(!enabled){childrenAgesFields.innerHTML="";return;}
+ const count=Math.max(1,Math.min(8,Number(childrenCount.value)||1));
+ const old=Array.from(childrenAgesFields.querySelectorAll("select")).map(el=>el.value);
+ childrenAgesFields.innerHTML="";
+ for(let i=0;i<count;i++){
+  const wrap=document.createElement("div"),label=document.createElement("label"),select=document.createElement("select");
+  label.htmlFor="childAge"+(i+1);label.textContent="Child "+(i+1)+" age";
+  label.style.cssText="display:block;font-weight:bold;color:var(--deep-green);font-size:13px;margin-bottom:7px";
+  select.id="childAge"+(i+1);select.required=true;select.style.cssText="width:100%;padding:12px;border:1px solid #dcd7cc;border-radius:5px;background:#fffefa;color:var(--text)";
+  const baby=document.createElement("option");baby.value="0";baby.textContent="Under 1 year";select.appendChild(baby);
+  for(let age=1;age<=17;age++){const op=document.createElement("option");op.value=String(age);op.textContent=age+(age===1?" year":" years");select.appendChild(op);}
+  if(old[i]!==undefined)select.value=old[i];
+  wrap.append(label,select);childrenAgesFields.appendChild(wrap);
+ }
 }
-
-dateInput.min = getLocalDateString(new Date());
-
-/* ==========================================
-   TIME OPTIONS
-   EVERY HOUR FROM 06:00 TO 22:00
-========================================== */
-
-function populateTimeOptions() {
-    timeSelect.innerHTML = "";
-
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = "Choose pickup time";
-    timeSelect.appendChild(placeholder);
-
-    for (let hour = 6; hour <= 22; hour++) {
-        const value = String(hour).padStart(2, "0") + ":00";
-
-        const option = document.createElement("option");
-        option.value = value;
-        option.textContent = value;
-
-        timeSelect.appendChild(option);
-    }
+function getChildrenAges(){return travellingWithChildren.checked?Array.from(childrenAgesFields.querySelectorAll("select")).map(el=>Number(el.value)):[];}
+function updateLocationFields(){
+ const otherPickup=pickup.value==="Other location",otherDrop=destination.value==="Other location";
+ pickupOtherGroup.classList.toggle("hidden",!otherPickup);destinationOtherGroup.classList.toggle("hidden",!otherDrop);
+ pickupOther.required=otherPickup;destinationOther.required=otherDrop;
+ if(!otherPickup)pickupOther.value="";if(!otherDrop)destinationOther.value="";
 }
-
-populateTimeOptions();
-
-/* ==========================================
-   PASSENGER LIMITS
-========================================== */
-
-function updatePassengerOptions() {
-    const selectedPackage = packages[packageSelect.value];
-
-    if (!selectedPackage) return;
-
-    const maximum = selectedPackage.maxPassengers;
-    const currentPassengers = Number(passengersSelect.value) || 1;
-
-    if (currentPassengers > maximum) {
-        passengersSelect.value = String(maximum);
-    }
-
-    Array.from(passengersSelect.options).forEach(option => {
-        const value = Number(option.value);
-
-        option.disabled = value > maximum;
-        option.hidden = value > maximum;
-    });
+function normalizeTime(item){
+ // Accept common API formats without ever displaying an object as "[object Object]".
+ if(typeof item==="string"||typeof item==="number"){
+  const raw=String(item).trim();
+  let match=raw.match(/(?:T|\s|^)(\d{1,2}):(\d{2})(?::\d{2})?/);
+  if(match){const h=Number(match[1]),m=Number(match[2]);if(h>=0&&h<=23&&m>=0&&m<=59)return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");}
+  // Also accept a bare hour like 6 or 18.
+  if(/^\d{1,2}$/.test(raw)){const h=Number(raw);if(h>=0&&h<=23)return String(h).padStart(2,"0")+":00";}
+  return "";
+ }
+ if(item&&typeof item==="object"){
+  for(const key of ["time","start_time","startTime","pickup_time","pickupTime","value","label","slot","datetime","date_time","start","available_time","hour"]){
+   if(item[key]!==undefined&&item[key]!==null){const result=normalizeTime(item[key]);if(result)return result;}
+  }
+ }
+ return "";
 }
-
-/* ==========================================
-   PRICE CALCULATION
-========================================== */
-
-function calculatePrice() {
-    const selectedPackage = packages[packageSelect.value];
-
-    if (!selectedPackage) return null;
-
-    updatePassengerOptions();
-
-    const passengerCount = Number(passengersSelect.value) || 1;
-
-    const packagePrice = selectedPackage.price;
-
-    let extrasPrice = 0;
-
-    if (warmDrinksCheckbox.checked) {
-        extrasPrice += WARM_DRINKS_PRICE_PER_PASSENGER * passengerCount;
-    }
-
-    if (photoStopCheckbox.checked) {
-        extrasPrice += PHOTO_STOP_PRICE;
-    }
-
-    const totalPrice = packagePrice + extrasPrice;
-
-    startingPriceElement.textContent = formatISK(packagePrice);
-    packageTotalElement.textContent = formatISK(packagePrice);
-    extrasTotalElement.textContent = formatISK(extrasPrice);
-    grandTotalElement.textContent = formatISK(totalPrice);
-
-    return {
-        packagePrice,
-        extrasPrice,
-        totalPrice,
-        passengerCount,
-        selectedPackage
-    };
+function extractTimeArray(data){
+ if(Array.isArray(data))return data;
+ if(!data||typeof data!=="object")return [];
+ const keys=["available_times","availableTimes","times","slots","availability","available_slots","availableSlots","data","results","items"];
+ for(const key of keys){
+  if(data[key]!==undefined){
+   const found=extractTimeArray(data[key]);
+   if(found.length)return found;
+  }
+ }
+ // Sometimes APIs return a map such as {"06:00": true, "07:00": true}.
+ const entries=Object.entries(data);
+ if(entries.length && entries.every(([key,value])=>/^\d{1,2}:\d{2}$/.test(key) && (value===true||value===1||value==="available"))) return entries.map(([key])=>key);
+ return [];
 }
+function setTimeOptions(items,message){
+ const previous=tourTime.value;
+ tourTime.innerHTML="";
+ const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choose pickup time";tourTime.appendChild(placeholder);
+ const clean=[...new Set((Array.isArray(items)?items:[]).map(normalizeTime).filter(t=>/^\d{2}:\d{2}$/.test(t)))].sort();
+ clean.forEach(time=>{const op=document.createElement("option");op.value=time;op.textContent=time;tourTime.appendChild(op);});
+ if(clean.includes(previous))tourTime.value=previous;
+ timeHelp.textContent=message;
+}
+async function loadAvailableTimes(){
+ const date=tourDate.value;
+ if(!date){setTimeOptions([],"Choose a date to check available pickup times.");return;}
+ setTimeOptions([],"Checking available times…");
+ try{
+  const response=await fetch(API_BASE_URL+"/api/availability?date="+encodeURIComponent(date)+"&service_type=northern_lights_tour",{headers:{Accept:"application/json"}});
+  const raw=await response.text();
+  let data;
+  try{data=JSON.parse(raw);}catch(_){throw new Error("The availability service returned an invalid response.");}
+  if(!response.ok || data.success===false)throw new Error(data.message||"Availability request failed");
+  const values=extractTimeArray(data);
+  const clean=[...new Set(values.map(normalizeTime).filter(Boolean))].sort();
+  setTimeOptions(clean,clean.length?"Available pickup times (Iceland local time).":"No available pickup times were returned for this date. Please choose another date.");
+ }catch(error){console.error("Availability error:",error);setTimeOptions([],"Could not load available times from the server. Please try again later.");}
+}
+travellingWithChildren.addEventListener("change",updateChildrenFields);
+childrenCount.addEventListener("change",updateChildrenFields);
+pickup.addEventListener("change",updateLocationFields);
+destination.addEventListener("change",updateLocationFields);
+tourDate.addEventListener("change",loadAvailableTimes);
+vehicleType.addEventListener("change",updateVehicleAndPassengers);
+passengers.addEventListener("change",updateVehicleAndPassengers);
 
-/* ==========================================
-   OTHER PICKUP LOCATION
-========================================== */
-
-pickupSelect.addEventListener("change", function () {
-    const isOther = pickupSelect.value === "Other location";
-
-    pickupOtherGroup.classList.toggle("hidden", !isOther);
-    pickupOtherInput.required = isOther;
-
-    if (!isOther) {
-        pickupOtherInput.value = "";
-    }
+function getPickup(){return pickup.value==="Other location"?pickupOther.value.trim():pickup.value;}
+function getDestination(pickupLocation){
+ if(destination.value==="Other location")return destinationOther.value.trim();
+ if(destination.value==="same_as_pickup")return pickupLocation+" (return after Northern Lights tour)";
+ return destination.value;
+}
+function validateFutureTime(){
+ const chosen=new Date(tourDate.value+"T"+tourTime.value+":00");
+ if(!tourDate.value||!tourTime.value||Number.isNaN(chosen.getTime()))return false;
+ // Interpret the selected local time as a date/time choice; server availability is checked separately.
+ return chosen.getTime()>Date.now();
+}
+form.addEventListener("submit",function(event){
+ event.preventDefault();if(!form.reportValidity())return;
+ if(!validateFutureTime()){alert("Please choose a future date and available pickup time.");return;}
+ const pickupLocation=getPickup(),destinationLocation=getDestination(pickupLocation);
+ if(!pickupLocation||!destinationLocation){alert("Please enter both pickup and drop-off locations.");return;}
+ if(pickupLocation.toLowerCase()===destinationLocation.toLowerCase()&&!confirm("Your pickup and drop-off locations are the same. Continue?"))return;
+ const ages=getChildrenAges(),numberOfChildren=travellingWithChildren.checked?ages.length:0;
+ const vehicle=selectedVehicle();
+ if(Number(passengers.value)>vehicle.maxPassengers){alert("The selected vehicle allows up to "+vehicle.maxPassengers+" passengers.");return;}
+ if(travellingWithChildren.checked&&(!numberOfChildren||ages.some(age=>!Number.isInteger(age)||age<0||age>17))){alert("Please select the age of each child travelling with you.");return;}
+ const fullName=document.getElementById("fullName").value.trim(),phone=document.getElementById("phone").value.trim(),email=document.getElementById("email").value.trim(),notes=document.getElementById("notes").value.trim();
+ const childrenNote=numberOfChildren?"Children travelling: "+numberOfChildren+"; ages: "+ages.map(age=>age===0?"under 1 year":age+" years").join(", "):"No children specified";
+ const booking={
+  id:"aurora-"+Date.now(),service_type:"northern_lights_tour",service:"Magical Northern Lights Tour",service_name:"Magical Northern Lights Tour",name:"Magical Northern Lights Tour",vehicle_type:vehicleType.value,vehicle_name:vehicle.name,vehicle_price:vehicle.price,
+  full_name:fullName,customerName:fullName,phone,email,pickup:pickupLocation,pickup_location:pickupLocation,destination:destinationLocation,dropoff_location:destinationLocation,
+  date:tourDate.value,pickup_date:tourDate.value,time:tourTime.value,pickup_time:tourTime.value,passengers:Number(passengers.value),luggage:0,flight_number:"",
+  children_count:numberOfChildren,children_ages:ages,price:vehicle.price,total:vehicle.price,unitPrice:vehicle.price,estimatedPrice:vehicle.price,
+  notes,special_requests:"Vehicle: "+vehicle.name+" ("+money(vehicle.price)+"); "+(notes?notes+" | ":"")+childrenNote,status:"pending",created_at:new Date().toISOString()
+ };
+ let cart=[];
+ try{const stored=localStorage.getItem("icelandTransferCart");cart=stored?JSON.parse(stored):[];if(!Array.isArray(cart))cart=[];}catch(error){alert("We could not read your existing booking cart. Please refresh and try again.");return;}
+ cart.push(booking);
+ try{localStorage.setItem("icelandTransferCart",JSON.stringify(cart));sessionStorage.setItem("icelandTransferPendingBooking",JSON.stringify(booking));sessionStorage.setItem("bookingData",JSON.stringify(booking));sessionStorage.setItem("icelandTransferBooking",JSON.stringify(booking));}
+ catch(error){alert("We could not save your booking. Please check browser storage and try again.");return;}
+ submitButton.disabled=true;submitButton.textContent="OPENING BOOKING OVERVIEW…";window.location.href="order-overview.html";
 });
-
-/* ==========================================
-   OTHER DESTINATION LOCATION
-========================================== */
-
-destinationSelect.addEventListener("change", function () {
-    const isOther = destinationSelect.value === "Other location";
-
-    destinationOtherGroup.classList.toggle("hidden", !isOther);
-    destinationOtherInput.required = isOther;
-
-    if (!isOther) {
-        destinationOtherInput.value = "";
-    }
-});
-
-/* ==========================================
-   GET LOCATIONS
-========================================== */
-
-function getPickupLocation() {
-    if (pickupSelect.value === "Other location") {
-        return pickupOtherInput.value.trim();
-    }
-
-    return pickupSelect.value;
-}
-
-function getDestinationLocation() {
-    if (destinationSelect.value === "Other location") {
-        return destinationOtherInput.value.trim();
-    }
-
-    if (destinationSelect.value === "same_as_pickup") {
-        return getPickupLocation();
-    }
-
-    return destinationSelect.value;
-}
-
-/* ==========================================
-   UPDATE PRICES WHEN OPTIONS CHANGE
-========================================== */
-
-packageSelect.addEventListener("change", calculatePrice);
-passengersSelect.addEventListener("change", calculatePrice);
-warmDrinksCheckbox.addEventListener("change", calculatePrice);
-photoStopCheckbox.addEventListener("change", calculatePrice);
-
-calculatePrice();
-
-/* ==========================================
-   DATE VALIDATION
-========================================== */
-
-dateInput.addEventListener("change", function () {
-    const selectedDate = dateInput.value;
-
-    if (!selectedDate) {
-        availabilityMessage.textContent =
-            "Choose a date to check available pickup times.";
-        return;
-    }
-
-    const todayString = getLocalDateString(new Date());
-
-    if (selectedDate < todayString) {
-        availabilityMessage.textContent =
-            "Please select today or a future date.";
-
-        dateInput.value = "";
-        return;
-    }
-
-    availabilityMessage.textContent =
-        "Pickup times are offered every hour from 06:00 to 22:00. " +
-        "Availability must be confirmed by the server.";
-});
-
-/* ==========================================
-   VALIDATE SELECTED DATE AND TIME
-========================================== */
-
-function validateSelectedDateAndTime() {
-    const selectedDate = dateInput.value;
-    const selectedTime = timeSelect.value;
-
-    if (!selectedDate || !selectedTime) {
-        alert("Please select your tour date and pickup time.");
-        return false;
-    }
-
-    const selectedDateTime = new Date(
-        selectedDate + "T" + selectedTime + ":00"
-    );
-
-    if (selectedDateTime.getTime() <= Date.now()) {
-        alert("Please choose a future pickup date and time.");
-        return false;
-    }
-
-    return true;
-}
-
-/* ==========================================
-   SAVE BOOKING SAFELY
-========================================== */
-
-function saveBookingToCart(booking) {
-    let cart = [];
-
-    try {
-        const existingCart = localStorage.getItem("icelandTransferCart");
-
-        if (existingCart) {
-            const parsedCart = JSON.parse(existingCart);
-
-            if (Array.isArray(parsedCart)) {
-                cart = parsedCart;
-            }
-        }
-
-        // Create a unique ID for this booking item.
-        booking.id = booking.id || (
-            "booking_" +
-            Date.now() +
-            "_" +
-            Math.random().toString(36).slice(2, 9)
-        );
-
-        // Keep the booking compatible with the overview page.
-        booking.service = booking.service || booking.package_name;
-        booking.service_name = booking.service_name || booking.package_name;
-        booking.total = booking.price;
-        booking.unitPrice = booking.price;
-        booking.estimatedPrice = booking.price;
-
-        // Add this booking without removing existing cart items.
-        cart.push(booking);
-
-        localStorage.setItem(
-            "icelandTransferCart",
-            JSON.stringify(cart)
-        );
-
-        // Keep a session copy for compatibility with the existing flow.
-        sessionStorage.setItem(
-            "icelandTransferPendingBooking",
-            JSON.stringify(booking)
-        );
-
-        sessionStorage.setItem(
-            "bookingData",
-            JSON.stringify(booking)
-        );
-
-        sessionStorage.setItem(
-            "icelandTransferBooking",
-            JSON.stringify(booking)
-        );
-
-        return true;
-
-    } catch (error) {
-        console.error("Unable to save booking:", error);
-
-        alert(
-            "Your browser could not save this booking. " +
-            "Please check your browser storage settings and try again."
-        );
-
-        return false;
-    }
-}
-
-/* ==========================================
-   SUBMIT BOOKING
-========================================== */
-
-form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const fullName = document.getElementById("fullName").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const notes = document.getElementById("notes").value.trim();
-
-    const selectedPackage = packages[packageSelect.value];
-
-    if (!selectedPackage) {
-        alert("Please choose a tour package.");
-        return;
-    }
-
-    if (!validateSelectedDateAndTime()) {
-        return;
-    }
-
-    const passengerCount = Number(passengersSelect.value);
-
-    if (
-        !Number.isInteger(passengerCount) ||
-        passengerCount < 1 ||
-        passengerCount > selectedPackage.maxPassengers
-    ) {
-        alert(
-            "The selected package allows up to " +
-            selectedPackage.maxPassengers +
-            " passengers."
-        );
-        return;
-    }
-
-    const pickupLocation = getPickupLocation();
-    const destinationLocation = getDestinationLocation();
-
-    if (!pickupLocation || !destinationLocation) {
-        alert("Please enter your pickup and drop-off locations.");
-        return;
-    }
-
-    if (
-        pickupLocation.toLowerCase() ===
-        destinationLocation.toLowerCase()
-    ) {
-        const confirmed = confirm(
-            "Your pickup and drop-off locations are the same. Continue?"
-        );
-
-        if (!confirmed) return;
-    }
-
-    const priceDetails = calculatePrice();
-
-    if (!priceDetails) {
-        alert("Unable to calculate the tour price.");
-        return;
-    }
-
-    const extras = [];
-
-    if (warmDrinksCheckbox.checked) {
-        extras.push({
-            id: "warm_drinks",
-            name: "Warm Drinks Stop",
-            price: WARM_DRINKS_PRICE_PER_PASSENGER,
-            quantity: passengerCount,
-            total: WARM_DRINKS_PRICE_PER_PASSENGER * passengerCount
-        });
-    }
-
-    if (photoStopCheckbox.checked) {
-        extras.push({
-            id: "photo_stop",
-            name: "Extended Photo Stop",
-            price: PHOTO_STOP_PRICE,
-            quantity: 1,
-            total: PHOTO_STOP_PRICE
-        });
-    }
-
-    const booking = {
-        id: "booking_" + Date.now(),
-
-        service_type: "northern_lights_tour",
-        service: selectedPackage.name,
-        service_name: selectedPackage.name,
-
-        package_type: packageSelect.value,
-        package_name: selectedPackage.name,
-
-        full_name: fullName,
-        email: email,
-        phone: phone,
-
-        pickup_location: pickupLocation,
-        pickup: pickupLocation,
-
-        destination: destinationLocation,
-        dropoff_location: destinationLocation,
-
-        pickup_date: dateInput.value,
-        date: dateInput.value,
-
-        pickup_time: timeSelect.value,
-        time: timeSelect.value,
-
-        passengers: passengerCount,
-        luggage: 0,
-        flight_number: "",
-
-        special_requests: notes,
-        notes: notes,
-
-        price: priceDetails.totalPrice,
-        total: priceDetails.totalPrice,
-        unitPrice: priceDetails.totalPrice,
-        estimatedPrice: priceDetails.totalPrice,
-
-        package_price: priceDetails.packagePrice,
-        extras_total: priceDetails.extrasPrice,
-        addons: extras,
-        extras: extras,
-
-        service_duration_hours: selectedPackage.durationHours,
-        selected_stops: extras.map(extra => extra.id),
-
-        status: "pending",
-        created_at: new Date().toISOString()
-    };
-
-    submitButton.disabled = true;
-    submitButton.textContent = "ADDING BOOKING...";
-
-    const saved = saveBookingToCart(booking);
-
-    if (!saved) {
-        submitButton.disabled = false;
-        submitButton.textContent = "ADD TO BOOKING";
-        return;
-    }
-
-    // Navigate only after the cart has been saved successfully.
-    window.location.href = "order-overview.html";
-});
+updateChildrenFields();updateLocationFields();updateVehicleAndPassengers();
+setTimeOptions([],"Choose a date to check available pickup times.");
 </script>
-
 </body>
 </html>

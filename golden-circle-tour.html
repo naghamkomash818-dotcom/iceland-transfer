@@ -17,7 +17,6 @@
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -86,8 +85,16 @@ nav a:hover { color: var(--gold); }
 }
 
 .hero-content { max-width: 750px; }
-.hero h1 { font-size: clamp(32px, 5vw, 52px); margin: 0 0 15px; }
-.hero p { font-size: 17px; margin: 0; }
+
+.hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    margin: 0 0 15px;
+}
+
+.hero p {
+    font-size: 17px;
+    margin: 0;
+}
 
 .container {
     max-width: 1100px;
@@ -101,58 +108,12 @@ nav a:hover { color: var(--gold); }
     margin-bottom: 30px;
 }
 
-.section-title h2 { font-size: 30px; margin-bottom: 8px; }
+.section-title h2 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
 .section-title p { color: #70766d; }
-
-.packages {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
-}
-
-.package {
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    background: white;
-    position: relative;
-    transition: transform .2s, box-shadow .2s;
-}
-
-.package:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 28px #0000000c;
-}
-
-.package.selected {
-    border: 2px solid var(--green);
-    background: #f8faf6;
-}
-
-.package h3 { color: var(--deep-green); margin-top: 0; }
-.package-price { color: var(--green); font-size: 25px; font-weight: bold; }
-.package ul { padding-left: 20px; font-size: 14px; }
-
-.package button {
-    width: 100%;
-    border: 0;
-    background: var(--green);
-    color: white;
-    padding: 12px;
-    border-radius: 7px;
-    margin-top: 10px;
-}
-
-.package button:hover { background: var(--deep-green); }
-
-.included-stops {
-    background: var(--beige);
-    border-radius: 12px;
-    padding: 22px;
-    margin: 30px 0;
-}
-
-.included-stops h3 { color: var(--deep-green); margin-top: 0; }
 
 .booking-card {
     background: white;
@@ -168,7 +129,12 @@ nav a:hover { color: var(--gold); }
     gap: 18px;
 }
 
-.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
 .form-group.full { grid-column: 1 / -1; }
 
 label {
@@ -192,35 +158,14 @@ input:focus, select:focus, textarea:focus {
     border-color: var(--green);
 }
 
-textarea { min-height: 95px; resize: vertical; }
-
-.hint { font-size: 12px; color: #747970; }
-
-.addons {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+textarea {
+    min-height: 95px;
+    resize: vertical;
 }
 
-.addon {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    background: #faf9f5;
-    border: 1px solid var(--border);
-    padding: 12px;
-    border-radius: 8px;
-}
-
-.addon input { width: auto; margin-top: 5px; }
-.addon label { font-weight: normal; cursor: pointer; }
-.addon strong { display: block; color: var(--green); }
-
-.custom-stop {
-    margin-top: 15px;
-    padding: 15px;
-    border: 1px dashed var(--gold);
-    border-radius: 8px;
+.hint {
+    font-size: 12px;
+    color: #747970;
 }
 
 .estimate {
@@ -257,7 +202,10 @@ textarea { min-height: 95px; resize: vertical; }
 
 .primary-button:hover { background: var(--deep-green); }
 
-.primary-button:disabled { opacity: .6; cursor: wait; }
+.primary-button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
 
 .secondary-button {
     border: 1px solid var(--green);
@@ -291,8 +239,17 @@ textarea { min-height: 95px; resize: vertical; }
     display: none;
 }
 
-.notice.success { display: block; background: #e8f3e7; color: #234a2a; }
-.notice.error { display: block; background: #f9e9e7; color: #8b2828; }
+.notice.success {
+    display: block;
+    background: #e8f3e7;
+    color: #234a2a;
+}
+
+.notice.error {
+    display: block;
+    background: #f9e9e7;
+    color: #8b2828;
+}
 
 #invoiceSection { display: none; }
 
@@ -327,10 +284,29 @@ footer {
     margin-top: 60px;
 }
 
-footer a { color: #e4d1a5; text-decoration: none; }
+footer a {
+    color: #e4d1a5;
+    text-decoration: none;
+}
+
+.child-age-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.child-age-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
 @media (max-width: 800px) {
-    .packages, .form-grid, .addons { grid-template-columns: 1fr; }
+    .form-grid, .child-age-list {
+        grid-template-columns: 1fr;
+    }
+
     .form-group.full { grid-column: auto; }
     .booking-card { padding: 18px; }
     nav { gap: 12px; }
@@ -339,7 +315,8 @@ footer a { color: #e4d1a5; text-decoration: none; }
 @media print {
     body * { visibility: hidden !important; }
 
-    #invoiceSection, #invoiceSection * {
+    #invoiceSection,
+    #invoiceSection * {
         visibility: visible !important;
     }
 
@@ -386,67 +363,10 @@ footer a { color: #e4d1a5; text-decoration: none; }
 
 <main class="container">
 
-<section>
-    <div class="section-title">
-        <h2>Choose Your Tour Package</h2>
-        <p>Select the package that suits your journey.</p>
-    </div>
-
-    <div class="packages">
-        <article class="package selected" id="card-classic">
-            <h3>Classic Tour</h3>
-            <div class="package-price">80,400 ISK</div>
-            <p>For up to 3 passengers.</p>
-            <ul>
-                <li>Private transportation</li>
-                <li>Þingvellir National Park</li>
-                <li>Geysir Geothermal Area</li>
-                <li>Gullfoss Waterfall</li>
-            </ul>
-            <button type="button" onclick="choosePackage('classic')">Select Classic</button>
-        </article>
-
-        <article class="package" id="card-extended">
-            <h3>Extended Tour</h3>
-            <div class="package-price">128,900 ISK</div>
-            <p>For up to 7 passengers.</p>
-            <ul>
-                <li>Private transportation</li>
-                <li>Three main Golden Circle stops</li>
-                <li>More room for your group</li>
-                <li>Optional additional stops</li>
-            </ul>
-            <button type="button" onclick="choosePackage('extended')">Select Extended</button>
-        </article>
-
-        <article class="package" id="card-premium">
-            <h3>Premium Group</h3>
-            <div class="package-price">225,000 ISK</div>
-            <p>For up to 20 passengers.</p>
-            <ul>
-                <li>Private group transportation</li>
-                <li>Three main Golden Circle stops</li>
-                <li>Ideal for larger groups</li>
-                <li>Optional additional stops</li>
-            </ul>
-            <button type="button" onclick="choosePackage('premium')">Select Premium</button>
-        </article>
-    </div>
-</section>
-
-<section class="included-stops">
-    <h3>Included in Every Package</h3>
-    <ul>
-        <li>Þingvellir National Park</li>
-        <li>Geysir Geothermal Area</li>
-        <li>Gullfoss Waterfall</li>
-    </ul>
-</section>
-
 <section id="booking">
     <div class="section-title">
         <h2>Book Your Golden Circle Tour</h2>
-        <p>Enter your details and choose your preferred stops.</p>
+        <p>Enter your details to arrange your Golden Circle journey.</p>
     </div>
 
     <div class="booking-card">
@@ -473,13 +393,21 @@ footer a { color: #e4d1a5; text-decoration: none; }
                         autocomplete="tel" required maxlength="40">
                 </div>
 
+                <input type="hidden" id="packageType"
+                    name="package_type" value="classic">
+
                 <div class="form-group">
-                    <label for="packageType">Tour Package *</label>
-                    <select id="packageType" name="package_type" required>
-                        <option value="classic">Classic Tour — 80,400 ISK</option>
-                        <option value="extended">Extended Tour — 128,900 ISK</option>
-                        <option value="premium">Premium Group — 225,000 ISK</option>
+                    <label for="vehicleType">Vehicle Type *</label>
+                    <select id="vehicleType" name="vehicle_type" required>
+                        <option value="sedan">Sedan (up to 4 passengers)</option>
+                        <option value="mpv4">MPV4 (up to 4 passengers)</option>
+                        <option value="van">Van (up to 8 passengers)</option>
+                        <option value="vip_van">VIP VAN (up to 5 passengers)</option>
                     </select>
+                    <span class="hint">
+                        Choose a vehicle to see its estimated price below.
+                        The server confirms the final price when you book.
+                    </span>
                 </div>
 
                 <div class="form-group">
@@ -489,31 +417,25 @@ footer a { color: #e4d1a5; text-decoration: none; }
                         <option value="Reykjavík">Reykjavík</option>
                         <option value="Kópavogur">Kópavogur</option>
                         <option value="Hafnarfjörður">Hafnarfjörður</option>
-                        <option value="Garðabær">Garðabær</option>
                         <option value="Mosfellsbær">Mosfellsbær</option>
-                        <option value="Seltjarnarnes">Seltjarnarnes</option>
-                        <option value="Keflavík International Airport (KEF)">Keflavík International Airport (KEF)</option>
-                        <option value="Keflavík">Keflavík</option>
-                        <option value="Reykjanesbær">Reykjanesbær</option>
-                        <option value="Blue Lagoon">Blue Lagoon</option>
                         <option value="Selfoss">Selfoss</option>
                         <option value="Hveragerði">Hveragerði</option>
-                        <option value="Hella">Hella</option>
-                        <option value="Hvolsvöllur">Hvolsvöllur</option>
-                        <option value="Vík">Vík</option>
-                        <option value="Höfn">Höfn</option>
-                        <option value="Borgarnes">Borgarnes</option>
-                        <option value="Stykkishólmur">Stykkishólmur</option>
-                        <option value="Akureyri">Akureyri</option>
-                        <option value="Egilsstaðir">Egilsstaðir</option>
-                        <option value="Other location in Iceland">Other location in Iceland</option>
+                        <option value="Golden Circle area">Golden Circle area</option>
+                        <option value="Other pickup location">Other (enter location)</option>
                     </select>
+                </div>
+
+                <div class="form-group" id="otherPickupGroup" hidden>
+                    <label for="otherPickupLocation">Enter Pickup Location *</label>
+                    <input type="text" id="otherPickupLocation"
+                        maxlength="200" placeholder="Enter the pickup location">
                 </div>
 
                 <div class="form-group">
                     <label for="destination">Destination *</label>
                     <select id="destination" name="destination" required>
-                        <option value="Golden Circle Tour">Golden Circle Tour</option>
+                        <option value="">Choose Golden Circle destination</option>
+                        <option value="Golden Circle Tour">Golden Circle Tour (main route)</option>
                         <option value="Þingvellir National Park">Þingvellir National Park</option>
                         <option value="Geysir Geothermal Area">Geysir Geothermal Area</option>
                         <option value="Gullfoss Waterfall">Gullfoss Waterfall</option>
@@ -523,22 +445,30 @@ footer a { color: #e4d1a5; text-decoration: none; }
                         <option value="Skálholt Cathedral">Skálholt Cathedral</option>
                         <option value="Laugarvatn Fontana">Laugarvatn Fontana</option>
                         <option value="Brúarfoss Waterfall">Brúarfoss Waterfall</option>
-                        <option value="Keflavík International Airport (KEF)">Keflavík International Airport (KEF)</option>
-                        <option value="Blue Lagoon">Blue Lagoon</option>
-                        <option value="South Coast">South Coast</option>
-                        <option value="Reynisfjara Black Sand Beach">Reynisfjara Black Sand Beach</option>
-                        <option value="Skógafoss Waterfall">Skógafoss Waterfall</option>
-                        <option value="Seljalandsfoss Waterfall">Seljalandsfoss Waterfall</option>
-                        <option value="Jökulsárlón Glacier Lagoon">Jökulsárlón Glacier Lagoon</option>
-                        <option value="Snæfellsnes Peninsula">Snæfellsnes Peninsula</option>
-                        <option value="Akureyri">Akureyri</option>
-                        <option value="Other destination in Iceland">Other destination in Iceland</option>
+                        <option value="Other Golden Circle location">Other (enter location)</option>
                     </select>
                 </div>
 
+                <div class="form-group" id="otherDestinationGroup" hidden>
+                    <label for="otherDestination">Enter Destination *</label>
+                    <input type="text" id="otherDestination"
+                        maxlength="200"
+                        placeholder="Enter a location in or near the Golden Circle">
+                </div>
+
+                <div class="form-group">
+                    <label for="countryOfOrigin">
+                        Which country are you travelling from? *
+                    </label>
+                    <input id="countryOfOrigin" name="country_of_origin"
+                        type="text" required maxlength="100"
+                        autocomplete="country-name"
+                        placeholder="e.g. France, Germany, United States">
+                </div>
                 <div class="form-group">
                     <label for="tourDate">Tour Date *</label>
-                    <input id="tourDate" name="pickup_date" type="date" required>
+                    <input id="tourDate" name="pickup_date"
+                        type="date" required>
                 </div>
 
                 <div class="form-group">
@@ -580,6 +510,10 @@ footer a { color: #e4d1a5; text-decoration: none; }
 
                 <div class="form-group">
                     <label for="luggage">Number of Luggage Items</label>
+                    <span class="hint">
+                        How many suitcases or bags will you bring in total?
+                        This is not the number of passengers.
+                    </span>
                     <select id="luggage" name="luggage">
                         <option value="0">0</option>
                         <option value="1">1</option>
@@ -606,87 +540,64 @@ footer a { color: #e4d1a5; text-decoration: none; }
                 </div>
 
                 <div class="form-group full">
-                    <label for="flightNumber">Flight Number (if applicable)</label>
-                    <input id="flightNumber" name="flight_number" type="text"
-                        maxlength="40" placeholder="e.g. FI123">
+                    <label for="travellingWithChildren">
+                        Are you travelling with children? *
+                    </label>
+                    <select id="travellingWithChildren"
+                        name="travelling_with_children" required>
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
                 </div>
-            </div>
 
-            <div class="form-group" style="margin-top:28px">
-                <label>Optional Stops</label>
-
-                <div class="addons">
-                    <div class="addon">
-                        <input type="checkbox" id="stopKerid" class="paid-stop"
-                            value="kerid" data-name="Kerið Crater"
-                            data-price="1500" data-type="person">
-                        <label for="stopKerid">
-                            Kerið Crater
-                            <strong>1,500 ISK per passenger</strong>
-                        </label>
-                    </div>
-
-                    <div class="addon">
-                        <input type="checkbox" id="stopFridheimar" class="paid-stop"
-                            value="fridheimar" data-name="Friðheimar Greenhouse"
-                            data-price="2500" data-type="person">
-                        <label for="stopFridheimar">
-                            Friðheimar Greenhouse
-                            <strong>2,500 ISK per passenger</strong>
-                        </label>
-                    </div>
-
-                    <div class="addon">
-                        <input type="checkbox" id="stopSecretLagoon" class="paid-stop"
-                            value="secret_lagoon" data-name="Secret Lagoon"
-                            data-price="12000" data-type="person">
-                        <label for="stopSecretLagoon">
-                            Secret Lagoon
-                            <strong>12,000 ISK per passenger</strong>
-                        </label>
-                    </div>
-
-                    <div class="addon">
-                        <input type="checkbox" id="stopSkalholt" class="paid-stop"
-                            value="skalholt" data-name="Skálholt Cathedral"
-                            data-price="3000" data-type="group">
-                        <label for="stopSkalholt">
-                            Skálholt Cathedral
-                            <strong>3,000 ISK per group</strong>
-                        </label>
-                    </div>
-
-                    <div class="addon">
-                        <input type="checkbox" id="stopFontana" class="paid-stop"
-                            value="fontana" data-name="Laugarvatn Fontana"
-                            data-price="8000" data-type="person">
-                        <label for="stopFontana">
-                            Laugarvatn Fontana
-                            <strong>8,000 ISK per passenger</strong>
-                        </label>
-                    </div>
-
-                    <div class="addon">
-                        <input type="checkbox" id="stopBruarfoss" class="paid-stop"
-                            value="bruarfoss" data-name="Brúarfoss Waterfall"
-                            data-price="5000" data-type="group">
-                        <label for="stopBruarfoss">
-                            Brúarfoss Waterfall
-                            <strong>5,000 ISK per group</strong>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="custom-stop">
-                <div class="form-group">
-                    <label for="otherStop">Request Another Stop (Optional)</label>
-                    <input type="text" id="otherStop" name="other_stop"
-                        maxlength="200" placeholder="Enter the name of another stop">
+                <div class="form-group full"
+                    id="childrenCountGroup" hidden>
+                    <label for="childrenCount">Number of Children *</label>
+                    <select id="childrenCount" name="children_count">
+                        <option value="1">1 child</option>
+                        <option value="2">2 children</option>
+                        <option value="3">3 children</option>
+                        <option value="4">4 children</option>
+                        <option value="5">5 children</option>
+                        <option value="6">6 children</option>
+                        <option value="7">7 children</option>
+                        <option value="8">8 children</option>
+                        <option value="9">9 children</option>
+                        <option value="10">10 children</option>
+                        <option value="11">11 children</option>
+                        <option value="12">12 children</option>
+                        <option value="13">13 children</option>
+                        <option value="14">14 children</option>
+                        <option value="15">15 children</option>
+                        <option value="16">16 children</option>
+                        <option value="17">17 children</option>
+                        <option value="18">18 children</option>
+                        <option value="19">19 children</option>
+                    </select>
                     <span class="hint">
-                        Additional custom stops require price confirmation.
+                        Children are included in the total passenger count.
                     </span>
                 </div>
+
+                <div class="form-group full"
+                    id="childrenAgesGroup" hidden>
+                    <label>Each Child's Age *</label>
+                    <div id="childrenAges" class="child-age-list"></div>
+                    <span class="hint">
+                        Choose ages from 0 to 17.
+                        Age 0 means under 1 year old.
+                    </span>
+                </div>
+
+                <div class="form-group full">
+                    <label for="flightNumber">
+                        Flight Number (if applicable)
+                    </label>
+                    <input id="flightNumber" name="flight_number"
+                        type="text" maxlength="40"
+                        placeholder="e.g. FI123">
+                </div>
+
             </div>
 
             <div class="form-group" style="margin-top:20px">
@@ -696,34 +607,30 @@ footer a { color: #e4d1a5; text-decoration: none; }
                     placeholder="Any additional information for your driver"></textarea>
             </div>
 
-            <div class="estimate">
+            <div class="estimate" id="priceEstimate" hidden>
                 <div class="estimate-row">
-                    <span>Selected package</span>
-                    <strong id="estimatePackage">Classic Tour</strong>
+                    <span>Selected vehicle</span>
+                    <strong id="estimateVehicle">—</strong>
                 </div>
-                <div class="estimate-row">
-                    <span>Package price</span>
-                    <strong id="estimateBase">80,400 ISK</strong>
-                </div>
-                <div class="estimate-row">
-                    <span>Optional stops</span>
-                    <strong id="estimateAddons">0 ISK</strong>
-                </div>
+
                 <div class="estimate-row estimate-total">
-                    <span>Estimated total</span>
-                    <strong id="estimateTotal">80,400 ISK</strong>
+                    <span>Estimated vehicle price</span>
+                    <strong id="estimateTotal">—</strong>
                 </div>
+
                 <p class="hint">
-                    This is an estimate. The server determines the final
-                    booking price. Custom stops may require a separate quote.
+                    This is an estimate. The final price is confirmed
+                    by the server when you submit your booking.
                 </p>
             </div>
 
             <div class="form-actions">
-                <button type="submit" id="submitBooking" class="primary-button">
+                <button type="submit" id="submitBooking"
+                    class="primary-button">
                     Check Availability &amp; Book
                 </button>
             </div>
+
         </form>
     </div>
 </section>
@@ -741,22 +648,95 @@ footer a { color: #e4d1a5; text-decoration: none; }
 
         <h3>Booking Confirmation</h3>
 
-        <div class="invoice-line"><span>Booking Reference</span><strong id="invReference">—</strong></div>
-        <div class="invoice-line"><span>Booking Status</span><strong id="invStatus">Confirmed</strong></div>
-        <div class="invoice-line"><span>Customer</span><strong id="invName">—</strong></div>
-        <div class="invoice-line"><span>Email</span><strong id="invEmail">—</strong></div>
-        <div class="invoice-line"><span>Phone</span><strong id="invPhone">—</strong></div>
-        <div class="invoice-line"><span>Pickup</span><strong id="invPickup">—</strong></div>
-        <div class="invoice-line"><span>Destination</span><strong id="invDestination">—</strong></div>
-        <div class="invoice-line"><span>Date</span><strong id="invDate">—</strong></div>
-        <div class="invoice-line"><span>Time</span><strong id="invTime">—</strong></div>
-        <div class="invoice-line"><span>Passengers</span><strong id="invPassengers">—</strong></div>
-        <div class="invoice-line"><span>Luggage</span><strong id="invLuggage">—</strong></div>
-        <div class="invoice-line"><span>Package</span><strong id="invPackage">—</strong></div>
-        <div class="invoice-line"><span>Optional Stops</span><strong id="invStops">None</strong></div>
-        <div class="invoice-line"><span>Total Price</span><strong id="invTotal">—</strong></div>
-        <div class="invoice-line"><span>Flight Number</span><strong id="invFlight">—</strong></div>
-        <div class="invoice-line"><span>Special Requests</span><strong id="invRequests">None</strong></div>
+        <div class="invoice-line">
+            <span>Booking Reference</span>
+            <strong id="invReference">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Booking Status</span>
+            <strong id="invStatus">Submitted</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Customer</span>
+            <strong id="invName">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Email</span>
+            <strong id="invEmail">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Phone</span>
+            <strong id="invPhone">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Travelling from</span>
+            <strong id="invCountry">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Pickup</span>
+            <strong id="invPickup">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Destination</span>
+            <strong id="invDestination">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Date</span>
+            <strong id="invDate">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Time</span>
+            <strong id="invTime">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Passengers</span>
+            <strong id="invPassengers">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Luggage</span>
+            <strong id="invLuggage">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Vehicle</span>
+            <strong id="invVehicle">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Travelling with children</span>
+            <strong id="invChildren">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Children's ages</span>
+            <strong id="invChildrenAges">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Total Price</span>
+            <strong id="invTotal">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Flight Number</span>
+            <strong id="invFlight">—</strong>
+        </div>
+
+        <div class="invoice-line">
+            <span>Special Requests</span>
+            <strong id="invRequests">None</strong>
+        </div>
 
         <p id="invoiceMessage" style="margin-top:20px"></p>
 
@@ -767,15 +747,19 @@ footer a { color: #e4d1a5; text-decoration: none; }
     </div>
 
     <div class="invoice-actions no-print">
-        <button type="button" class="primary-button" onclick="saveInvoicePDF()">
+        <button type="button" class="primary-button"
+            onclick="saveInvoicePDF()">
             Save Invoice as PDF
         </button>
-        <button type="button" class="danger-button" id="cancelBookingButton">
+
+        <button type="button" class="danger-button"
+            id="cancelBookingButton">
             Cancel Booking
         </button>
     </div>
 
-    <div id="invoiceNotice" class="notice" role="status" aria-live="polite"></div>
+    <div id="invoiceNotice" class="notice"
+        role="status" aria-live="polite"></div>
 </section>
 
 </main>
@@ -784,90 +768,93 @@ footer a { color: #e4d1a5; text-decoration: none; }
     <p><strong>ICELAND TRANSFER</strong></p>
     <p>Your Journey, Our Drive</p>
     <p>
-        <a href="contact.html">Contact Us</a>
-        &nbsp; | &nbsp;
-        <a href="https://wa.me/3548333707">WhatsApp: +354 833 3707</a>
+        <a href="contact.html">Contact Us</a> |
+        <a href="https://wa.me/3548333707">
+            WhatsApp: +354 833 3707
+        </a>
     </p>
 </footer>
-
 <script>
 "use strict";
 
-/* ================================
-   SERVER CONNECTION
-================================ */
-
 const API_BASE = "https://iceland-transfer-server.onrender.com";
 
-const PACKAGE_PRICES = {
-    classic: 80400,
-    extended: 128900,
-    premium: 225000
-};
-
-const PACKAGE_NAMES = {
-    classic: "Classic Tour",
-    extended: "Extended Tour",
-    premium: "Premium Group"
-};
-
-const PACKAGE_CAPACITY = {
-    classic: 3,
-    extended: 7,
-    premium: 20
-};
-
-const STOP_NAMES = {
-    kerid: "Kerið Crater",
-    fridheimar: "Friðheimar Greenhouse",
-    secret_lagoon: "Secret Lagoon",
-    skalholt: "Skálholt Cathedral",
-    fontana: "Laugarvatn Fontana",
-    bruarfoss: "Brúarfoss Waterfall",
-    other: "Other requested stop"
+const VEHICLES = {
+    sedan: {
+        name: "Sedan",
+        price: 17900,
+        capacity: 4
+    },
+    mpv4: {
+        name: "MPV4",
+        price: 21900,
+        capacity: 4
+    },
+    van: {
+        name: "Van",
+        price: 26900,
+        capacity: 8
+    },
+    vip_van: {
+        name: "VIP VAN",
+        price: 32000,
+        capacity: 5
+    }
 };
 
 const form = document.getElementById("bookingForm");
-const packageSelect = document.getElementById("packageType");
+const vehicleSelect = document.getElementById("vehicleType");
 const passengersSelect = document.getElementById("passengers");
 const dateInput = document.getElementById("tourDate");
 const timeSelect = document.getElementById("pickupTime");
 const submitButton = document.getElementById("submitBooking");
 const cancelButton = document.getElementById("cancelBookingButton");
 
+const childrenTravelSelect =
+    document.getElementById("travellingWithChildren");
+
+const childrenCountSelect =
+    document.getElementById("childrenCount");
+
+const childrenCountGroup =
+    document.getElementById("childrenCountGroup");
+
+const childrenAgesGroup =
+    document.getElementById("childrenAgesGroup");
+
+const childrenAgesContainer =
+    document.getElementById("childrenAges");
+
 let latestBooking = null;
 let cancellationToken = null;
 let cancellationUrl = null;
 
-
-/* ================================
-   DATE AND TIME
-================================ */
+/* Today's date */
 
 function getTodayLocalDate() {
     const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
+    return (
+        now.getFullYear() + "-" +
+        String(now.getMonth() + 1).padStart(2, "0") + "-" +
+        String(now.getDate()).padStart(2, "0")
+    );
 }
 
 dateInput.min = getTodayLocalDate();
 
-/*
-  The current server normalizes booking times to whole hours.
-  Therefore, this page offers hourly options from 06:00 to 22:00.
-*/
+/* Available pickup times */
+
 function populatePickupTimes() {
     timeSelect.innerHTML =
         '<option value="">Choose pickup time</option>';
 
     for (let hour = 6; hour <= 22; hour++) {
-        const hh = String(hour).padStart(2, "0");
-        const time = `${hh}:00`;
+        const time =
+            String(hour).padStart(2, "0") + ":00";
 
         const option = document.createElement("option");
+
         option.value = time;
         option.textContent = time;
 
@@ -877,10 +864,7 @@ function populatePickupTimes() {
 
 populatePickupTimes();
 
-
-/* ================================
-   NOTICES
-================================ */
+/* Notifications */
 
 function showNotice(elementId, message, type) {
     const element = document.getElementById(elementId);
@@ -903,130 +887,172 @@ function clearNotice(elementId) {
     element.style.display = "none";
 }
 
+/* Vehicle capacity */
 
-/* ================================
-   PACKAGE SELECTION
-================================ */
-
-function choosePackage(packageType) {
-    if (!Object.prototype.hasOwnProperty.call(PACKAGE_PRICES, packageType)) {
-        return;
-    }
-
-    packageSelect.value = packageType;
-
-    document.querySelectorAll(".package").forEach(card => {
-        card.classList.remove("selected");
-    });
-
-    const selectedCard = document.getElementById("card-" + packageType);
-
-    if (selectedCard) {
-        selectedCard.classList.add("selected");
-    }
-
-    updatePassengerOptions();
-    updateEstimate();
-
-    document.getElementById("booking").scrollIntoView({
-        behavior: "smooth"
-    });
+function getPassengerCapacity() {
+    return VEHICLES[vehicleSelect.value]?.capacity || 20;
 }
 
 function updatePassengerOptions() {
-    const packageType = packageSelect.value;
-    const capacity = PACKAGE_CAPACITY[packageType] || 20;
-    const currentPassengers = Number(passengersSelect.value) || 1;
+    const capacity = getPassengerCapacity();
 
     Array.from(passengersSelect.options).forEach(option => {
         const count = Number(option.value);
+
         option.disabled = count > capacity;
         option.hidden = count > capacity;
     });
 
-    if (currentPassengers > capacity) {
+    if (Number(passengersSelect.value) > capacity) {
         passengersSelect.value = String(capacity);
     }
 
     updateEstimate();
 }
 
-packageSelect.addEventListener("change", () => {
-    choosePackage(packageSelect.value);
-});
+vehicleSelect.addEventListener(
+    "change",
+    updatePassengerOptions
+);
 
-
-/* ================================
-   PRICE ESTIMATE
-================================ */
+/* Estimated vehicle price */
 
 function formatISK(amount) {
     return Math.round(amount).toLocaleString("en-US") + " ISK";
 }
 
-function getSelectedStops() {
-    return Array.from(
-        document.querySelectorAll(".paid-stop:checked")
-    ).map(checkbox => ({
-        id: checkbox.value,
-        name: checkbox.dataset.name,
-        price: Number(checkbox.dataset.price),
-        type: checkbox.dataset.type
-    }));
-}
-
-function getEstimatedAddonTotal() {
-    const passengers = Number(passengersSelect.value) || 1;
-
-    return getSelectedStops().reduce((total, stop) => {
-        if (stop.type === "person") {
-            return total + stop.price * passengers;
-        }
-
-        return total + stop.price;
-    }, 0);
-}
-
-function getEstimatedTotal() {
-    const packagePrice = PACKAGE_PRICES[packageSelect.value] || 0;
-    return packagePrice + getEstimatedAddonTotal();
-}
-
 function updateEstimate() {
-    const packageType = packageSelect.value;
-    const basePrice = PACKAGE_PRICES[packageType] || 0;
-    const addonPrice = getEstimatedAddonTotal();
+    const vehicle = VEHICLES[vehicleSelect.value];
 
-    document.getElementById("estimatePackage").textContent =
-        PACKAGE_NAMES[packageType] || "Tour Package";
+    const estimateBox =
+        document.getElementById("priceEstimate");
 
-    document.getElementById("estimateBase").textContent =
-        formatISK(basePrice);
+    if (!vehicle) {
+        estimateBox.hidden = true;
+        return;
+    }
 
-    document.getElementById("estimateAddons").textContent =
-        formatISK(addonPrice);
+    document.getElementById("estimateVehicle").textContent =
+        vehicle.name;
 
     document.getElementById("estimateTotal").textContent =
-        formatISK(basePrice + addonPrice);
+        formatISK(vehicle.price);
+
+    estimateBox.hidden = false;
 }
 
-document.querySelectorAll(".paid-stop").forEach(checkbox => {
-    checkbox.addEventListener("change", updateEstimate);
-});
-
-passengersSelect.addEventListener("change", updateEstimate);
+passengersSelect.addEventListener(
+    "change",
+    updateEstimate
+);
 
 updatePassengerOptions();
-updateEstimate();
 
+/* Other pickup and destination fields */
 
-/* ================================
-   SERVER REQUEST HELPER
-================================ */
+function setupOtherLocation(selectId, groupId, inputId) {
+    const select = document.getElementById(selectId);
+    const group = document.getElementById(groupId);
+    const input = document.getElementById(inputId);
+
+    function update() {
+        const isOther = select.value.startsWith("Other ");
+
+        group.hidden = !isOther;
+        input.required = isOther;
+    }
+
+    select.addEventListener("change", update);
+
+    update();
+}
+
+setupOtherLocation(
+    "pickupLocation",
+    "otherPickupGroup",
+    "otherPickupLocation"
+);
+
+setupOtherLocation(
+    "destination",
+    "otherDestinationGroup",
+    "otherDestination"
+);
+
+/* Children's ages */
+
+function renderChildAgeInputs() {
+    const count = Number(childrenCountSelect.value) || 0;
+
+    childrenAgesContainer.innerHTML = "";
+
+    for (let i = 1; i <= count; i++) {
+        const group = document.createElement("div");
+
+        group.className = "child-age-item";
+
+        const label = document.createElement("label");
+
+        label.htmlFor = "childAge" + i;
+        label.textContent = "Child " + i + " age *";
+
+        const select = document.createElement("select");
+
+        select.id = "childAge" + i;
+        select.name = "child_ages[]";
+
+        select.required =
+            childrenTravelSelect.value === "yes";
+
+        for (let age = 0; age <= 17; age++) {
+            const option = document.createElement("option");
+
+            option.value = String(age);
+
+            option.textContent = age === 0
+                ? "Under 1 year (0)"
+                : age + (age === 1 ? " year" : " years");
+
+            select.appendChild(option);
+        }
+
+        group.appendChild(label);
+        group.appendChild(select);
+
+        childrenAgesContainer.appendChild(group);
+    }
+}
+
+function updateChildrenFields() {
+    const hasChildren =
+        childrenTravelSelect.value === "yes";
+
+    childrenCountGroup.hidden = !hasChildren;
+    childrenAgesGroup.hidden = !hasChildren;
+
+    childrenCountSelect.required = hasChildren;
+
+    renderChildAgeInputs();
+}
+
+childrenTravelSelect.addEventListener(
+    "change",
+    updateChildrenFields
+);
+
+childrenCountSelect.addEventListener(
+    "change",
+    renderChildAgeInputs
+);
+
+updateChildrenFields();
+
+/* Server request */
 
 async function serverRequest(path, options = {}) {
     const response = await fetch(API_BASE + path, {
         ...options,
+
         headers: {
             "Content-Type": "application/json",
             ...(options.headers || {})
@@ -1045,43 +1071,38 @@ async function serverRequest(path, options = {}) {
         throw new Error(
             result.error ||
             result.message ||
-            `The server returned error ${response.status}.`
+            "Server error: " + response.status
         );
     }
 
     return result;
 }
 
+/* Submit booking */
 
-/* ================================
-   BOOKING SUBMISSION
-================================ */
-
-form.addEventListener("submit", async event => {
+form.addEventListener("submit", async function(event) {
     event.preventDefault();
 
     clearNotice("formNotice");
     clearNotice("invoiceNotice");
 
-    if (!form.reportValidity()) return;
-
-    const packageType = packageSelect.value;
-    const passengerCount = Number(passengersSelect.value);
-
-    if (!Object.prototype.hasOwnProperty.call(PACKAGE_PRICES, packageType)) {
-        showNotice("formNotice", "Please select a valid tour package.", "error");
+    if (!form.reportValidity()) {
         return;
     }
 
-    if (
-        passengerCount < 1 ||
-        passengerCount > PACKAGE_CAPACITY[packageType]
-    ) {
+    const passengerCount =
+        Number(passengersSelect.value);
+
+    const capacity = getPassengerCapacity();
+
+    if (passengerCount < 1 || passengerCount > capacity) {
         showNotice(
             "formNotice",
-            "The selected package does not support this number of passengers.",
+            "The selected vehicle supports up to " +
+            capacity + " passengers.",
             "error"
         );
+
         return;
     }
 
@@ -1091,59 +1112,124 @@ form.addEventListener("submit", async event => {
             "Please select today or a future date.",
             "error"
         );
+
         return;
     }
 
-    const customStop = document.getElementById("otherStop").value.trim();
+    const childAges =
+        childrenTravelSelect.value === "yes"
+            ? Array.from(
+                childrenAgesContainer.querySelectorAll("select")
+              ).map(select => Number(select.value))
+            : [];
 
-    /*
-      IMPORTANT:
-      The backend expects selected_stops to contain IDs, not display names.
-      The backend also expects "other" when a custom stop is supplied.
-      Keep addons empty to avoid sending unsupported object-shaped add-ons.
-      The selected stop IDs are sent in selected_stops.
-    */
-    const selectedStops = getSelectedStops().map(stop => stop.id);
+    if (
+        childrenTravelSelect.value === "yes" &&
+        childAges.length !== Number(childrenCountSelect.value)
+    ) {
+        showNotice(
+            "formNotice",
+            "Please select the age of every child.",
+            "error"
+        );
 
-    if (customStop) {
-        selectedStops.push("other");
+        return;
     }
 
-    const payload = {
-        full_name: document.getElementById("fullName").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        pickup_location: document.getElementById("pickupLocation").value,
-        destination: document.getElementById("destination").value,
-        pickup_date: dateInput.value,
-        pickup_time: timeSelect.value,
-        passengers: passengerCount,
-        luggage: Number(document.getElementById("luggage").value) || 0,
-        flight_number: document.getElementById("flightNumber").value.trim(),
-        special_requests: document.getElementById("specialRequests").value.trim(),
-        service_type: "golden_circle_tour",
-        package_type: packageType,
+    if (childAges.length > passengerCount) {
+        showNotice(
+            "formNotice",
+            "The number of children cannot exceed the total number of passengers.",
+            "error"
+        );
 
-        // The backend receives an empty legacy add-ons array.
+        return;
+    }
+
+    const pickupSelect =
+        document.getElementById("pickupLocation");
+
+    const destinationSelect =
+        document.getElementById("destination");
+
+    const pickupLocation =
+        pickupSelect.value === "Other pickup location"
+            ? document.getElementById("otherPickupLocation").value.trim()
+            : pickupSelect.value;
+
+    const destination =
+        destinationSelect.value === "Other Golden Circle location"
+            ? document.getElementById("otherDestination").value.trim()
+            : destinationSelect.value;
+
+    const payload = {
+        full_name:
+            document.getElementById("fullName").value.trim(),
+
+        email:
+            document.getElementById("email").value.trim(),
+
+        phone:
+            document.getElementById("phone").value.trim(),
+
+        pickup_location: pickupLocation,
+
+        destination: destination,
+
+        country_of_origin:
+            document.getElementById("countryOfOrigin").value.trim(),
+
+        pickup_date: dateInput.value,
+
+        pickup_time: timeSelect.value,
+
+        passengers: passengerCount,
+
+        luggage:
+            Number(document.getElementById("luggage").value) || 0,
+
+        flight_number:
+            document.getElementById("flightNumber").value.trim(),
+
+        special_requests:
+            document.getElementById("specialRequests").value.trim(),
+
+        service_type: "golden_circle_tour",
+
+        package_type: "classic",
+
+        vehicle_type: vehicleSelect.value,
+
+        vehicle_name:
+            VEHICLES[vehicleSelect.value].name,
+
+        travelling_with_children:
+            childrenTravelSelect.value === "yes",
+
+        children_count: childAges.length,
+
+        child_ages: childAges,
+
         addons: [],
 
-        // Send the exact stop IDs expected by the backend.
-        selected_stops: selectedStops,
-
-        other_stop: customStop
+        selected_stops: []
     };
 
     submitButton.disabled = true;
     submitButton.textContent = "Submitting Booking...";
 
     try {
-        const result = await serverRequest("/api/bookings", {
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
+        const result = await serverRequest(
+            "/api/bookings",
+            {
+                method: "POST",
+                body: JSON.stringify(payload)
+            }
+        );
 
         const returnedBooking =
-            result.booking && typeof result.booking === "object"
+            result.booking &&
+            typeof result.booking === "object"
                 ? result.booking
                 : {};
 
@@ -1152,21 +1238,7 @@ form.addEventListener("submit", async event => {
             ...returnedBooking,
             ...result,
 
-            // Keep the customer-entered values for the invoice.
-            package_type: payload.package_type,
-            pickup_location: payload.pickup_location,
-            destination: payload.destination,
-            pickup_date: payload.pickup_date,
-            pickup_time: payload.pickup_time,
-            passengers: payload.passengers,
-            luggage: payload.luggage,
-            full_name: payload.full_name,
-            email: payload.email,
-            phone: payload.phone,
-            flight_number: payload.flight_number,
-            special_requests: payload.special_requests,
-            selected_stops: payload.selected_stops,
-            other_stop: payload.other_stop
+            ...payload
         };
 
         cancellationToken =
@@ -1181,7 +1253,9 @@ form.addEventListener("submit", async event => {
 
         displayInvoice(latestBooking);
 
-        document.getElementById("invoiceSection").style.display = "block";
+        document.getElementById(
+            "invoiceSection"
+        ).style.display = "block";
 
         showNotice(
             "formNotice",
@@ -1189,7 +1263,9 @@ form.addEventListener("submit", async event => {
             "success"
         );
 
-        document.getElementById("invoiceSection").scrollIntoView({
+        document.getElementById(
+            "invoiceSection"
+        ).scrollIntoView({
             behavior: "smooth",
             block: "start"
         });
@@ -1200,28 +1276,27 @@ form.addEventListener("submit", async event => {
             "Booking could not be completed: " + error.message,
             "error"
         );
+
     } finally {
         submitButton.disabled = false;
-        submitButton.textContent = "Check Availability & Book";
+
+        submitButton.textContent =
+            "Check Availability & Book";
     }
 });
 
-
-/* ================================
-   INVOICE
-================================ */
+/* Invoice */
 
 function setInvoiceValue(id, value) {
     document.getElementById(id).textContent =
-        value === null || value === undefined || value === ""
+        value === null ||
+        value === undefined ||
+        value === ""
             ? "—"
             : String(value);
 }
 
 function displayInvoice(booking) {
-    const packageType = booking.package_type || "classic";
-    const estimatedTotal = getEstimatedTotal();
-
     const serverPrice =
         booking.total_price ??
         booking.total_amount ??
@@ -1234,26 +1309,29 @@ function displayInvoice(booking) {
         serverPrice !== null &&
         Number.isFinite(Number(serverPrice))
             ? Number(serverPrice)
-            : estimatedTotal;
+            : VEHICLES[booking.vehicle_type]?.price || 0;
 
-    const bookingReference =
+    const reference =
         booking.booking_reference ||
         booking.reference ||
         booking.booking_id ||
         booking.id ||
         booking.booking?.id ||
-        "Confirmed by server";
+        "Submitted by server";
 
-    setInvoiceValue("invReference", bookingReference);
+    setInvoiceValue("invReference", reference);
 
     setInvoiceValue(
         "invStatus",
-        booking.status || booking.booking?.status || "Submitted"
+        booking.status ||
+        booking.booking?.status ||
+        "Submitted"
     );
 
     setInvoiceValue("invName", booking.full_name);
     setInvoiceValue("invEmail", booking.email);
     setInvoiceValue("invPhone", booking.phone);
+    setInvoiceValue("invCountry", booking.country_of_origin);
     setInvoiceValue("invPickup", booking.pickup_location);
     setInvoiceValue("invDestination", booking.destination);
     setInvoiceValue("invDate", booking.pickup_date);
@@ -1262,44 +1340,47 @@ function displayInvoice(booking) {
     setInvoiceValue("invLuggage", booking.luggage);
 
     setInvoiceValue(
-        "invPackage",
-        PACKAGE_NAMES[packageType] || packageType
+        "invVehicle",
+        VEHICLES[booking.vehicle_type]?.name ||
+        booking.vehicle_name ||
+        booking.vehicle_type ||
+        "—"
     );
 
-    const stops = Array.isArray(booking.selected_stops)
-        ? booking.selected_stops
-        : [];
+    setInvoiceValue(
+        "invChildren",
+        booking.travelling_with_children
+            ? "Yes (" + booking.children_count + " children)"
+            : "No"
+    );
 
-    const readableStops = stops.map(stop => {
-        return STOP_NAMES[stop] || stop;
-    });
+    setInvoiceValue(
+        "invChildrenAges",
+        Array.isArray(booking.child_ages) &&
+        booking.child_ages.length
+            ? booking.child_ages.map(age =>
+                Number(age) === 0
+                    ? "Under 1 year"
+                    : age + " years"
+              ).join(", ")
+            : "None"
+    );
 
-    let stopText = readableStops.length
-        ? readableStops.join(", ")
-        : "None";
+    setInvoiceValue(
+        "invTotal",
+        formatISK(totalPrice)
+    );
 
-    if (booking.other_stop) {
-        stopText +=
-            (readableStops.length ? "; " : "") +
-            booking.other_stop +
-            " (price to be confirmed)";
-    }
-
-    setInvoiceValue("invStops", stopText);
-    setInvoiceValue("invTotal", formatISK(totalPrice));
     setInvoiceValue("invFlight", booking.flight_number);
     setInvoiceValue("invRequests", booking.special_requests);
 
     document.getElementById("invoiceMessage").textContent =
-        "Please keep your booking reference. Your booking and final price are subject to server confirmation.";
+        "Please keep your booking reference. The server's booking status and final price apply to this booking.";
 
     cancelButton.style.display = "inline-block";
 }
 
-
-/* ================================
-   SAVE INVOICE AS PDF
-================================ */
+/* Save invoice as PDF */
 
 function saveInvoicePDF() {
     if (!latestBooking) {
@@ -1310,14 +1391,16 @@ function saveInvoicePDF() {
     window.print();
 }
 
+/* Cancel booking */
 
-/* ================================
-   CANCEL BOOKING
-================================ */
-
-cancelButton.addEventListener("click", async () => {
+cancelButton.addEventListener("click", async function() {
     if (!latestBooking) {
-        showNotice("invoiceNotice", "No booking is available to cancel.", "error");
+        showNotice(
+            "invoiceNotice",
+            "No booking is available to cancel.",
+            "error"
+        );
+
         return;
     }
 
@@ -1334,14 +1417,17 @@ cancelButton.addEventListener("click", async () => {
             "The server did not return a cancellation token or cancellation link. Please contact the driver to cancel this booking.",
             "error"
         );
+
         return;
     }
 
     const confirmed = window.confirm(
-        "Are you sure you want to cancel this booking? The server will check whether cancellation is allowed under the cancellation policy."
+        "Are you sure you want to cancel this booking? The server will check whether cancellation is allowed."
     );
 
-    if (!confirmed) return;
+    if (!confirmed) {
+        return;
+    }
 
     cancelButton.disabled = true;
     cancelButton.textContent = "Cancelling...";
@@ -1360,9 +1446,11 @@ cancelButton.addEventListener("click", async () => {
 
             const response = await fetch(parsedUrl.href, {
                 method: "POST",
+
                 headers: {
                     "Content-Type": "application/json"
                 },
+
                 body: JSON.stringify({
                     cancellation_token: cancellationToken
                 })
@@ -1381,23 +1469,31 @@ cancelButton.addEventListener("click", async () => {
                     "The server rejected the cancellation request."
                 );
             }
+
         } else {
-            result = await serverRequest("/api/bookings/cancel", {
-                method: "POST",
-                body: JSON.stringify({
-                    booking_id: reference,
-                    cancellation_token: cancellationToken
-                })
-            });
+            result = await serverRequest(
+                "/api/bookings/cancel",
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+                        booking_id: reference,
+                        cancellation_token: cancellationToken
+                    })
+                }
+            );
         }
 
         latestBooking.status = "cancelled";
+
         setInvoiceValue("invStatus", "Cancelled");
+
         cancelButton.style.display = "none";
 
         showNotice(
             "invoiceNotice",
-            result.message || "The booking cancellation was accepted by the server.",
+            result.message ||
+            "The booking cancellation was accepted by the server.",
             "success"
         );
 
@@ -1407,19 +1503,12 @@ cancelButton.addEventListener("click", async () => {
             "Cancellation failed: " + error.message,
             "error"
         );
+
     } finally {
         cancelButton.disabled = false;
         cancelButton.textContent = "Cancel Booking";
     }
 });
-
-
-/* ================================
-   INITIALIZE
-================================ */
-
-choosePackage("classic");
-
 </script>
 
 </body>
