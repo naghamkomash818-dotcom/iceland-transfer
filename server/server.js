@@ -60,8 +60,6 @@ const VEHICLES = {
     }
 };
 
-const MAX_SIMULTANEOUS_BOOKINGS = 3;
-
 const OPENING_HOUR = 6;
 const CLOSING_HOUR = 22;
 
@@ -148,9 +146,6 @@ function cleanText(value, maxLength = 1000) {
 function normalizeVehicle(value) {
     let original = cleanText(value, 150).toLowerCase();
 
-    // Remove passenger descriptions from labels such as:
-    // "Sedan — up to 4 passengers"
-    // "MPV4 - 4 passengers"
     original = original.split(/[—–]/)[0].trim();
 
     original = original
@@ -190,7 +185,6 @@ function normalizeVehicle(value) {
         return aliases[original];
     }
 
-    // Handle labels where a description follows the vehicle name.
     if (/^sedan\b/.test(original)) {
         return "sedan";
     }
@@ -247,6 +241,13 @@ function normalizeServiceType(value, data = {}) {
     return "transfer";
 }
 
+// ========================================
+// SERVICE DURATION
+// ========================================
+
+// Duration is saved for invoice/booking information.
+// It does NOT block additional hourly slots.
+
 function getServiceDuration(serviceType) {
     if (serviceType === "golden_circle") {
         return 8;
@@ -259,8 +260,11 @@ function getServiceDuration(serviceType) {
     return 1;
 }
 
+// ========================================
+// DATE AND TIME HELPERS
+// ========================================
+
 function getIcelandNow() {
-    // Iceland uses UTC year-round.
     return new Date();
 }
 
@@ -301,10 +305,6 @@ function getTripEnd(date, time, durationHours) {
     return end.toISOString().slice(0, 19);
 }
 
-function intervalsOverlap(startA, endA, startB, endB) {
-    return startA < endB && startB < endA;
-}
-
 function createCancellationToken() {
     return crypto.randomBytes(32).toString("hex");
 }
@@ -316,43 +316,36 @@ function getBookingStart(booking) {
     );
 }
 
-function getBookingEnd(booking) {
-    const start = getBookingStart(booking);
+// ========================================
+// GLOBAL HOURLY SLOT HELPERS
+// ========================================
 
-    const duration = Number(
-        booking.service_duration_hours || 1
-    );
+// All services share the same hourly schedule.
+// A booking at 06:30 also locks the 06:00 hour.
 
-    return new Date(
-        start.getTime() + duration * 60 * 60 * 1000
+function getHourSlot(time) {
+    return String(time).slice(0, 2);
+}
+
+function isSameHourSlot(booking, date, time) {
+    return (
+        booking.pickup_date === date &&
+        getHourSlot(booking.pickup_time) === getHourSlot(time) &&
+        String(booking.status || "").toLowerCase() !== "cancelled"
     );
 }
 
 // ========================================
-// LOAD BOOKINGS FOR AVAILABILITY CHECKS
+// LOAD BOOKINGS FOR A DATE
 // ========================================
 
 async function loadBookingsForDate(date) {
-    const targetDate = new Date(`${date}T00:00:00Z`);
-
-    const previousDate = new Date(
-        targetDate.getTime() - 24 * 60 * 60 * 1000
-    );
-
-    const nextDate = new Date(
-        targetDate.getTime() + 24 * 60 * 60 * 1000
-    );
-
-    const fromDate = previousDate.toISOString().slice(0, 10);
-    const toDate = nextDate.toISOString().slice(0, 10);
-
     const { data, error } = await supabase
         .from("bookings")
         .select(
             "id,pickup_date,pickup_time,status,service_duration_hours,trip_end_time"
         )
-        .gte("pickup_date", fromDate)
-        .lte("pickup_date", toDate);
+        .eq("pickup_date", date);
 
     if (error) {
         console.error(
@@ -364,66 +357,36 @@ async function loadBookingsForDate(date) {
     }
 
     return (data || []).filter(booking => {
-        return String(booking.status || "").toLowerCase() !== "cancelled";
+        return (
+            String(booking.status || "").toLowerCase() !== "cancelled"
+        );
     });
 }
 
 // ========================================
-// COUNT OVERLAPPING BOOKINGS
+// CHECK GLOBAL HOURLY AVAILABILITY
 // ========================================
 
-function countOverlappingBookings(
-    bookings,
-    date,
-    time,
-    durationHours
-) {
-    const requestedStart = dateTimeAsUTC(date, time);
-
-    const requestedEnd = new Date(
-        requestedStart.getTime() +
-        durationHours * 60 * 60 * 1000
+function findBookingForHour(bookings, date, time) {
+    return bookings.find(booking =>
+        isSameHourSlot(booking, date, time)
     );
-
-    let count = 0;
-
-    for (const booking of bookings) {
-        const existingStart = getBookingStart(booking);
-        const existingEnd = getBookingEnd(booking);
-
-        if (
-            intervalsOverlap(
-                requestedStart,
-                requestedEnd,
-                existingStart,
-                existingEnd
-            )
-        ) {
-            count++;
-        }
-    }
-
-    return count;
 }
 
-async function checkAvailability(date, time, durationHours) {
+async function checkAvailability(date, time) {
     const bookings = await loadBookingsForDate(date);
 
-    const overlapping = countOverlappingBookings(
+    const existingBooking = findBookingForHour(
         bookings,
         date,
-        time,
-        durationHours
+        time
     );
 
     return {
-        available: overlapping < MAX_SIMULTANEOUS_BOOKINGS,
-        overlappingBookings: overlapping,
-        remainingSlots: Math.max(
-            0,
-            MAX_SIMULTANEOUS_BOOKINGS - overlapping
-        ),
-        maxBookings: MAX_SIMULTANEOUS_BOOKINGS
+        available: !existingBooking,
+        overlappingBookings: existingBooking ? 1 : 0,
+        remainingSlots: existingBooking ? 0 : 1,
+        maxBookings: 1
     };
 }
 
@@ -431,48 +394,40 @@ async function checkAvailability(date, time, durationHours) {
 // GENERATE AVAILABLE TIMES
 // ========================================
 
-async function getAvailableTimes(date, durationHours) {
+async function getAvailableTimes(date) {
     const bookings = await loadBookingsForDate(date);
 
     const availableTimes = [];
+    const bookedTimes = [];
 
     for (
-        let minutes = OPENING_HOUR * 60;
-        minutes <= CLOSING_HOUR * 60;
-        minutes += 30
+        let hour = OPENING_HOUR;
+        hour < CLOSING_HOUR;
+        hour++
     ) {
-        const hour = Math.floor(minutes / 60);
-        const minute = minutes % 60;
-
-        const time =
-            String(hour).padStart(2, "0") +
-            ":" +
-            String(minute).padStart(2, "0");
-
-        if (
-            minutes + durationHours * 60 >
-            CLOSING_HOUR * 60
-        ) {
-            continue;
-        }
+        const time = String(hour).padStart(2, "0") + ":00";
 
         if (!isFuturePickup(date, time)) {
             continue;
         }
 
-        const overlapping = countOverlappingBookings(
+        const existingBooking = findBookingForHour(
             bookings,
             date,
-            time,
-            durationHours
+            time
         );
 
-        if (overlapping < MAX_SIMULTANEOUS_BOOKINGS) {
+        if (existingBooking) {
+            bookedTimes.push(time);
+        } else {
             availableTimes.push(time);
         }
     }
 
-    return availableTimes;
+    return {
+        availableTimes,
+        bookedTimes
+    };
 }
 
 // ========================================
@@ -655,6 +610,7 @@ async function createBooking(data) {
     }
 
     const [hour, minute] = pickupTime.split(":").map(Number);
+
     const pickupMinutes = hour * 60 + minute;
 
     if (
@@ -665,18 +621,6 @@ async function createBooking(data) {
             status: 400,
             code: "OUTSIDE_OPERATING_HOURS",
             message: "Bookings are available between 06:00 and 22:00."
-        };
-    }
-
-    if (
-        pickupMinutes + durationHours * 60 >
-        CLOSING_HOUR * 60
-    ) {
-        throw {
-            status: 400,
-            code: "TRIP_ENDS_AFTER_CLOSING",
-            message:
-                "Please select a pickup time that allows the trip to finish by 22:00."
         };
     }
 
@@ -751,12 +695,13 @@ async function createBooking(data) {
     // ========================================
     // SERVER-SIDE VEHICLE PRICE
     // ========================================
-    // Do not trust a price sent by the browser.
-    // The selected vehicle determines the price.
 
     const price = vehicle.price;
     const extrasTotal = 0;
     const total = price + extrasTotal;
+
+    // Duration is stored for information only.
+    // It does not block other hourly slots.
 
     const tripEndTime = getTripEnd(
         pickupDate,
@@ -765,13 +710,12 @@ async function createBooking(data) {
     );
 
     // ========================================
-    // CHECK AVAILABILITY
+    // CHECK GLOBAL HOURLY AVAILABILITY
     // ========================================
 
     const availability = await checkAvailability(
         pickupDate,
-        pickupTime,
-        durationHours
+        pickupTime
     );
 
     if (!availability.available) {
@@ -779,7 +723,7 @@ async function createBooking(data) {
             status: 409,
             code: "TIME_SLOT_FULL",
             message:
-                "This time is fully booked. Please choose another time."
+                "This hour is already booked. Please choose another time."
         };
     }
 
@@ -869,6 +813,16 @@ async function createBooking(data) {
             error.message
         );
 
+        // Database unique index prevents simultaneous duplicate bookings.
+        if (error.code === "23505") {
+            throw {
+                status: 409,
+                code: "TIME_SLOT_FULL",
+                message:
+                    "This hour has just been booked. Please choose another time."
+            };
+        }
+
         throw {
             status: 500,
             code: "BOOKING_SAVE_FAILED",
@@ -884,30 +838,24 @@ async function createBooking(data) {
     // BOOKING RESPONSE AND INVOICE
     // ========================================
 
+    const bookingResponse = {
+        ...savedBooking,
+        vehicle_type: vehicleKey,
+        vehicle_name: vehicle.name,
+        vehicle_capacity: vehicle.capacity,
+        price: total,
+        extras_total: extrasTotal,
+        total
+    };
+
     return {
         success: true,
 
         message: "Your booking has been confirmed.",
 
-        booking: {
-            ...savedBooking,
-            vehicle_type: vehicleKey,
-            vehicle_name: vehicle.name,
-            vehicle_capacity: vehicle.capacity,
-            price: total,
-            extras_total: extrasTotal,
-            total
-        },
+        booking: bookingResponse,
 
-        data: {
-            ...savedBooking,
-            vehicle_type: vehicleKey,
-            vehicle_name: vehicle.name,
-            vehicle_capacity: vehicle.capacity,
-            price: total,
-            extras_total: extrasTotal,
-            total
-        },
+        data: bookingResponse,
 
         invoice: {
             booking_id: savedBooking.id,
@@ -1042,6 +990,7 @@ async function cancelBooking(token) {
 // ========================================
 
 const server = http.createServer(async (req, res) => {
+
     if (req.method === "OPTIONS") {
         res.writeHead(204, {
             "Access-Control-Allow-Origin": "*",
@@ -1102,8 +1051,6 @@ const server = http.createServer(async (req, res) => {
                 ""
             );
 
-            const durationHours = getServiceDuration(serviceType);
-
             if (!isValidDateString(date)) {
                 sendJSON(res, 400, {
                     success: false,
@@ -1115,21 +1062,26 @@ const server = http.createServer(async (req, res) => {
                 return;
             }
 
+            // Return all available and booked hourly slots.
+
             if (!time) {
-                const times = await getAvailableTimes(
-                    date,
-                    durationHours
-                );
+                const result = await getAvailableTimes(date);
+
+                const times = result.availableTimes;
 
                 sendJSON(res, 200, {
                     success: true,
                     date,
                     service_type: serviceType,
+
                     times,
                     availableTimes: times,
                     available_times: times,
                     availableSlots: times,
-                    available_slots: times
+                    available_slots: times,
+
+                    bookedTimes: result.bookedTimes,
+                    booked_times: result.bookedTimes
                 });
 
                 return;
@@ -1152,9 +1104,7 @@ const server = http.createServer(async (req, res) => {
             if (
                 !isFuturePickup(date, time) ||
                 requestedMinutes < OPENING_HOUR * 60 ||
-                requestedMinutes >= CLOSING_HOUR * 60 ||
-                requestedMinutes + durationHours * 60 >
-                    CLOSING_HOUR * 60
+                requestedMinutes >= CLOSING_HOUR * 60
             ) {
                 sendJSON(res, 200, {
                     success: true,
@@ -1167,11 +1117,7 @@ const server = http.createServer(async (req, res) => {
                 return;
             }
 
-            const result = await checkAvailability(
-                date,
-                time,
-                durationHours
-            );
+            const result = await checkAvailability(date, time);
 
             sendJSON(res, 200, {
                 success: true,
@@ -1213,6 +1159,7 @@ const server = http.createServer(async (req, res) => {
                 const result = await createBooking(body);
 
                 sendJSON(res, 201, result);
+
             } catch (error) {
                 const status = error.status || 500;
 
@@ -1245,11 +1192,14 @@ const server = http.createServer(async (req, res) => {
 
         if (req.method === "POST" && cancelPathMatch) {
             try {
-                const token = decodeURIComponent(cancelPathMatch[1]);
+                const token = decodeURIComponent(
+                    cancelPathMatch[1]
+                );
 
                 const result = await cancelBooking(token);
 
                 sendJSON(res, 200, result);
+
             } catch (error) {
                 const status = error.status || 500;
 
@@ -1304,6 +1254,7 @@ const server = http.createServer(async (req, res) => {
                 const result = await cancelBooking(token);
 
                 sendJSON(res, 200, result);
+
             } catch (error) {
                 const status = error.status || 500;
 
@@ -1335,6 +1286,7 @@ const server = http.createServer(async (req, res) => {
             code: "NOT_FOUND",
             message: "The requested endpoint was not found."
         });
+
     } catch (error) {
         console.error(
             "Unexpected server error:",
