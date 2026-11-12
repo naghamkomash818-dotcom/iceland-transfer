@@ -7,331 +7,333 @@
 
 <style>
 :root {
-    --green: #465b45;
-    --deep-green: #293c2e;
-    --beige: #f5f1e8;
-    --gold: #b99b61;
-    --white: #fffdf9;
-    --text: #333b32;
-    --border: #dedbd1;
+    --green:#465b45;
+    --deep-green:#293c2e;
+    --beige:#f5f1e8;
+    --gold:#b99b61;
+    --white:#fffdf9;
+    --text:#333b32;
+    --border:#dedbd1;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: var(--white);
-    color: var(--text);
-    line-height: 1.6;
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:var(--white);
+    color:var(--text);
+    line-height:1.6;
 }
 
-button, input, select, textarea { font: inherit; }
-button, .button { cursor: pointer; }
+button,input,select,textarea{font:inherit}
+button,.button{cursor:pointer}
 
-header {
-    background: var(--white);
-    padding: 15px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    box-shadow: 0 2px 12px #0000000d;
+/* Important: make hidden fields actually disappear */
+[hidden]{
+    display:none !important;
 }
 
-.logo {
-    color: var(--deep-green);
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 1px;
+header{
+    background:var(--white);
+    padding:15px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+    box-shadow:0 2px 12px #0000000d;
 }
 
-.logo small {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--gold);
+.logo{
+    color:var(--deep-green);
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:1px;
 }
 
-nav {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-wrap: wrap;
+.logo small{
+    display:block;
+    font-size:10px;
+    letter-spacing:2px;
+    color:var(--gold);
 }
 
-nav a {
-    color: var(--deep-green);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
+nav{
+    display:flex;
+    gap:20px;
+    align-items:center;
+    flex-wrap:wrap;
 }
 
-nav a:hover { color: var(--gold); }
+nav a{
+    color:var(--deep-green);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:bold;
+}
 
-.hero {
-    min-height: 350px;
+nav a:hover{color:var(--gold)}
+
+.hero{
+    min-height:350px;
     background:
-        linear-gradient(#17271d80, #17271d80),
+        linear-gradient(#17271d80,#17271d80),
         url("images/aurora.jpg") center/cover no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    padding: 55px 20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+    padding:55px 20px;
 }
 
-.hero-content { max-width: 750px; }
+.hero-content{max-width:750px}
 
-.hero h1 {
-    font-size: clamp(32px, 5vw, 52px);
-    margin: 0 0 15px;
+.hero h1{
+    font-size:clamp(32px,5vw,52px);
+    margin:0 0 15px;
 }
 
-.hero p {
-    font-size: 17px;
-    margin: 0;
+.hero p{
+    font-size:17px;
+    margin:0;
 }
 
-.container {
-    max-width: 1100px;
-    width: 92%;
-    margin: 45px auto;
+.container{
+    max-width:1100px;
+    width:92%;
+    margin:45px auto;
 }
 
-.section-title {
-    text-align: center;
-    color: var(--deep-green);
-    margin-bottom: 30px;
+.section-title{
+    text-align:center;
+    color:var(--deep-green);
+    margin-bottom:30px;
 }
 
-.section-title h2 {
-    font-size: 30px;
-    margin-bottom: 8px;
+.section-title h2{
+    font-size:30px;
+    margin-bottom:8px;
 }
 
-.section-title p { color: #70766d; }
+.section-title p{color:#70766d}
 
-.booking-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 8px 30px #00000008;
+.booking-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:30px;
+    box-shadow:0 8px 30px #00000008;
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
 }
 
-.form-group.full { grid-column: 1 / -1; }
+.form-group.full{grid-column:1/-1}
 
-label {
-    font-size: 14px;
-    font-weight: bold;
-    color: var(--deep-green);
+label{
+    font-size:14px;
+    font-weight:bold;
+    color:var(--deep-green);
 }
 
-input, select, textarea {
-    width: 100%;
-    min-width: 0;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    background: white;
-    color: var(--text);
+input,select,textarea{
+    width:100%;
+    min-width:0;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:white;
+    color:var(--text);
 }
 
-input:focus, select:focus, textarea:focus {
-    outline: 2px solid #465b4530;
-    border-color: var(--green);
+input:focus,select:focus,textarea:focus{
+    outline:2px solid #465b4530;
+    border-color:var(--green);
 }
 
-textarea {
-    min-height: 95px;
-    resize: vertical;
+textarea{
+    min-height:95px;
+    resize:vertical;
 }
 
-.hint {
-    font-size: 12px;
-    color: #747970;
+.hint{
+    font-size:12px;
+    color:#747970;
 }
 
-.estimate {
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 10px;
-    background: var(--beige);
+.estimate{
+    margin-top:25px;
+    padding:20px;
+    border-radius:10px;
+    background:var(--beige);
 }
 
-.estimate-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 5px 0;
+.estimate-row{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:5px 0;
 }
 
-.estimate-total {
-    border-top: 1px solid var(--gold);
-    margin-top: 10px;
-    padding-top: 12px;
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--deep-green);
+.estimate-total{
+    border-top:1px solid var(--gold);
+    margin-top:10px;
+    padding-top:12px;
+    font-size:20px;
+    font-weight:bold;
+    color:var(--deep-green);
 }
 
-.primary-button {
-    border: 0;
-    border-radius: 8px;
-    background: var(--green);
-    color: white;
-    padding: 14px 20px;
-    font-weight: bold;
+.primary-button{
+    border:0;
+    border-radius:8px;
+    background:var(--green);
+    color:white;
+    padding:14px 20px;
+    font-weight:bold;
 }
 
-.primary-button:hover { background: var(--deep-green); }
+.primary-button:hover{background:var(--deep-green)}
 
-.primary-button:disabled {
-    opacity: .6;
-    cursor: wait;
+.primary-button:disabled{
+    opacity:.6;
+    cursor:wait;
 }
 
-.secondary-button {
-    border: 1px solid var(--green);
-    border-radius: 8px;
-    background: white;
-    color: var(--deep-green);
-    padding: 12px 18px;
-    font-weight: bold;
+.secondary-button{
+    border:1px solid var(--green);
+    border-radius:8px;
+    background:white;
+    color:var(--deep-green);
+    padding:12px 18px;
+    font-weight:bold;
 }
 
-.danger-button {
-    border: 0;
-    border-radius: 8px;
-    background: #9d3939;
-    color: white;
-    padding: 12px 18px;
-    font-weight: bold;
+.danger-button{
+    border:0;
+    border-radius:8px;
+    background:#9d3939;
+    color:white;
+    padding:12px 18px;
+    font-weight:bold;
 }
 
-.form-actions, .invoice-actions {
-    margin-top: 22px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+.form-actions,.invoice-actions{
+    margin-top:22px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
 }
 
-.notice {
-    padding: 13px 15px;
-    border-radius: 8px;
-    margin: 15px 0;
-    display: none;
+.notice{
+    padding:13px 15px;
+    border-radius:8px;
+    margin:15px 0;
+    display:none;
 }
 
-.notice.success {
-    display: block;
-    background: #e8f3e7;
-    color: #234a2a;
+.notice.success{
+    display:block;
+    background:#e8f3e7;
+    color:#234a2a;
 }
 
-.notice.error {
-    display: block;
-    background: #f9e9e7;
-    color: #8b2828;
+.notice.error{
+    display:block;
+    background:#f9e9e7;
+    color:#8b2828;
 }
 
-#invoiceSection { display: none; }
+#invoiceSection{display:none}
 
-.invoice {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 25px;
-    margin-top: 25px;
+.invoice{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:25px;
+    margin-top:25px;
 }
 
-.invoice h2, .invoice h3 { color: var(--deep-green); }
+.invoice h2,.invoice h3{color:var(--deep-green)}
 
-.invoice-line {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
+.invoice-line{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:8px 0;
+    border-bottom:1px solid #eee;
 }
 
-.invoice-line strong {
-    text-align: right;
-    overflow-wrap: anywhere;
+.invoice-line strong{
+    text-align:right;
+    overflow-wrap:anywhere;
 }
 
-footer {
-    background: var(--deep-green);
-    color: white;
-    text-align: center;
-    padding: 30px 15px;
-    margin-top: 60px;
+footer{
+    background:var(--deep-green);
+    color:white;
+    text-align:center;
+    padding:30px 15px;
+    margin-top:60px;
 }
 
-footer a {
-    color: #e4d1a5;
-    text-decoration: none;
+footer a{
+    color:#e4d1a5;
+    text-decoration:none;
 }
 
-.child-age-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 10px;
+.child-age-list{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin-top:10px;
 }
 
-.child-age-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+.child-age-item{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
 }
 
-@media (max-width: 800px) {
-    .form-grid, .child-age-list {
-        grid-template-columns: 1fr;
-    }
-
-    .form-group.full { grid-column: auto; }
-    .booking-card { padding: 18px; }
-    nav { gap: 12px; }
+@media(max-width:800px){
+    .form-grid,.child-age-list{grid-template-columns:1fr}
+    .form-group.full{grid-column:auto}
+    .booking-card{padding:18px}
+    nav{gap:12px}
 }
 
-@media print {
-    body * { visibility: hidden !important; }
+@media print{
+    body *{visibility:hidden !important}
 
     #invoiceSection,
-    #invoiceSection * {
-        visibility: visible !important;
+    #invoiceSection *{
+        visibility:visible !important;
     }
 
-    #invoiceSection {
-        display: block !important;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        margin: 0;
-        padding: 0;
+    #invoiceSection{
+        display:block !important;
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        margin:0;
+        padding:0;
     }
 
-    .invoice-actions, .no-print { display: none !important; }
-    .invoice { border: none; box-shadow: none; }
+    .invoice-actions,.no-print{display:none !important}
+    .invoice{border:none;box-shadow:none}
 }
 </style>
 </head>
@@ -465,47 +467,30 @@ footer a {
                         autocomplete="country-name"
                         placeholder="e.g. France, Germany, United States">
                 </div>
+
                 <div class="form-group">
                     <label for="tourDate">Tour Date *</label>
                     <input id="tourDate" name="pickup_date"
                         type="date" required>
+                    <span class="hint">Past dates cannot be selected.</span>
                 </div>
 
                 <div class="form-group">
                     <label for="pickupTime">Pickup Time *</label>
                     <select id="pickupTime" name="pickup_time" required>
-                        <option value="">Choose pickup time</option>
+                        <option value="">Choose a date first</option>
                     </select>
                     <span class="hint">
-                        Available time options are between 06:00 and 22:00.
-                        Availability is checked again by the server when booking.
+                        Times are between 06:00 and 21:00 Iceland time.
+                        Booked times are displayed but cannot be selected.
                     </span>
                 </div>
 
                 <div class="form-group">
                     <label for="passengers">Passengers *</label>
                     <select id="passengers" name="passengers" required>
-                        <option value="1">1 passenger</option>
-                        <option value="2">2 passengers</option>
-                        <option value="3">3 passengers</option>
-                        <option value="4">4 passengers</option>
-                        <option value="5">5 passengers</option>
-                        <option value="6">6 passengers</option>
-                        <option value="7">7 passengers</option>
-                        <option value="8">8 passengers</option>
-                        <option value="9">9 passengers</option>
-                        <option value="10">10 passengers</option>
-                        <option value="11">11 passengers</option>
-                        <option value="12">12 passengers</option>
-                        <option value="13">13 passengers</option>
-                        <option value="14">14 passengers</option>
-                        <option value="15">15 passengers</option>
-                        <option value="16">16 passengers</option>
-                        <option value="17">17 passengers</option>
-                        <option value="18">18 passengers</option>
-                        <option value="19">19 passengers</option>
-                        <option value="20">20 passengers</option>
                     </select>
+                    <span class="hint" id="passengerCapacityHint"></span>
                 </div>
 
                 <div class="form-group">
@@ -550,8 +535,7 @@ footer a {
                     </select>
                 </div>
 
-                <div class="form-group full"
-                    id="childrenCountGroup" hidden>
+                <div class="form-group full" id="childrenCountGroup" hidden>
                     <label for="childrenCount">Number of Children *</label>
                     <select id="childrenCount" name="children_count">
                         <option value="1">1 child</option>
@@ -579,8 +563,7 @@ footer a {
                     </span>
                 </div>
 
-                <div class="form-group full"
-                    id="childrenAgesGroup" hidden>
+                <div class="form-group full" id="childrenAgesGroup" hidden>
                     <label>Each Child's Age *</label>
                     <div id="childrenAges" class="child-age-list"></div>
                     <span class="hint">
@@ -625,12 +608,10 @@ footer a {
             </div>
 
             <div class="form-actions">
-                <button type="submit" id="submitBooking"
-                    class="primary-button">
+                <button type="submit" id="submitBooking" class="primary-button">
                     Check Availability &amp; Book
                 </button>
             </div>
-
         </form>
     </div>
 </section>
@@ -648,95 +629,24 @@ footer a {
 
         <h3>Booking Confirmation</h3>
 
-        <div class="invoice-line">
-            <span>Booking Reference</span>
-            <strong id="invReference">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Booking Status</span>
-            <strong id="invStatus">Submitted</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Customer</span>
-            <strong id="invName">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Email</span>
-            <strong id="invEmail">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Phone</span>
-            <strong id="invPhone">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Travelling from</span>
-            <strong id="invCountry">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Pickup</span>
-            <strong id="invPickup">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Destination</span>
-            <strong id="invDestination">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Date</span>
-            <strong id="invDate">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Time</span>
-            <strong id="invTime">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Passengers</span>
-            <strong id="invPassengers">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Luggage</span>
-            <strong id="invLuggage">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Vehicle</span>
-            <strong id="invVehicle">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Travelling with children</span>
-            <strong id="invChildren">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Children's ages</span>
-            <strong id="invChildrenAges">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Total Price</span>
-            <strong id="invTotal">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Flight Number</span>
-            <strong id="invFlight">—</strong>
-        </div>
-
-        <div class="invoice-line">
-            <span>Special Requests</span>
-            <strong id="invRequests">None</strong>
-        </div>
+        <div class="invoice-line"><span>Booking Reference</span><strong id="invReference">—</strong></div>
+        <div class="invoice-line"><span>Booking Status</span><strong id="invStatus">Submitted</strong></div>
+        <div class="invoice-line"><span>Customer</span><strong id="invName">—</strong></div>
+        <div class="invoice-line"><span>Email</span><strong id="invEmail">—</strong></div>
+        <div class="invoice-line"><span>Phone</span><strong id="invPhone">—</strong></div>
+        <div class="invoice-line"><span>Travelling from</span><strong id="invCountry">—</strong></div>
+        <div class="invoice-line"><span>Pickup</span><strong id="invPickup">—</strong></div>
+        <div class="invoice-line"><span>Destination</span><strong id="invDestination">—</strong></div>
+        <div class="invoice-line"><span>Date</span><strong id="invDate">—</strong></div>
+        <div class="invoice-line"><span>Time</span><strong id="invTime">—</strong></div>
+        <div class="invoice-line"><span>Passengers</span><strong id="invPassengers">—</strong></div>
+        <div class="invoice-line"><span>Luggage</span><strong id="invLuggage">—</strong></div>
+        <div class="invoice-line"><span>Vehicle</span><strong id="invVehicle">—</strong></div>
+        <div class="invoice-line"><span>Travelling with children</span><strong id="invChildren">—</strong></div>
+        <div class="invoice-line"><span>Children's ages</span><strong id="invChildrenAges">—</strong></div>
+        <div class="invoice-line"><span>Total Price</span><strong id="invTotal">—</strong></div>
+        <div class="invoice-line"><span>Flight Number</span><strong id="invFlight">—</strong></div>
+        <div class="invoice-line"><span>Special Requests</span><strong id="invRequests">None</strong></div>
 
         <p id="invoiceMessage" style="margin-top:20px"></p>
 
@@ -747,19 +657,16 @@ footer a {
     </div>
 
     <div class="invoice-actions no-print">
-        <button type="button" class="primary-button"
-            onclick="saveInvoicePDF()">
+        <button type="button" class="primary-button" onclick="saveInvoicePDF()">
             Save Invoice as PDF
         </button>
 
-        <button type="button" class="danger-button"
-            id="cancelBookingButton">
+        <button type="button" class="danger-button" id="cancelBookingButton">
             Cancel Booking
         </button>
     </div>
 
-    <div id="invoiceNotice" class="notice"
-        role="status" aria-live="polite"></div>
+    <div id="invoiceNotice" class="notice" role="status" aria-live="polite"></div>
 </section>
 
 </main>
@@ -769,37 +676,20 @@ footer a {
     <p>Your Journey, Our Drive</p>
     <p>
         <a href="contact.html">Contact Us</a> |
-        <a href="https://wa.me/3548333707">
-            WhatsApp: +354 833 3707
-        </a>
+        <a href="https://wa.me/3548333707">WhatsApp: +354 833 3707</a>
     </p>
 </footer>
+
 <script>
 "use strict";
 
 const API_BASE = "https://iceland-transfer-server.onrender.com";
 
 const VEHICLES = {
-    sedan: {
-        name: "Sedan",
-        price: 17900,
-        capacity: 4
-    },
-    mpv4: {
-        name: "MPV4",
-        price: 21900,
-        capacity: 4
-    },
-    van: {
-        name: "Van",
-        price: 26900,
-        capacity: 8
-    },
-    vip_van: {
-        name: "VIP VAN",
-        price: 32000,
-        capacity: 5
-    }
+    sedan: { name:"Sedan", price:17900, capacity:4 },
+    mpv4: { name:"MPV4", price:21900, capacity:4 },
+    van: { name:"Van", price:26900, capacity:8 },
+    vip_van: { name:"VIP VAN", price:32000, capacity:5 }
 };
 
 const form = document.getElementById("bookingForm");
@@ -828,94 +718,97 @@ const childrenAgesContainer =
 let latestBooking = null;
 let cancellationToken = null;
 let cancellationUrl = null;
+let availabilityRequestId = 0;
 
-/* Today's date */
+/* Iceland date and time */
 
-function getTodayLocalDate() {
-    const now = new Date();
+function getIcelandDateParts() {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone:"Atlantic/Reykjavik",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        hourCycle:"h23"
+    }).formatToParts(new Date());
 
-    return (
-        now.getFullYear() + "-" +
-        String(now.getMonth() + 1).padStart(2, "0") + "-" +
-        String(now.getDate()).padStart(2, "0")
-    );
+    const result = {};
+
+    parts.forEach(part => {
+        if (part.type !== "literal") {
+            result[part.type] = part.value;
+        }
+    });
+
+    return result;
 }
 
-dateInput.min = getTodayLocalDate();
+function getTodayIcelandDate() {
+    const p = getIcelandDateParts();
+    return p.year + "-" + p.month + "-" + p.day;
+}
 
-/* Available pickup times */
+function isPastIcelandTime(date, time) {
+    const today = getTodayIcelandDate();
 
-function populatePickupTimes() {
-    timeSelect.innerHTML =
-        '<option value="">Choose pickup time</option>';
+    if (date < today) return true;
+    if (date > today) return false;
 
-    for (let hour = 6; hour <= 22; hour++) {
-        const time =
-            String(hour).padStart(2, "0") + ":00";
+    const p = getIcelandDateParts();
+    const currentTime = p.hour + ":" + p.minute;
 
-        const option = document.createElement("option");
+    return time <= currentTime;
+}
 
-        option.value = time;
-        option.textContent = time;
+/* Prevent choosing previous dates */
 
-        timeSelect.appendChild(option);
+function setMinimumDate() {
+    dateInput.min = getTodayIcelandDate();
+
+    if (dateInput.value && dateInput.value < dateInput.min) {
+        dateInput.value = "";
     }
 }
 
-populatePickupTimes();
+setMinimumDate();
 
-/* Notifications */
-
-function showNotice(elementId, message, type) {
-    const element = document.getElementById(elementId);
-
-    element.textContent = message;
-    element.className = "notice " + type;
-    element.style.display = "block";
-
-    element.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-}
-
-function clearNotice(elementId) {
-    const element = document.getElementById(elementId);
-
-    element.textContent = "";
-    element.className = "notice";
-    element.style.display = "none";
-}
-
-/* Vehicle capacity */
-
-function getPassengerCapacity() {
-    return VEHICLES[vehicleSelect.value]?.capacity || 20;
-}
+/* Passenger options linked to selected vehicle */
 
 function updatePassengerOptions() {
-    const capacity = getPassengerCapacity();
+    const vehicle = VEHICLES[vehicleSelect.value];
 
-    Array.from(passengersSelect.options).forEach(option => {
-        const count = Number(option.value);
+    if (!vehicle) return;
 
-        option.disabled = count > capacity;
-        option.hidden = count > capacity;
-    });
+    const previousValue = Number(passengersSelect.value) || 1;
+    const capacity = vehicle.capacity;
 
-    if (Number(passengersSelect.value) > capacity) {
-        passengersSelect.value = String(capacity);
+    passengersSelect.innerHTML = "";
+
+    for (let i = 1; i <= capacity; i++) {
+        const option = document.createElement("option");
+
+        option.value = String(i);
+        option.textContent =
+            i + (i === 1 ? " passenger" : " passengers");
+
+        passengersSelect.appendChild(option);
     }
+
+    passengersSelect.value = String(
+        Math.min(previousValue, capacity)
+    );
+
+    document.getElementById("passengerCapacityHint").textContent =
+        "This vehicle can carry a maximum of " +
+        capacity + " passengers.";
 
     updateEstimate();
 }
 
-vehicleSelect.addEventListener(
-    "change",
-    updatePassengerOptions
-);
+vehicleSelect.addEventListener("change", updatePassengerOptions);
 
-/* Estimated vehicle price */
+/* Price estimate */
 
 function formatISK(amount) {
     return Math.round(amount).toLocaleString("en-US") + " ISK";
@@ -923,9 +816,7 @@ function formatISK(amount) {
 
 function updateEstimate() {
     const vehicle = VEHICLES[vehicleSelect.value];
-
-    const estimateBox =
-        document.getElementById("priceEstimate");
+    const estimateBox = document.getElementById("priceEstimate");
 
     if (!vehicle) {
         estimateBox.hidden = true;
@@ -941,10 +832,7 @@ function updateEstimate() {
     estimateBox.hidden = false;
 }
 
-passengersSelect.addEventListener(
-    "change",
-    updateEstimate
-);
+passengersSelect.addEventListener("change", updateEstimate);
 
 updatePassengerOptions();
 
@@ -960,10 +848,11 @@ function setupOtherLocation(selectId, groupId, inputId) {
 
         group.hidden = !isOther;
         input.required = isOther;
+
+        if (!isOther) input.value = "";
     }
 
     select.addEventListener("change", update);
-
     update();
 }
 
@@ -979,7 +868,7 @@ setupOtherLocation(
     "otherDestination"
 );
 
-/* Children's ages */
+/* Children's age fields */
 
 function renderChildAgeInputs() {
     const count = Number(childrenCountSelect.value) || 0;
@@ -988,25 +877,19 @@ function renderChildAgeInputs() {
 
     for (let i = 1; i <= count; i++) {
         const group = document.createElement("div");
-
         group.className = "child-age-item";
 
         const label = document.createElement("label");
-
         label.htmlFor = "childAge" + i;
         label.textContent = "Child " + i + " age *";
 
         const select = document.createElement("select");
-
         select.id = "childAge" + i;
         select.name = "child_ages[]";
-
-        select.required =
-            childrenTravelSelect.value === "yes";
+        select.required = childrenTravelSelect.value === "yes";
 
         for (let age = 0; age <= 17; age++) {
             const option = document.createElement("option");
-
             option.value = String(age);
 
             option.textContent = age === 0
@@ -1018,43 +901,370 @@ function renderChildAgeInputs() {
 
         group.appendChild(label);
         group.appendChild(select);
-
         childrenAgesContainer.appendChild(group);
     }
 }
 
 function updateChildrenFields() {
-    const hasChildren =
-        childrenTravelSelect.value === "yes";
+    const hasChildren = childrenTravelSelect.value === "yes";
 
     childrenCountGroup.hidden = !hasChildren;
     childrenAgesGroup.hidden = !hasChildren;
 
     childrenCountSelect.required = hasChildren;
 
-    renderChildAgeInputs();
+    if (hasChildren) {
+        renderChildAgeInputs();
+    } else {
+        childrenAgesContainer.innerHTML = "";
+    }
 }
 
-childrenTravelSelect.addEventListener(
-    "change",
-    updateChildrenFields
-);
-
-childrenCountSelect.addEventListener(
-    "change",
-    renderChildAgeInputs
-);
+childrenTravelSelect.addEventListener("change", updateChildrenFields);
+childrenCountSelect.addEventListener("change", renderChildAgeInputs);
 
 updateChildrenFields();
+
+/* Notices */
+
+function showNotice(elementId, message, type) {
+    const element = document.getElementById(elementId);
+    element.textContent = message;
+    element.className = "notice " + type;
+    element.style.display = "block";
+}
+
+function clearNotice(elementId) {
+    const element = document.getElementById(elementId);
+    element.textContent = "";
+    element.className = "notice";
+    element.style.display = "none";
+}
+
+/* Normalize server time values */
+
+function normalizeTime(value) {
+    if (value === null || value === undefined) return null;
+
+    if (typeof value === "object") {
+        value =
+            value.time ??
+            value.pickup_time ??
+            value.start_time ??
+            value.slot ??
+            value.value ??
+            value.hour;
+
+        if (value === null || value === undefined) return null;
+    }
+
+    const text = String(value).trim();
+    const match = text.match(/(\d{1,2}):(\d{2})/);
+
+    if (!match) return null;
+
+    const hour = Number(match[1]);
+    const minute = Number(match[2]);
+
+    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+        return null;
+    }
+
+    return String(hour).padStart(2, "0") +
+        ":" + String(minute).padStart(2, "0");
+}
+
+function extractTimeArray(data, keys) {
+    for (const key of keys) {
+        if (Array.isArray(data?.[key])) {
+            return data[key].map(normalizeTime).filter(Boolean);
+        }
+    }
+
+    return null;
+}
+
+/* Get all daily availability from server */
+
+async function fetchAvailability(date) {
+    const response = await fetch(
+        API_BASE + "/api/availability?date=" +
+        encodeURIComponent(date),
+        {
+            method:"GET",
+            cache:"no-store"
+        }
+    );
+
+    let data = {};
+
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error("The server returned an invalid response.");
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data.error || data.message ||
+            "Availability request failed: " + response.status
+        );
+    }
+
+    return data;
+}
+
+/* Fallback for servers that return availability one hour at a time */
+
+async function checkSingleTimeAvailability(date, time) {
+    try {
+        const response = await fetch(
+            API_BASE +
+            "/api/availability?date=" +
+            encodeURIComponent(date) +
+            "&time=" +
+            encodeURIComponent(time),
+            {
+                method:"GET",
+                cache:"no-store"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) return "unknown";
+
+        if (
+            data.available === false ||
+            data.isAvailable === false ||
+            data.is_available === false
+        ) {
+            return "booked";
+        }
+
+        if (
+            data.available === true ||
+            data.isAvailable === true ||
+            data.is_available === true
+        ) {
+            return "available";
+        }
+
+        return "unknown";
+
+    } catch {
+        return "unknown";
+    }
+}
+
+/* Build the time dropdown */
+
+function createTimeOptions() {
+    timeSelect.innerHTML = "";
+
+    const first = document.createElement("option");
+    first.value = "";
+    first.textContent = "Choose a date first";
+    timeSelect.appendChild(first);
+
+    for (let hour = 6; hour <= 21; hour++) {
+        const time = String(hour).padStart(2, "0") + ":00";
+
+        const option = document.createElement("option");
+        option.value = time;
+        option.textContent = time;
+        option.disabled = true;
+
+        timeSelect.appendChild(option);
+    }
+}
+
+function renderAvailability(date, bookedTimes, availableTimes) {
+    createTimeOptions();
+
+    const booked = new Set(bookedTimes || []);
+    const available = availableTimes
+        ? new Set(availableTimes)
+        : null;
+
+    Array.from(timeSelect.options).forEach(option => {
+        const time = option.value;
+        if (!time) return;
+
+        if (isPastIcelandTime(date, time)) {
+            option.disabled = true;
+            option.textContent = time + " — Unavailable";
+        } else if (booked.has(time)) {
+            option.disabled = true;
+            option.textContent = time + " — Booked";
+        } else if (available && !available.has(time)) {
+            option.disabled = true;
+            option.textContent = time + " — Unavailable";
+        } else {
+            option.disabled = false;
+            option.textContent = time;
+        }
+    });
+
+    timeSelect.value = "";
+}
+
+function setAllTimesUnavailable(message) {
+    createTimeOptions();
+
+    Array.from(timeSelect.options).forEach(option => {
+        if (!option.value) return;
+
+        option.disabled = true;
+        option.textContent = option.value + " — Unavailable";
+    });
+
+    if (message) {
+        showNotice("formNotice", message, "error");
+    }
+}
+
+/* Load available times when a date is selected */
+
+async function loadAvailability() {
+    const date = dateInput.value;
+    const requestId = ++availabilityRequestId;
+
+    createTimeOptions();
+
+    if (!date) return;
+
+    if (date < getTodayIcelandDate()) {
+        dateInput.value = "";
+        showNotice(
+            "formNotice",
+            "Please choose today or a future date.",
+            "error"
+        );
+        return;
+    }
+
+    Array.from(timeSelect.options).forEach(option => {
+        if (option.value) {
+            option.disabled = true;
+            option.textContent = option.value + " — Checking...";
+        }
+    });
+
+    try {
+        const data = await fetchAvailability(date);
+
+        if (requestId !== availabilityRequestId) return;
+
+        let bookedTimes = extractTimeArray(data, [
+            "booked_times",
+            "bookedTimes",
+            "unavailable_times",
+            "unavailableTimes",
+            "booked",
+            "unavailable"
+        ]);
+
+        let availableTimes = extractTimeArray(data, [
+            "available_times",
+            "availableTimes",
+            "available_slots",
+            "availableSlots",
+            "times",
+            "available"
+        ]);
+
+        /*
+         * If the server provides only available times,
+         * use that list directly.
+         *
+         * If it provides booked times, use those.
+         *
+         * If it provides neither, check each hour individually.
+         */
+        if (bookedTimes === null && availableTimes === null) {
+            const checks = [];
+
+            for (let hour = 6; hour <= 21; hour++) {
+                const time = String(hour).padStart(2, "0") + ":00";
+
+                checks.push(
+                    checkSingleTimeAvailability(date, time)
+                        .then(status => ({ time, status }))
+                );
+            }
+
+            const results = await Promise.all(checks);
+
+            if (requestId !== availabilityRequestId) return;
+
+            const unknownResults = results.filter(
+                item => item.status === "unknown"
+            );
+
+            if (unknownResults.length === results.length) {
+                throw new Error(
+                    "The server did not provide recognizable availability information."
+                );
+            }
+
+            bookedTimes = results
+                .filter(item => item.status === "booked")
+                .map(item => item.time);
+
+            availableTimes = results
+                .filter(item => item.status === "available")
+                .map(item => item.time);
+        }
+
+        renderAvailability(
+            date,
+            bookedTimes || [],
+            availableTimes
+        );
+
+        const hasAvailableTime =
+            Array.from(timeSelect.options).some(
+                option => option.value && !option.disabled
+            );
+
+        if (!hasAvailableTime) {
+            showNotice(
+                "formNotice",
+                "No pickup times are available for this date. Please choose another date.",
+                "error"
+            );
+        } else {
+            clearNotice("formNotice");
+        }
+
+    } catch (error) {
+        if (requestId !== availabilityRequestId) return;
+
+        setAllTimesUnavailable();
+
+        showNotice(
+            "formNotice",
+            "We could not load the pickup times. Please try again. " +
+            error.message,
+            "error"
+        );
+    }
+}
+
+dateInput.addEventListener("change", loadAvailability);
+
+/* Keep date minimum updated */
+
+dateInput.addEventListener("focus", setMinimumDate);
 
 /* Server request */
 
 async function serverRequest(path, options = {}) {
     const response = await fetch(API_BASE + path, {
         ...options,
-
-        headers: {
-            "Content-Type": "application/json",
+        headers:{
+            "Content-Type":"application/json",
             ...(options.headers || {})
         }
     });
@@ -1078,7 +1288,7 @@ async function serverRequest(path, options = {}) {
     return result;
 }
 
-/* Submit booking */
+/* Booking submission */
 
 form.addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -1086,33 +1296,57 @@ form.addEventListener("submit", async function(event) {
     clearNotice("formNotice");
     clearNotice("invoiceNotice");
 
-    if (!form.reportValidity()) {
-        return;
-    }
+    if (!form.reportValidity()) return;
 
-    const passengerCount =
-        Number(passengersSelect.value);
+    const passengerCount = Number(passengersSelect.value);
+    const vehicle = VEHICLES[vehicleSelect.value];
 
-    const capacity = getPassengerCapacity();
-
-    if (passengerCount < 1 || passengerCount > capacity) {
+    if (!vehicle || passengerCount > vehicle.capacity) {
         showNotice(
             "formNotice",
-            "The selected vehicle supports up to " +
-            capacity + " passengers.",
+            "The selected vehicle cannot carry this number of passengers.",
             "error"
         );
-
         return;
     }
 
-    if (dateInput.value < getTodayLocalDate()) {
+    if (dateInput.value < getTodayIcelandDate()) {
         showNotice(
             "formNotice",
             "Please select today or a future date.",
             "error"
         );
+        return;
+    }
 
+    if (!timeSelect.value) {
+        showNotice(
+            "formNotice",
+            "Please choose a pickup time.",
+            "error"
+        );
+        return;
+    }
+
+    const selectedOption =
+        timeSelect.options[timeSelect.selectedIndex];
+
+    if (!selectedOption || selectedOption.disabled) {
+        showNotice(
+            "formNotice",
+            "This time is not available. Please choose another time.",
+            "error"
+        );
+        return;
+    }
+
+    if (isPastIcelandTime(dateInput.value, timeSelect.value)) {
+        showNotice(
+            "formNotice",
+            "Please choose a future time in Iceland.",
+            "error"
+        );
+        loadAvailability();
         return;
     }
 
@@ -1132,7 +1366,6 @@ form.addEventListener("submit", async function(event) {
             "Please select the age of every child.",
             "error"
         );
-
         return;
     }
 
@@ -1142,15 +1375,11 @@ form.addEventListener("submit", async function(event) {
             "The number of children cannot exceed the total number of passengers.",
             "error"
         );
-
         return;
     }
 
-    const pickupSelect =
-        document.getElementById("pickupLocation");
-
-    const destinationSelect =
-        document.getElementById("destination");
+    const pickupSelect = document.getElementById("pickupLocation");
+    const destinationSelect = document.getElementById("destination");
 
     const pickupLocation =
         pickupSelect.value === "Other pickup location"
@@ -1163,30 +1392,22 @@ form.addEventListener("submit", async function(event) {
             : destinationSelect.value;
 
     const payload = {
-        full_name:
-            document.getElementById("fullName").value.trim(),
+        full_name:document.getElementById("fullName").value.trim(),
+        email:document.getElementById("email").value.trim(),
+        phone:document.getElementById("phone").value.trim(),
 
-        email:
-            document.getElementById("email").value.trim(),
-
-        phone:
-            document.getElementById("phone").value.trim(),
-
-        pickup_location: pickupLocation,
-
-        destination: destination,
+        pickup_location:pickupLocation,
+        destination:destination,
 
         country_of_origin:
             document.getElementById("countryOfOrigin").value.trim(),
 
-        pickup_date: dateInput.value,
+        pickup_date:dateInput.value,
+        pickup_time:timeSelect.value,
 
-        pickup_time: timeSelect.value,
+        passengers:passengerCount,
 
-        passengers: passengerCount,
-
-        luggage:
-            Number(document.getElementById("luggage").value) || 0,
+        luggage:Number(document.getElementById("luggage").value) || 0,
 
         flight_number:
             document.getElementById("flightNumber").value.trim(),
@@ -1194,25 +1415,20 @@ form.addEventListener("submit", async function(event) {
         special_requests:
             document.getElementById("specialRequests").value.trim(),
 
-        service_type: "golden_circle_tour",
+        service_type:"golden_circle_tour",
+        package_type:"classic",
 
-        package_type: "classic",
-
-        vehicle_type: vehicleSelect.value,
-
-        vehicle_name:
-            VEHICLES[vehicleSelect.value].name,
+        vehicle_type:vehicleSelect.value,
+        vehicle_name:vehicle.name,
 
         travelling_with_children:
             childrenTravelSelect.value === "yes",
 
-        children_count: childAges.length,
+        children_count:childAges.length,
+        child_ages:childAges,
 
-        child_ages: childAges,
-
-        addons: [],
-
-        selected_stops: []
+        addons:[],
+        selected_stops:[]
     };
 
     submitButton.disabled = true;
@@ -1222,14 +1438,13 @@ form.addEventListener("submit", async function(event) {
         const result = await serverRequest(
             "/api/bookings",
             {
-                method: "POST",
-                body: JSON.stringify(payload)
+                method:"POST",
+                body:JSON.stringify(payload)
             }
         );
 
         const returnedBooking =
-            result.booking &&
-            typeof result.booking === "object"
+            result.booking && typeof result.booking === "object"
                 ? result.booking
                 : {};
 
@@ -1237,7 +1452,6 @@ form.addEventListener("submit", async function(event) {
             ...payload,
             ...returnedBooking,
             ...result,
-
             ...payload
         };
 
@@ -1253,9 +1467,7 @@ form.addEventListener("submit", async function(event) {
 
         displayInvoice(latestBooking);
 
-        document.getElementById(
-            "invoiceSection"
-        ).style.display = "block";
+        document.getElementById("invoiceSection").style.display = "block";
 
         showNotice(
             "formNotice",
@@ -1263,12 +1475,12 @@ form.addEventListener("submit", async function(event) {
             "success"
         );
 
-        document.getElementById(
-            "invoiceSection"
-        ).scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+        document.getElementById("invoiceSection").scrollIntoView({
+            behavior:"smooth",
+            block:"start"
         });
+
+        loadAvailability();
 
     } catch (error) {
         showNotice(
@@ -1277,11 +1489,11 @@ form.addEventListener("submit", async function(event) {
             "error"
         );
 
+        loadAvailability();
+
     } finally {
         submitButton.disabled = false;
-
-        submitButton.textContent =
-            "Check Availability & Book";
+        submitButton.textContent = "Check Availability & Book";
     }
 });
 
@@ -1289,9 +1501,7 @@ form.addEventListener("submit", async function(event) {
 
 function setInvoiceValue(id, value) {
     document.getElementById(id).textContent =
-        value === null ||
-        value === undefined ||
-        value === ""
+        value === null || value === undefined || value === ""
             ? "—"
             : String(value);
 }
@@ -1323,9 +1533,7 @@ function displayInvoice(booking) {
 
     setInvoiceValue(
         "invStatus",
-        booking.status ||
-        booking.booking?.status ||
-        "Submitted"
+        booking.status || booking.booking?.status || "Submitted"
     );
 
     setInvoiceValue("invName", booking.full_name);
@@ -1356,8 +1564,7 @@ function displayInvoice(booking) {
 
     setInvoiceValue(
         "invChildrenAges",
-        Array.isArray(booking.child_ages) &&
-        booking.child_ages.length
+        Array.isArray(booking.child_ages) && booking.child_ages.length
             ? booking.child_ages.map(age =>
                 Number(age) === 0
                     ? "Under 1 year"
@@ -1366,11 +1573,7 @@ function displayInvoice(booking) {
             : "None"
     );
 
-    setInvoiceValue(
-        "invTotal",
-        formatISK(totalPrice)
-    );
-
+    setInvoiceValue("invTotal", formatISK(totalPrice));
     setInvoiceValue("invFlight", booking.flight_number);
     setInvoiceValue("invRequests", booking.special_requests);
 
@@ -1400,7 +1603,6 @@ cancelButton.addEventListener("click", async function() {
             "No booking is available to cancel.",
             "error"
         );
-
         return;
     }
 
@@ -1417,7 +1619,6 @@ cancelButton.addEventListener("click", async function() {
             "The server did not return a cancellation token or cancellation link. Please contact the driver to cancel this booking.",
             "error"
         );
-
         return;
     }
 
@@ -1425,9 +1626,7 @@ cancelButton.addEventListener("click", async function() {
         "Are you sure you want to cancel this booking? The server will check whether cancellation is allowed."
     );
 
-    if (!confirmed) {
-        return;
-    }
+    if (!confirmed) return;
 
     cancelButton.disabled = true;
     cancelButton.textContent = "Cancelling...";
@@ -1445,14 +1644,10 @@ cancelButton.addEventListener("click", async function() {
             }
 
             const response = await fetch(parsedUrl.href, {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    cancellation_token: cancellationToken
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify({
+                    cancellation_token:cancellationToken
                 })
             });
 
@@ -1474,18 +1669,16 @@ cancelButton.addEventListener("click", async function() {
             result = await serverRequest(
                 "/api/bookings/cancel",
                 {
-                    method: "POST",
-
-                    body: JSON.stringify({
-                        booking_id: reference,
-                        cancellation_token: cancellationToken
+                    method:"POST",
+                    body:JSON.stringify({
+                        booking_id:reference,
+                        cancellation_token:cancellationToken
                     })
                 }
             );
         }
 
         latestBooking.status = "cancelled";
-
         setInvoiceValue("invStatus", "Cancelled");
 
         cancelButton.style.display = "none";
@@ -1496,6 +1689,8 @@ cancelButton.addEventListener("click", async function() {
             "The booking cancellation was accepted by the server.",
             "success"
         );
+
+        loadAvailability();
 
     } catch (error) {
         showNotice(
@@ -1509,6 +1704,13 @@ cancelButton.addEventListener("click", async function() {
         cancelButton.textContent = "Cancel Booking";
     }
 });
+
+/* Initial setup */
+
+createTimeOptions();
+updatePassengerOptions();
+updateChildrenFields();
+
 </script>
 
 </body>

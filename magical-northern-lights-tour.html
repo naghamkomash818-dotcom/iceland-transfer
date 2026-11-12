@@ -66,7 +66,7 @@ footer{background:var(--deep-green);color:white;padding:38px 25px}.footer-inner{
 <div class="price-display"><div class="price-label">Selected vehicle price</div><div class="price-value" id="startingPrice">17,900 ISK</div><div class="price-note" id="vehiclePriceNote">Sedan · Up to 4 passengers · Estimated price per vehicle</div></div>
 <form id="tourBookingForm">
 <div class="form-group"><label for="vehicleType">Choose Vehicle *</label><select id="vehicleType" required><option value="sedan">Sedan — up to 4 passengers</option><option value="mpv4">MPV4 — up to 4 passengers</option><option value="van">Van — up to 8 passengers</option><option value="vip_van">VIP VAN — up to 5 passengers</option></select><small style="display:block;color:var(--muted);font-size:12px;margin-top:6px">The price updates automatically when you select a vehicle.</small></div>
-<div class="form-row"><div class="form-group"><label for="tourDate">Tour Date *</label><input type="date" id="tourDate" required></div><div class="form-group"><label for="tourTime">Pickup Time (Iceland time) *</label><select id="tourTime" required><option value="">Choose time</option></select><small id="timeHelp" style="display:block;color:#777a70;font-size:11px;margin-top:5px">Loading available times…</small></div></div>
+<div class="form-row"><div class="form-group"><label for="tourDate">Tour Date *</label><input type="date" id="tourDate" required></div><div class="form-group"><label for="tourTime">Pickup Time (Iceland time) *</label><select id="tourTime" required><option value="">Choose time</option></select><small id="timeHelp" style="display:block;color:#777a70;font-size:11px;margin-top:5px">Choose a date to check available pickup times.</small></div></div>
 <div class="form-group"><label for="fullName">Full Name *</label><input type="text" id="fullName" autocomplete="name" maxlength="100" required placeholder="Enter your full name"></div>
 <div class="form-group"><label for="phone">Phone Number *</label><input type="tel" id="phone" autocomplete="tel" maxlength="30" required placeholder="+country code and phone number"></div>
 <div class="form-group"><label for="pickup">Pickup Location *</label><select id="pickup" required><option value="">Choose pickup location</option><option>Reykjavik City Centre</option><option>Keflavik International Airport (KEF)</option><option>Keflavik Town</option><option>Reykjanesbær</option><option>Hafnarfjordur</option><option>Gardabaer</option><option>Kopavogur</option><option>Mosfellsbaer</option><option>Selfoss</option><option>Hveragerdi</option><option>Grindavik</option><option>Blue Lagoon</option><option>Other location</option></select></div>
@@ -104,15 +104,20 @@ footer{background:var(--deep-green);color:white;padding:38px 25px}.footer-inner{
 <section class="other-tours"><div class="section-label">Explore More</div><h2>Discover More of Iceland</h2><p>Make your Iceland journey even more memorable.</p><div class="tour-links"><a href="golden-circle-tour.html" class="tour-link">Golden Circle Tour</a><a href="airport-transportation.html" class="tour-link">Airport Transportation</a><a href="transfers.html" class="tour-link">All Transfers</a><a href="order-overview.html" class="tour-link">View Booking Overview</a></div></section>
 <footer><div class="footer-inner"><div><div class="footer-logo">ICELAND <span>TRANSFER</span></div><p>Private transportation and tours in Iceland.</p></div><div class="footer-links"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="airport-transportation.html">Airport Transfers</a><a href="order-overview.html">My Booking</a></div></div></footer>
 <a class="whatsapp-button" href="https://wa.me/3548333707" target="_blank" rel="noopener noreferrer">WhatsApp Us</a>
+
 <script>
 "use strict";
+
 const API_BASE_URL = "https://iceland-transfer-server.onrender.com";
+const AVAILABILITY_URL = API_BASE_URL + "/api/availability";
+
 const VEHICLES = {
  sedan: { name: "Sedan", price: 17900, maxPassengers: 4 },
  mpv4: { name: "MPV4", price: 21900, maxPassengers: 4 },
  van: { name: "Van", price: 26900, maxPassengers: 8 },
  vip_van: { name: "VIP VAN", price: 32000, maxPassengers: 5 }
 };
+
 const form = document.getElementById("tourBookingForm");
 const passengers = document.getElementById("passengers");
 const vehicleType = document.getElementById("vehicleType");
@@ -133,155 +138,653 @@ const tourDate = document.getElementById("tourDate");
 const tourTime = document.getElementById("tourTime");
 const timeHelp = document.getElementById("timeHelp");
 const submitButton = document.getElementById("submitButton");
+
+let availabilityRequestNumber = 0;
+let currentAvailableTimes = null;
+
 const money = amount => Math.round(amount).toLocaleString("en-US") + " ISK";
-function selectedVehicle(){ return VEHICLES[vehicleType.value] || VEHICLES.sedan; }
-function updateVehicleAndPassengers(){
- const vehicle=selectedVehicle();
- const current=Number(passengers.value)||1;
- Array.from(passengers.options).forEach(option=>{
-  const disabled=Number(option.value)>vehicle.maxPassengers;
-  option.disabled=disabled; option.hidden=disabled;
- });
- if(current>vehicle.maxPassengers) passengers.value=String(vehicle.maxPassengers);
- document.getElementById("startingPrice").textContent=money(vehicle.price);
- vehiclePriceNote.textContent=vehicle.name+" · Up to "+vehicle.maxPassengers+" passengers · Estimated price per vehicle";
- vehicleTotal.textContent=money(vehicle.price);
- document.getElementById("grandTotal").textContent=money(vehicle.price);
+
+function selectedVehicle(){
+ return VEHICLES[vehicleType.value] || VEHICLES.sedan;
 }
 
-function localDateString(date){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,"0"),d=String(date.getDate()).padStart(2,"0");return `${y}-${m}-${d}`;}
-tourDate.min=localDateString(new Date());
+function updateVehicleAndPassengers(){
+ const vehicle = selectedVehicle();
+ const current = Number(passengers.value) || 1;
 
+ Array.from(passengers.options).forEach(option => {
+  const disabled = Number(option.value) > vehicle.maxPassengers;
+  option.disabled = disabled;
+  option.hidden = disabled;
+ });
+
+ if(current > vehicle.maxPassengers){
+  passengers.value = String(vehicle.maxPassengers);
+ }
+
+ document.getElementById("startingPrice").textContent = money(vehicle.price);
+ vehiclePriceNote.textContent = vehicle.name + " · Up to " + vehicle.maxPassengers + " passengers · Estimated price per vehicle";
+ vehicleTotal.textContent = money(vehicle.price);
+ document.getElementById("grandTotal").textContent = money(vehicle.price);
+}
+
+/* Iceland local date and time */
+function getIcelandDateParts(){
+ const parts = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Atlantic/Reykjavik",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit"
+ }).formatToParts(new Date());
+
+ const values = {};
+ parts.forEach(part => {
+  if(part.type !== "literal") values[part.type] = part.value;
+ });
+
+ return {
+  year: values.year,
+  month: values.month,
+  day: values.day,
+  date: values.year + "-" + values.month + "-" + values.day
+ };
+}
+
+function getIcelandTimeParts(){
+ const parts = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Atlantic/Reykjavik",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23"
+ }).formatToParts(new Date());
+
+ const values = {};
+ parts.forEach(part => {
+  if(part.type !== "literal") values[part.type] = part.value;
+ });
+
+ return {
+  hour: Number(values.hour),
+  minute: Number(values.minute)
+ };
+}
+
+tourDate.min = getIcelandDateParts().date;
+
+function isPastIcelandTime(date, time){
+ const today = getIcelandDateParts().date;
+ const now = getIcelandTimeParts();
+
+ if(date < today) return true;
+ if(date > today) return false;
+
+ const [hour, minute] = time.split(":").map(Number);
+ return hour < now.hour || (hour === now.hour && minute <= now.minute);
+}
+
+/* Children fields */
 function updateChildrenFields(){
- const enabled=travellingWithChildren.checked;
- childrenCountGroup.classList.toggle("hidden",!enabled);
- childrenAgesGroup.classList.toggle("hidden",!enabled);
- if(!enabled){childrenAgesFields.innerHTML="";return;}
- const count=Math.max(1,Math.min(8,Number(childrenCount.value)||1));
- const old=Array.from(childrenAgesFields.querySelectorAll("select")).map(el=>el.value);
- childrenAgesFields.innerHTML="";
- for(let i=0;i<count;i++){
-  const wrap=document.createElement("div"),label=document.createElement("label"),select=document.createElement("select");
-  label.htmlFor="childAge"+(i+1);label.textContent="Child "+(i+1)+" age";
-  label.style.cssText="display:block;font-weight:bold;color:var(--deep-green);font-size:13px;margin-bottom:7px";
-  select.id="childAge"+(i+1);select.required=true;select.style.cssText="width:100%;padding:12px;border:1px solid #dcd7cc;border-radius:5px;background:#fffefa;color:var(--text)";
-  const baby=document.createElement("option");baby.value="0";baby.textContent="Under 1 year";select.appendChild(baby);
-  for(let age=1;age<=17;age++){const op=document.createElement("option");op.value=String(age);op.textContent=age+(age===1?" year":" years");select.appendChild(op);}
-  if(old[i]!==undefined)select.value=old[i];
-  wrap.append(label,select);childrenAgesFields.appendChild(wrap);
+ const enabled = travellingWithChildren.checked;
+
+ childrenCountGroup.classList.toggle("hidden", !enabled);
+ childrenAgesGroup.classList.toggle("hidden", !enabled);
+
+ if(!enabled){
+  childrenAgesFields.innerHTML = "";
+  return;
+ }
+
+ const count = Math.max(1, Math.min(8, Number(childrenCount.value) || 1));
+ const old = Array.from(childrenAgesFields.querySelectorAll("select")).map(el => el.value);
+
+ childrenAgesFields.innerHTML = "";
+
+ for(let i = 0; i < count; i++){
+  const wrap = document.createElement("div");
+  const label = document.createElement("label");
+  const select = document.createElement("select");
+
+  label.htmlFor = "childAge" + (i + 1);
+  label.textContent = "Child " + (i + 1) + " age";
+  label.style.cssText = "display:block;font-weight:bold;color:var(--deep-green);font-size:13px;margin-bottom:7px";
+
+  select.id = "childAge" + (i + 1);
+  select.required = true;
+  select.style.cssText = "width:100%;padding:12px;border:1px solid #dcd7cc;border-radius:5px;background:#fffefa;color:var(--text)";
+
+  const baby = document.createElement("option");
+  baby.value = "0";
+  baby.textContent = "Under 1 year";
+  select.appendChild(baby);
+
+  for(let age = 1; age <= 17; age++){
+   const op = document.createElement("option");
+   op.value = String(age);
+   op.textContent = age + (age === 1 ? " year" : " years");
+   select.appendChild(op);
+  }
+
+  if(old[i] !== undefined) select.value = old[i];
+
+  wrap.append(label, select);
+  childrenAgesFields.appendChild(wrap);
  }
 }
-function getChildrenAges(){return travellingWithChildren.checked?Array.from(childrenAgesFields.querySelectorAll("select")).map(el=>Number(el.value)):[];}
-function updateLocationFields(){
- const otherPickup=pickup.value==="Other location",otherDrop=destination.value==="Other location";
- pickupOtherGroup.classList.toggle("hidden",!otherPickup);destinationOtherGroup.classList.toggle("hidden",!otherDrop);
- pickupOther.required=otherPickup;destinationOther.required=otherDrop;
- if(!otherPickup)pickupOther.value="";if(!otherDrop)destinationOther.value="";
+
+function getChildrenAges(){
+ return travellingWithChildren.checked
+  ? Array.from(childrenAgesFields.querySelectorAll("select")).map(el => Number(el.value))
+  : [];
 }
+
+/* Pickup and destination fields */
+function updateLocationFields(){
+ const otherPickup = pickup.value === "Other location";
+ const otherDrop = destination.value === "Other location";
+
+ pickupOtherGroup.classList.toggle("hidden", !otherPickup);
+ destinationOtherGroup.classList.toggle("hidden", !otherDrop);
+
+ pickupOther.required = otherPickup;
+ destinationOther.required = otherDrop;
+
+ if(!otherPickup) pickupOther.value = "";
+ if(!otherDrop) destinationOther.value = "";
+}
+
+/* Availability helpers */
 function normalizeTime(item){
- // Accept common API formats without ever displaying an object as "[object Object]".
- if(typeof item==="string"||typeof item==="number"){
-  const raw=String(item).trim();
-  let match=raw.match(/(?:T|\s|^)(\d{1,2}):(\d{2})(?::\d{2})?/);
-  if(match){const h=Number(match[1]),m=Number(match[2]);if(h>=0&&h<=23&&m>=0&&m<=59)return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");}
-  // Also accept a bare hour like 6 or 18.
-  if(/^\d{1,2}$/.test(raw)){const h=Number(raw);if(h>=0&&h<=23)return String(h).padStart(2,"0")+":00";}
+ if(typeof item === "string" || typeof item === "number"){
+  const raw = String(item).trim();
+  const match = raw.match(/(?:T|\s|^)(\d{1,2}):(\d{2})(?::\d{2})?/);
+
+  if(match){
+   const h = Number(match[1]);
+   const m = Number(match[2]);
+
+   if(h >= 0 && h <= 23 && m >= 0 && m <= 59){
+    return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
+   }
+  }
+
+  if(/^\d{1,2}$/.test(raw)){
+   const h = Number(raw);
+   if(h >= 0 && h <= 23){
+    return String(h).padStart(2, "0") + ":00";
+   }
+  }
+
   return "";
  }
- if(item&&typeof item==="object"){
-  for(const key of ["time","start_time","startTime","pickup_time","pickupTime","value","label","slot","datetime","date_time","start","available_time","hour"]){
-   if(item[key]!==undefined&&item[key]!==null){const result=normalizeTime(item[key]);if(result)return result;}
+
+ if(item && typeof item === "object"){
+  for(const key of [
+   "time","start_time","startTime","pickup_time","pickupTime",
+   "value","label","slot","datetime","date_time","start",
+   "available_time","hour"
+  ]){
+   if(item[key] !== undefined && item[key] !== null){
+    const result = normalizeTime(item[key]);
+    if(result) return result;
+   }
   }
  }
+
  return "";
 }
-function extractTimeArray(data){
- if(Array.isArray(data))return data;
- if(!data||typeof data!=="object")return [];
- const keys=["available_times","availableTimes","times","slots","availability","available_slots","availableSlots","data","results","items"];
- for(const key of keys){
-  if(data[key]!==undefined){
-   const found=extractTimeArray(data[key]);
-   if(found.length)return found;
-  }
- }
- // Sometimes APIs return a map such as {"06:00": true, "07:00": true}.
- const entries=Object.entries(data);
- if(entries.length && entries.every(([key,value])=>/^\d{1,2}:\d{2}$/.test(key) && (value===true||value===1||value==="available"))) return entries.map(([key])=>key);
- return [];
-}
-function setTimeOptions(items,message){
- const previous=tourTime.value;
- tourTime.innerHTML="";
- const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choose pickup time";tourTime.appendChild(placeholder);
- const clean=[...new Set((Array.isArray(items)?items:[]).map(normalizeTime).filter(t=>/^\d{2}:\d{2}$/.test(t)))].sort();
- clean.forEach(time=>{const op=document.createElement("option");op.value=time;op.textContent=time;tourTime.appendChild(op);});
- if(clean.includes(previous))tourTime.value=previous;
- timeHelp.textContent=message;
-}
-async function loadAvailableTimes(){
- const date=tourDate.value;
- if(!date){setTimeOptions([],"Choose a date to check available pickup times.");return;}
- setTimeOptions([],"Checking available times…");
- try{
-  const response=await fetch(API_BASE_URL+"/api/availability?date="+encodeURIComponent(date)+"&service_type=northern_lights_tour",{headers:{Accept:"application/json"}});
-  const raw=await response.text();
-  let data;
-  try{data=JSON.parse(raw);}catch(_){throw new Error("The availability service returned an invalid response.");}
-  if(!response.ok || data.success===false)throw new Error(data.message||"Availability request failed");
-  const values=extractTimeArray(data);
-  const clean=[...new Set(values.map(normalizeTime).filter(Boolean))].sort();
-  setTimeOptions(clean,clean.length?"Available pickup times (Iceland local time).":"No available pickup times were returned for this date. Please choose another date.");
- }catch(error){console.error("Availability error:",error);setTimeOptions([],"Could not load available times from the server. Please try again later.");}
-}
-travellingWithChildren.addEventListener("change",updateChildrenFields);
-childrenCount.addEventListener("change",updateChildrenFields);
-pickup.addEventListener("change",updateLocationFields);
-destination.addEventListener("change",updateLocationFields);
-tourDate.addEventListener("change",loadAvailableTimes);
-vehicleType.addEventListener("change",updateVehicleAndPassengers);
-passengers.addEventListener("change",updateVehicleAndPassengers);
 
-function getPickup(){return pickup.value==="Other location"?pickupOther.value.trim():pickup.value;}
+function extractArray(data, keys){
+ if(!data || typeof data !== "object") return null;
+
+ for(const key of keys){
+  if(Array.isArray(data[key])) return data[key];
+ }
+
+ return null;
+}
+
+function extractAvailabilityData(data){
+ const bookedKeys = [
+  "booked_times","bookedTimes",
+  "unavailable_times","unavailableTimes",
+  "booked","unavailable"
+ ];
+
+ const availableKeys = [
+  "available_times","availableTimes",
+  "available_slots","availableSlots",
+  "times","available"
+ ];
+
+ let booked = extractArray(data, bookedKeys);
+ let available = extractArray(data, availableKeys);
+
+ if(data && typeof data === "object" && data.data && typeof data.data === "object"){
+  if(!booked) booked = extractArray(data.data, bookedKeys);
+  if(!available) available = extractArray(data.data, availableKeys);
+ }
+
+ return { booked, available };
+}
+
+function getAllTourHours(){
+ const hours = [];
+
+ for(let hour = 6; hour <= 21; hour++){
+  hours.push(String(hour).padStart(2, "0") + ":00");
+ }
+
+ return hours;
+}
+
+/*
+ * Always show all hours.
+ * Booked hours remain visible and disabled with "— Booked".
+ * Past hours remain visible and disabled with "— Unavailable".
+ */
+function renderTimeOptions(date, bookedSet, availableSet, message){
+ const previous = tourTime.value;
+
+ tourTime.innerHTML = "";
+
+ const placeholder = document.createElement("option");
+ placeholder.value = "";
+ placeholder.textContent = "Choose pickup time";
+ tourTime.appendChild(placeholder);
+
+ const allHours = getAllTourHours();
+
+ allHours.forEach(time => {
+  const option = document.createElement("option");
+  option.value = time;
+
+  if(isPastIcelandTime(date, time)){
+   option.textContent = time + " — Unavailable";
+   option.disabled = true;
+  }else if(bookedSet && bookedSet.has(time)){
+   option.textContent = time + " — Booked";
+   option.disabled = true;
+  }else if(availableSet && !availableSet.has(time)){
+   option.textContent = time + " — Unavailable";
+   option.disabled = true;
+  }else{
+   option.textContent = time;
+   option.disabled = false;
+  }
+
+  tourTime.appendChild(option);
+ });
+
+ const selectedOption = Array.from(tourTime.options).find(
+  option => option.value === previous && !option.disabled
+ );
+
+ if(selectedOption){
+  tourTime.value = previous;
+ }
+
+ timeHelp.textContent = message;
+}
+
+async function checkSingleHour(date, time){
+ try{
+  const url = AVAILABILITY_URL +
+   "?date=" + encodeURIComponent(date) +
+   "&time=" + encodeURIComponent(time);
+
+  const response = await fetch(url, {
+   cache: "no-store",
+   headers: { Accept: "application/json" }
+  });
+
+  if(!response.ok) return null;
+
+  const data = await response.json();
+
+  if(data.available === false ||
+     data.isAvailable === false ||
+     data.is_available === false){
+   return false;
+  }
+
+  if(data.available === true ||
+     data.isAvailable === true ||
+     data.is_available === true){
+   return true;
+  }
+
+  return null;
+
+ }catch(error){
+  console.error("Single-hour availability check failed:", time, error);
+  return null;
+ }
+}
+
+async function loadAvailableTimes(){
+ const requestNumber = ++availabilityRequestNumber;
+ const date = tourDate.value;
+
+ currentAvailableTimes = null;
+
+ if(!date){
+  tourTime.innerHTML = '<option value="">Choose pickup time</option>';
+  timeHelp.textContent = "Choose a date to check available pickup times.";
+  return;
+ }
+
+ if(date < getIcelandDateParts().date){
+  renderTimeOptions(date, new Set(), new Set(), "Please choose today or a future date.");
+  return;
+ }
+
+ timeHelp.textContent = "Checking available times…";
+
+ try{
+  /* Global availability: no service_type filter. */
+  const response = await fetch(
+   AVAILABILITY_URL + "?date=" + encodeURIComponent(date),
+   {
+    cache: "no-store",
+    headers: { Accept: "application/json" }
+   }
+  );
+
+  const raw = await response.text();
+  let data;
+
+  try{
+   data = JSON.parse(raw);
+  }catch(error){
+   throw new Error("The availability service returned an invalid response.");
+  }
+
+  if(!response.ok || data.success === false){
+   throw new Error(data.message || "Availability request failed.");
+  }
+
+  if(requestNumber !== availabilityRequestNumber) return;
+
+  const availability = extractAvailabilityData(data);
+  const allHours = getAllTourHours();
+
+  let bookedSet = null;
+  let availableSet = null;
+
+  if(availability.booked !== null){
+   bookedSet = new Set(
+    availability.booked.map(normalizeTime).filter(Boolean)
+   );
+  }
+
+  if(availability.available !== null){
+   availableSet = new Set(
+    availability.available.map(normalizeTime).filter(Boolean)
+   );
+  }
+
+  if(bookedSet === null && availableSet === null){
+   /*
+    * Compatibility fallback:
+    * Check every hour individually if the API does not return arrays.
+    */
+   const checks = await Promise.all(
+    allHours.map(async time => ({
+     time,
+     available: await checkSingleHour(date, time)
+    }))
+   );
+
+   if(requestNumber !== availabilityRequestNumber) return;
+
+   const hasKnownResult = checks.some(item => item.available !== null);
+
+   if(!hasKnownResult){
+    renderTimeOptions(
+     date,
+     new Set(),
+     new Set(allHours),
+     "Could not confirm availability. Please try again later."
+    );
+
+    currentAvailableTimes = new Set();
+    return;
+   }
+
+   bookedSet = new Set(
+    checks
+     .filter(item => item.available === false)
+     .map(item => item.time)
+   );
+
+   availableSet = new Set(
+    checks
+     .filter(item => item.available === true)
+     .map(item => item.time)
+   );
+  }
+
+  if(bookedSet === null){
+   bookedSet = new Set();
+  }
+
+  currentAvailableTimes = new Set(
+   allHours.filter(time =>
+    !bookedSet.has(time) &&
+    (!availableSet || availableSet.has(time)) &&
+    !isPastIcelandTime(date, time)
+   )
+  );
+
+  renderTimeOptions(
+   date,
+   bookedSet,
+   availableSet,
+   "Available times are shown normally. Booked times are marked as Booked. All times are Iceland local time."
+  );
+
+ }catch(error){
+  console.error("Availability error:", error);
+
+  if(requestNumber !== availabilityRequestNumber) return;
+
+  currentAvailableTimes = new Set();
+
+  renderTimeOptions(
+   date,
+   new Set(),
+   new Set(getAllTourHours()),
+   "Could not load availability. Please try again later."
+  );
+ }
+}
+
+/* Event listeners */
+travellingWithChildren.addEventListener("change", updateChildrenFields);
+childrenCount.addEventListener("change", updateChildrenFields);
+pickup.addEventListener("change", updateLocationFields);
+destination.addEventListener("change", updateLocationFields);
+tourDate.addEventListener("change", loadAvailableTimes);
+vehicleType.addEventListener("change", updateVehicleAndPassengers);
+passengers.addEventListener("change", updateVehicleAndPassengers);
+
+function getPickup(){
+ return pickup.value === "Other location"
+  ? pickupOther.value.trim()
+  : pickup.value;
+}
+
 function getDestination(pickupLocation){
- if(destination.value==="Other location")return destinationOther.value.trim();
- if(destination.value==="same_as_pickup")return pickupLocation+" (return after Northern Lights tour)";
+ if(destination.value === "Other location"){
+  return destinationOther.value.trim();
+ }
+
+ if(destination.value === "same_as_pickup"){
+  return pickupLocation + " (return after Northern Lights tour)";
+ }
+
  return destination.value;
 }
+
 function validateFutureTime(){
- const chosen=new Date(tourDate.value+"T"+tourTime.value+":00");
- if(!tourDate.value||!tourTime.value||Number.isNaN(chosen.getTime()))return false;
- // Interpret the selected local time as a date/time choice; server availability is checked separately.
- return chosen.getTime()>Date.now();
+ const date = tourDate.value;
+ const time = tourTime.value;
+
+ if(!date || !time) return false;
+ if(isPastIcelandTime(date, time)) return false;
+ if(!currentAvailableTimes || !currentAvailableTimes.has(time)) return false;
+
+ const selectedOption = tourTime.options[tourTime.selectedIndex];
+
+ if(!selectedOption || selectedOption.disabled) return false;
+
+ return true;
 }
-form.addEventListener("submit",function(event){
- event.preventDefault();if(!form.reportValidity())return;
- if(!validateFutureTime()){alert("Please choose a future date and available pickup time.");return;}
- const pickupLocation=getPickup(),destinationLocation=getDestination(pickupLocation);
- if(!pickupLocation||!destinationLocation){alert("Please enter both pickup and drop-off locations.");return;}
- if(pickupLocation.toLowerCase()===destinationLocation.toLowerCase()&&!confirm("Your pickup and drop-off locations are the same. Continue?"))return;
- const ages=getChildrenAges(),numberOfChildren=travellingWithChildren.checked?ages.length:0;
- const vehicle=selectedVehicle();
- if(Number(passengers.value)>vehicle.maxPassengers){alert("The selected vehicle allows up to "+vehicle.maxPassengers+" passengers.");return;}
- if(travellingWithChildren.checked&&(!numberOfChildren||ages.some(age=>!Number.isInteger(age)||age<0||age>17))){alert("Please select the age of each child travelling with you.");return;}
- const fullName=document.getElementById("fullName").value.trim(),phone=document.getElementById("phone").value.trim(),email=document.getElementById("email").value.trim(),notes=document.getElementById("notes").value.trim();
- const childrenNote=numberOfChildren?"Children travelling: "+numberOfChildren+"; ages: "+ages.map(age=>age===0?"under 1 year":age+" years").join(", "):"No children specified";
- const booking={
-  id:"aurora-"+Date.now(),service_type:"northern_lights_tour",service:"Magical Northern Lights Tour",service_name:"Magical Northern Lights Tour",name:"Magical Northern Lights Tour",vehicle_type:vehicleType.value,vehicle_name:vehicle.name,vehicle_price:vehicle.price,
-  full_name:fullName,customerName:fullName,phone,email,pickup:pickupLocation,pickup_location:pickupLocation,destination:destinationLocation,dropoff_location:destinationLocation,
-  date:tourDate.value,pickup_date:tourDate.value,time:tourTime.value,pickup_time:tourTime.value,passengers:Number(passengers.value),luggage:0,flight_number:"",
-  children_count:numberOfChildren,children_ages:ages,price:vehicle.price,total:vehicle.price,unitPrice:vehicle.price,estimatedPrice:vehicle.price,
-  notes,special_requests:"Vehicle: "+vehicle.name+" ("+money(vehicle.price)+"); "+(notes?notes+" | ":"")+childrenNote,status:"pending",created_at:new Date().toISOString()
+
+/* Add tour to booking overview */
+form.addEventListener("submit", function(event){
+ event.preventDefault();
+
+ if(!form.reportValidity()) return;
+
+ if(!validateFutureTime()){
+  alert("Please choose a future pickup time that is currently available. Please check the availability again.");
+  loadAvailableTimes();
+  return;
+ }
+
+ const pickupLocation = getPickup();
+ const destinationLocation = getDestination(pickupLocation);
+
+ if(!pickupLocation || !destinationLocation){
+  alert("Please enter both pickup and drop-off locations.");
+  return;
+ }
+
+ if(
+  pickupLocation.toLowerCase() === destinationLocation.toLowerCase() &&
+  !confirm("Your pickup and drop-off locations are the same. Continue?")
+ ){
+  return;
+ }
+
+ const ages = getChildrenAges();
+ const numberOfChildren = travellingWithChildren.checked ? ages.length : 0;
+ const vehicle = selectedVehicle();
+
+ if(Number(passengers.value) > vehicle.maxPassengers){
+  alert("The selected vehicle allows up to " + vehicle.maxPassengers + " passengers.");
+  return;
+ }
+
+ if(
+  travellingWithChildren.checked &&
+  (!numberOfChildren || ages.some(age => !Number.isInteger(age) || age < 0 || age > 17))
+ ){
+  alert("Please select the age of each child travelling with you.");
+  return;
+ }
+
+ const fullName = document.getElementById("fullName").value.trim();
+ const phone = document.getElementById("phone").value.trim();
+ const email = document.getElementById("email").value.trim();
+ const notes = document.getElementById("notes").value.trim();
+
+ const childrenNote = numberOfChildren
+  ? "Children travelling: " + numberOfChildren + "; ages: " +
+    ages.map(age => age === 0 ? "under 1 year" : age + " years").join(", ")
+  : "No children specified";
+
+ const booking = {
+  id: "aurora-" + Date.now(),
+
+  service_type: "northern_lights_tour",
+  service: "Magical Northern Lights Tour",
+  service_name: "Magical Northern Lights Tour",
+  name: "Magical Northern Lights Tour",
+
+  vehicle_type: vehicleType.value,
+  vehicle_name: vehicle.name,
+  vehicle_price: vehicle.price,
+
+  full_name: fullName,
+  customerName: fullName,
+  phone: phone,
+  email: email,
+
+  pickup: pickupLocation,
+  pickup_location: pickupLocation,
+  destination: destinationLocation,
+  dropoff_location: destinationLocation,
+
+  date: tourDate.value,
+  pickup_date: tourDate.value,
+  time: tourTime.value,
+  pickup_time: tourTime.value,
+
+  passengers: Number(passengers.value),
+  luggage: 0,
+  flight_number: "",
+
+  children_count: numberOfChildren,
+  children_ages: ages,
+
+  price: vehicle.price,
+  total: vehicle.price,
+  unitPrice: vehicle.price,
+  estimatedPrice: vehicle.price,
+
+  notes: notes,
+
+  special_requests:
+   "Vehicle: " + vehicle.name + " (" + money(vehicle.price) + "); " +
+   (notes ? notes + " | " : "") +
+   childrenNote,
+
+  status: "pending",
+  created_at: new Date().toISOString()
  };
- let cart=[];
- try{const stored=localStorage.getItem("icelandTransferCart");cart=stored?JSON.parse(stored):[];if(!Array.isArray(cart))cart=[];}catch(error){alert("We could not read your existing booking cart. Please refresh and try again.");return;}
+
+ let cart = [];
+
+ try{
+  const stored = localStorage.getItem("icelandTransferCart");
+  cart = stored ? JSON.parse(stored) : [];
+
+  if(!Array.isArray(cart)) cart = [];
+
+ }catch(error){
+  alert("We could not read your existing booking cart. Please refresh and try again.");
+  return;
+ }
+
  cart.push(booking);
- try{localStorage.setItem("icelandTransferCart",JSON.stringify(cart));sessionStorage.setItem("icelandTransferPendingBooking",JSON.stringify(booking));sessionStorage.setItem("bookingData",JSON.stringify(booking));sessionStorage.setItem("icelandTransferBooking",JSON.stringify(booking));}
- catch(error){alert("We could not save your booking. Please check browser storage and try again.");return;}
- submitButton.disabled=true;submitButton.textContent="OPENING BOOKING OVERVIEW…";window.location.href="order-overview.html";
+
+ try{
+  localStorage.setItem("icelandTransferCart", JSON.stringify(cart));
+  sessionStorage.setItem("icelandTransferPendingBooking", JSON.stringify(booking));
+  sessionStorage.setItem("bookingData", JSON.stringify(booking));
+  sessionStorage.setItem("icelandTransferBooking", JSON.stringify(booking));
+
+ }catch(error){
+  alert("We could not save your booking. Please check browser storage and try again.");
+  return;
+ }
+
+ submitButton.disabled = true;
+ submitButton.textContent = "OPENING BOOKING OVERVIEW…";
+
+ window.location.href = "order-overview.html";
 });
-updateChildrenFields();updateLocationFields();updateVehicleAndPassengers();
-setTimeOptions([],"Choose a date to check available pickup times.");
+
+/* Initial setup */
+updateChildrenFields();
+updateLocationFields();
+updateVehicleAndPassengers();
+
+tourTime.innerHTML = '<option value="">Choose pickup time</option>';
+timeHelp.textContent = "Choose a date to check available pickup times.";
+
 </script>
 </body>
 </html>

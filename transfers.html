@@ -73,17 +73,30 @@ footer{background:#202e24;color:#e8e8df;padding:35px 25px}.footer-container{max-
 <div class="form-group full-width"><label for="customerEmail">Email Address</label><input type="email" id="customerEmail" name="customerEmail" autocomplete="email" placeholder="Enter your email address" required></div>
 <div class="form-group full-width"><label><input type="checkbox" id="travellingWithChildren" style="width:auto;margin-right:7px">I am travelling with children</label></div>
 <div class="children-box" id="childrenBox"><div class="form-group"><label for="childrenCount">Number of Children</label><select id="childrenCount"><option value="">Choose number of children</option><option value="1">1 child</option><option value="2">2 children</option><option value="3">3 children</option><option value="4">4 children</option><option value="5">5 children</option><option value="6">6 children</option><option value="7">7 children</option><option value="8">8 children</option></select></div><div class="children-ages" id="childrenAges"></div></div>
-</div><button class="primary-button" type="submit">Add Booking to Order Overview</button><p class="form-note">Times shown are between 6:00 and 22:00 Iceland time. This page saves a booking request to your Order Overview; it does not confirm live availability.</p><div class="booking-message" id="bookingMessage" role="status"></div></form>
+</div><button class="primary-button" type="submit">Add Booking to Order Overview</button><p class="form-note" id="availabilityNote">Times shown are between 6:00 and 21:00 Iceland time. Availability is checked again when the booking is confirmed.</p><div class="booking-message" id="bookingMessage" role="status"></div></form>
 </div></section>
 
 <footer><div class="footer-container"><a href="index.html" class="footer-logo">ICELAND TRANSFER<span>YOUR JOURNEY, OUR DRIVE</span></a><p class="footer-text">Discover Iceland. Travel comfortably.</p><div class="footer-links"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="airport-transportation.html">Airport Transfers</a><a href="booking.html">Book Now</a><a href="contact.html">Contact</a></div></div></footer>
 
 <script>
-const imageFallbacks={airport:["images2/transfers-hero.jpg","images2/private-transfer.jpg"],private:["images2/transfers-hero.jpg","images2/airport-transfer.jpg"],tour:["images2/iceland-road.jpg","images2/transfers-hero.jpg"],aurora:["images2/aurora-transfer.jpg","images2/transfers-hero.jpg"]};
-function useFallbackImage(img,type){const list=imageFallbacks[type]||[];const i=Number(img.dataset.fallbackIndex||0);if(i>=list.length){img.onerror=null;return;}img.dataset.fallbackIndex=i+1;img.src=list[i];}
+const imageFallbacks={
+ airport:["images2/transfers-hero.jpg","images2/private-transfer.jpg"],
+ private:["images2/transfers-hero.jpg","images2/airport-transfer.jpg"],
+ tour:["images2/iceland-road.jpg","images2/transfers-hero.jpg"],
+ aurora:["images2/aurora-transfer.jpg","images2/transfers-hero.jpg"]
+};
+
+function useFallbackImage(img,type){
+ const list=imageFallbacks[type]||[];
+ const i=Number(img.dataset.fallbackIndex||0);
+ if(i>=list.length){img.onerror=null;return;}
+ img.dataset.fallbackIndex=i+1;
+ img.src=list[i];
+}
 
 const vehiclePrices={"Sedan":17900,"MPV4":21900,"Van":26900,"VIP VAN":32000};
 const vehicleCapacities={"Sedan":4,"MPV4":4,"Van":8,"VIP VAN":5};
+
 const vehicleType=document.getElementById("vehicleType");
 const passengers=document.getElementById("passengers");
 const vehiclePrice=document.getElementById("vehiclePrice");
@@ -96,47 +109,378 @@ const travelDate=document.getElementById("travelDate");
 const travelTime=document.getElementById("travelTime");
 
 function updateVehicle(){
- const type=vehicleType.value; const cap=vehicleCapacities[type];
+ const type=vehicleType.value;
+ const cap=vehicleCapacities[type];
+
  vehiclePriceLabel.textContent=type;
  vehiclePrice.textContent=vehiclePrices[type].toLocaleString("en-US")+" ISK";
+
  const previous=Number(passengers.value)||2;
  passengers.innerHTML="";
- for(let i=1;i<=cap;i++){const option=document.createElement("option");option.value=String(i);option.textContent=i+(i===1?" Passenger":" Passengers");passengers.appendChild(option);}
+
+ for(let i=1;i<=cap;i++){
+  const option=document.createElement("option");
+  option.value=String(i);
+  option.textContent=i+(i===1?" Passenger":" Passengers");
+  passengers.appendChild(option);
+ }
+
  passengers.value=String(Math.min(previous,cap));
  updateChildrenOptions();
 }
+
 function updateChildrenOptions(){
  const count=Number(childrenCount.value)||0;
  const max=Number(passengers.value)||1;
- [...childrenCount.options].forEach(o=>{if(o.value)o.disabled=Number(o.value)>Math.min(8,max);});
- if(count>Math.min(8,max)){childrenCount.value="";childrenAges.innerHTML="";return;}
+
+ [...childrenCount.options].forEach(o=>{
+  if(o.value)o.disabled=Number(o.value)>Math.min(8,max);
+ });
+
+ if(count>Math.min(8,max)){
+  childrenCount.value="";
+  childrenAges.innerHTML="";
+  return;
+ }
+
  childrenAges.innerHTML="";
+
  for(let i=1;i<=count;i++){
-  const group=document.createElement("div");group.className="form-group";
-  const label=document.createElement("label");label.htmlFor="childAge"+i;label.textContent="Child "+i+" age";
-  const select=document.createElement("select");select.id="childAge"+i;select.required=true;select.dataset.childAge="true";
-  const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent="Choose age";select.appendChild(placeholder);
-  for(let age=0;age<=17;age++){const option=document.createElement("option");option.value=String(age);option.textContent=age===0?"Under 1 year":age+" "+(age===1?"year":"years");select.appendChild(option);}
-  group.append(label,select);childrenAges.appendChild(group);
+  const group=document.createElement("div");
+  group.className="form-group";
+
+  const label=document.createElement("label");
+  label.htmlFor="childAge"+i;
+  label.textContent="Child "+i+" age";
+
+  const select=document.createElement("select");
+  select.id="childAge"+i;
+  select.required=true;
+  select.dataset.childAge="true";
+
+  const placeholder=document.createElement("option");
+  placeholder.value="";
+  placeholder.textContent="Choose age";
+  select.appendChild(placeholder);
+
+  for(let age=0;age<=17;age++){
+   const option=document.createElement("option");
+   option.value=String(age);
+   option.textContent=age===0?"Under 1 year":age+" "+(age===1?"year":"years");
+   select.appendChild(option);
+  }
+
+  group.append(label,select);
+  childrenAges.appendChild(group);
  }
 }
+
 vehicleType.addEventListener("change",updateVehicle);
 passengers.addEventListener("change",updateChildrenOptions);
+
 childCheckbox.addEventListener("change",()=>{
  childrenBox.classList.toggle("visible",childCheckbox.checked);
  childrenCount.required=childCheckbox.checked;
- if(!childCheckbox.checked){childrenCount.value="";childrenAges.innerHTML="";}
- else updateChildrenOptions();
+
+ if(!childCheckbox.checked){
+  childrenCount.value="";
+  childrenAges.innerHTML="";
+ }else{
+  updateChildrenOptions();
+ }
 });
+
 childrenCount.addEventListener("change",updateChildrenOptions);
 
-// Create real, readable time strings rather than a browser-specific object.
-for(let hour=6;hour<=22;hour++){
- const option=document.createElement("option");const value=String(hour).padStart(2,"0")+":00";
- option.value=value;option.textContent=value;travelTime.appendChild(option);
+/* ==========================================
+   SHARED BOOKING AVAILABILITY
+   ========================================== */
+
+const API_BASE="https://iceland-transfer-server.onrender.com";
+const AVAILABILITY_URL=API_BASE+"/api/availability";
+
+let availabilityRequestNumber=0;
+let lastAvailabilityLoadedDate="";
+
+function normalizeTime(value){
+ if(value===null||value===undefined)return null;
+
+ const text=String(value).trim();
+ const match=text.match(/^(\d{1,2}):(\d{2})/);
+
+ if(!match)return null;
+
+ const hour=Number(match[1]);
+ const minute=Number(match[2]);
+
+ if(hour<0||hour>23||minute<0||minute>59)return null;
+
+ return String(hour).padStart(2,"0")+":"+String(minute).padStart(2,"0");
 }
-const now=new Date();travelDate.min=[now.getFullYear(),String(now.getMonth()+1).padStart(2,"0"),String(now.getDate()).padStart(2,"0")].join("-");
+
+function getArrayFromResponse(data,keys){
+ for(const key of keys){
+  if(Array.isArray(data?.[key])){
+   return data[key];
+  }
+ }
+ return null;
+}
+
+function isPastIcelandTime(dateValue,timeValue){
+ const parts=new Intl.DateTimeFormat("en-GB",{
+  timeZone:"Atlantic/Reykjavik",
+  year:"numeric",
+  month:"2-digit",
+  day:"2-digit",
+  hour:"2-digit",
+  minute:"2-digit",
+  hourCycle:"h23"
+ }).formatToParts(new Date());
+
+ const values={};
+ parts.forEach(part=>{
+  if(part.type!=="literal")values[part.type]=part.value;
+ });
+
+ const currentDate=values.year+"-"+values.month+"-"+values.day;
+ const currentTime=values.hour+":"+values.minute;
+
+ if(dateValue<currentDate)return true;
+ if(dateValue>currentDate)return false;
+
+ return timeValue<=currentTime;
+}
+
+async function checkSingleTimeAvailability(dateValue,timeValue){
+ try{
+  const params=new URLSearchParams({
+   date:dateValue,
+   time:timeValue
+  });
+
+  const response=await fetch(AVAILABILITY_URL+"?"+params.toString(),{
+   method:"GET",
+   cache:"no-store"
+  });
+
+  if(!response.ok)return null;
+
+  const data=await response.json();
+
+  if(
+   data.available===false||
+   data.isAvailable===false||
+   data.is_available===false
+  ){
+   return false;
+  }
+
+  if(
+   data.available===true||
+   data.isAvailable===true||
+   data.is_available===true
+  ){
+   return true;
+  }
+
+  return null;
+
+ }catch(error){
+  console.warn("Could not check time:",timeValue,error);
+  return null;
+ }
+}
+
+async function loadAvailability(){
+ const dateValue=travelDate.value;
+
+ if(!dateValue){
+  renderTimeOptions(new Set(),false);
+  return;
+ }
+
+ const requestNumber=++availabilityRequestNumber;
+
+ travelTime.disabled=true;
+ travelTime.innerHTML='<option value="">Checking available times...</option>';
+
+ try{
+  const params=new URLSearchParams({date:dateValue});
+
+  const response=await fetch(AVAILABILITY_URL+"?"+params.toString(),{
+   method:"GET",
+   cache:"no-store"
+  });
+
+  if(!response.ok){
+   throw new Error("Availability request failed: "+response.status);
+  }
+
+  const data=await response.json();
+
+  if(requestNumber!==availabilityRequestNumber)return;
+
+  const bookedArray=getArrayFromResponse(data,[
+   "booked_times",
+   "bookedTimes",
+   "unavailable_times",
+   "unavailableTimes",
+   "booked",
+   "unavailable"
+  ]);
+
+  const availableArray=getArrayFromResponse(data,[
+   "available_times",
+   "availableTimes",
+   "available_slots",
+   "availableSlots",
+   "times",
+   "available"
+  ]);
+
+  const bookedTimes=new Set();
+
+  if(bookedArray!==null){
+   bookedArray.forEach(item=>{
+    const value=normalizeTime(
+     typeof item==="object"?
+     (item.time||item.start_time||item.startTime):
+     item
+    );
+
+    if(value)bookedTimes.add(value);
+   });
+
+  }else{
+   /*
+     Compatibility check:
+     If the server does not return a booked-times list,
+     check each full-hour slot individually.
+   */
+   const checks=[];
+
+   for(let hour=6;hour<=21;hour++){
+    const time=String(hour).padStart(2,"0")+":00";
+    checks.push({time,promise:checkSingleTimeAvailability(dateValue,time)});
+   }
+
+   const results=await Promise.all(
+    checks.map(async item=>({
+     time:item.time,
+     result:await item.promise
+    }))
+   );
+
+   if(requestNumber!==availabilityRequestNumber)return;
+
+   results.forEach(item=>{
+    if(item.result===false){
+     bookedTimes.add(item.time);
+    }
+   });
+  }
+
+  let availableTimes=null;
+
+  if(availableArray!==null){
+   availableTimes=new Set();
+
+   availableArray.forEach(item=>{
+    const value=normalizeTime(
+     typeof item==="object"?
+     (item.time||item.start_time||item.startTime):
+     item
+    );
+
+    if(value)availableTimes.add(value);
+   });
+  }
+
+  if(requestNumber!==availabilityRequestNumber)return;
+
+  renderTimeOptions(bookedTimes,true,availableTimes);
+  lastAvailabilityLoadedDate=dateValue;
+
+ }catch(error){
+  console.error("Availability loading error:",error);
+
+  if(requestNumber!==availabilityRequestNumber)return;
+
+  /*
+    If availability cannot be reached, keep the time choices visible.
+    The final booking system must still validate the selected slot.
+  */
+  renderTimeOptions(new Set(),false);
+  lastAvailabilityLoadedDate=dateValue;
+ }
+}
+
+function renderTimeOptions(bookedTimes,availabilityConfirmed,availableTimes=null){
+ const previousValue=travelTime.value;
+
+ travelTime.innerHTML='<option value="">Choose a time</option>';
+
+ let selectableCount=0;
+
+ for(let hour=6;hour<=21;hour++){
+  const value=String(hour).padStart(2,"0")+":00";
+  const option=document.createElement("option");
+
+  option.value=value;
+
+  if(isPastIcelandTime(travelDate.value,value)){
+   option.textContent=value+" — Unavailable";
+   option.disabled=true;
+
+  }else if(bookedTimes.has(value)){
+   option.textContent=value+" — Booked";
+   option.disabled=true;
+
+  }else if(availabilityConfirmed&&availableTimes!==null&&!availableTimes.has(value)){
+   option.textContent=value+" — Unavailable";
+   option.disabled=true;
+
+  }else{
+   option.textContent=value;
+   selectableCount++;
+  }
+
+  travelTime.appendChild(option);
+ }
+
+ if(previousValue){
+  const previousOption=[...travelTime.options].find(
+   option=>option.value===previousValue&&!option.disabled
+  );
+
+  if(previousOption){
+   travelTime.value=previousValue;
+  }
+ }
+
+ if(selectableCount===0){
+  travelTime.innerHTML='<option value="">No available times for this date</option>';
+ }
+
+ travelTime.disabled=false;
+}
+
+travelDate.addEventListener("change",loadAvailability);
+
+/* Initial date and time setup */
+const now=new Date();
+
+travelDate.min=[
+ now.getFullYear(),
+ String(now.getMonth()+1).padStart(2,"0"),
+ String(now.getDate()).padStart(2,"0")
+].join("-");
+
 updateVehicle();
+
+/* Load availability when the page opens */
+loadAvailability();
 
 function selectBookingService(serviceName){
  const serviceSelect=document.getElementById("service");
@@ -146,24 +490,133 @@ function selectBookingService(serviceName){
 
 document.getElementById("bookingForm").addEventListener("submit",function(event){
  event.preventDefault();
+
  const service=document.getElementById("service").value.trim();
- const date=travelDate.value;const time=travelTime.value;
- const pickup=document.getElementById("pickup").value.trim();const destination=document.getElementById("destination").value.trim();
- const passengerCount=Number(passengers.value);const customerName=document.getElementById("customerName").value.trim();
- const customerPhone=document.getElementById("customerPhone").value.trim();const customerEmail=document.getElementById("customerEmail").value.trim();
- const hasChildren=childCheckbox.checked;const count=hasChildren?Number(childrenCount.value):0;
- const ages=hasChildren?[...childrenAges.querySelectorAll("[data-child-age]")].map(el=>el.value):[];
- if(!service||!date||!time||!pickup||!destination||!customerName||!customerPhone||!customerEmail||!Number.isInteger(passengerCount)||passengerCount<1){alert("Please complete all required booking details.");return;}
- if(hasChildren&&(!count||ages.length!==count||ages.some(age=>age===""))){alert("Please select the number of children and the age of every child.");return;}
- if(hasChildren&&count>passengerCount){alert("The number of children cannot be greater than the total number of passengers.");return;}
+ const date=travelDate.value;
+ const time=travelTime.value;
+
+ const pickup=document.getElementById("pickup").value.trim();
+ const destination=document.getElementById("destination").value.trim();
+
+ const passengerCount=Number(passengers.value);
+ const customerName=document.getElementById("customerName").value.trim();
+ const customerPhone=document.getElementById("customerPhone").value.trim();
+ const customerEmail=document.getElementById("customerEmail").value.trim();
+
+ const hasChildren=childCheckbox.checked;
+ const count=hasChildren?Number(childrenCount.value):0;
+
+ const ages=hasChildren?
+  [...childrenAges.querySelectorAll("[data-child-age]")].map(el=>el.value):
+  [];
+
+ if(
+  !service||
+  !date||
+  !time||
+  !pickup||
+  !destination||
+  !customerName||
+  !customerPhone||
+  !customerEmail||
+  !Number.isInteger(passengerCount)||
+  passengerCount<1
+ ){
+  alert("Please complete all required booking details.");
+  return;
+ }
+
+ if(isPastIcelandTime(date,time)){
+  alert("This time has already passed in Iceland. Please choose another time.");
+  loadAvailability();
+  return;
+ }
+
+ const selectedTimeOption=travelTime.options[travelTime.selectedIndex];
+
+ if(!selectedTimeOption||selectedTimeOption.disabled){
+  alert("Please choose an available time.");
+  loadAvailability();
+  return;
+ }
+
+ if(hasChildren&&(!count||ages.length!==count||ages.some(age=>age===""))){
+  alert("Please select the number of children and the age of every child.");
+  return;
+ }
+
+ if(hasChildren&&count>passengerCount){
+  alert("The number of children cannot be greater than the total number of passengers.");
+  return;
+ }
+
  const price=vehiclePrices[vehicleType.value];
- const booking={id:"general-"+Date.now(),name:service,service:service,serviceType:service,date:date,travelDate:date,time:time,travelTime:time,pickup:pickup,pickupLocation:pickup,destination:destination,dropoff:destination,dropoffLocation:destination,passengers:passengerCount,numberOfPassengers:passengerCount,vehicleType:vehicleType.value,vehicle_type:vehicleType.value,unitPrice:price,total:price,price:price,customerName:customerName,nameOfCustomer:customerName,email:customerEmail,customerEmail:customerEmail,phone:customerPhone,customerPhone:customerPhone,phoneNumber:customerPhone,childrenCount:count,children_count:count,childrenAges:ages,children_ages:ages,notes:"Booking request from Tourist Services page. Vehicle: "+vehicleType.value+" ("+price.toLocaleString("en-US")+" ISK per vehicle). Children: "+(count?count+"; ages "+ages.map(a=>a==="0"?"under 1 year":a).join(", "):"none")+". Price is a vehicle estimate; availability and final price must be confirmed."};
+
+ const booking={
+  id:"general-"+Date.now(),
+  name:service,
+  service:service,
+  serviceType:service,
+  date:date,
+  travelDate:date,
+  time:time,
+  travelTime:time,
+  pickup:pickup,
+  pickupLocation:pickup,
+  destination:destination,
+  dropoff:destination,
+  dropoffLocation:destination,
+  passengers:passengerCount,
+  numberOfPassengers:passengerCount,
+  vehicleType:vehicleType.value,
+  vehicle_type:vehicleType.value,
+  unitPrice:price,
+  total:price,
+  price:price,
+  customerName:customerName,
+  nameOfCustomer:customerName,
+  email:customerEmail,
+  customerEmail:customerEmail,
+  phone:customerPhone,
+  customerPhone:customerPhone,
+  phoneNumber:customerPhone,
+  childrenCount:count,
+  children_count:count,
+  childrenAges:ages,
+  children_ages:ages,
+  notes:"Booking request from Tourist Services page. Vehicle: "+vehicleType.value+" ("+price.toLocaleString("en-US")+" ISK per vehicle). Children: "+(count?count+"; ages "+ages.map(a=>a==="0"?"under 1 year":a).join(", "):"none")+". Price is a vehicle estimate; availability and final price must be confirmed."
+ };
+
  let cart=[];
- try{const saved=localStorage.getItem("icelandTransferCart");const parsed=saved?JSON.parse(saved):[];if(Array.isArray(parsed))cart=parsed;cart.push(booking);localStorage.setItem("icelandTransferCart",JSON.stringify(cart));}
- catch(error){alert("We couldn't save your booking in this browser. Please check your browser storage settings and try again.");return;}
- const message=document.getElementById("bookingMessage");message.textContent="Your booking request has been saved. Opening your Order Overview...";message.style.display="block";
- const button=document.querySelector("#bookingForm button[type='submit']");button.disabled=true;button.textContent="Booking Saved...";
- setTimeout(()=>{window.location.href="order-overview.html";},700);
+
+ try{
+  const saved=localStorage.getItem("icelandTransferCart");
+  const parsed=saved?JSON.parse(saved):[];
+
+  if(Array.isArray(parsed))cart=parsed;
+
+  cart.push(booking);
+
+  localStorage.setItem("icelandTransferCart",JSON.stringify(cart));
+
+ }catch(error){
+  alert("We couldn't save your booking in this browser. Please check your browser storage settings and try again.");
+  return;
+ }
+
+ const message=document.getElementById("bookingMessage");
+
+ message.textContent="Your booking request has been saved. Opening your Order Overview...";
+ message.style.display="block";
+
+ const button=document.querySelector("#bookingForm button[type='submit']");
+
+ button.disabled=true;
+ button.textContent="Booking Saved...";
+
+ setTimeout(()=>{
+  window.location.href="order-overview.html";
+ },700);
 });
 </script>
 </body>

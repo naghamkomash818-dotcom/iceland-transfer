@@ -135,131 +135,777 @@ footer{background:var(--deep-green);color:white;padding:35px 25px}.footer-inner{
 <section class="other-services"><div class="section-label">Explore More Services</div><h2>More Ways to Discover Iceland</h2><p>Explore our other transportation services and private tours.</p><div class="service-links"><a href="keflavik-shuttle.html" class="service-link">Keflavik Shuttle</a><a href="golden-circle-tour.html" class="service-link">Golden Circle Tour</a><a href="magical-northern-lights-tour.html" class="service-link">Northern Lights Tour</a><a href="airport-transportation.html" class="service-link">Airport Transportation</a><a href="order-overview.html" class="service-link">Booking Overview</a></div></section>
 <footer><div class="footer-inner"><div><div class="footer-logo">ICELAND <span>TRANSFER</span></div><p>Private transfers and tours in Iceland.</p></div><div class="footer-links"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="transfers.html">Transfers</a><a href="contact.html">Contact</a></div></div></footer>
 <a class="whatsapp-button" href="https://wa.me/3548333707" target="_blank" rel="noopener noreferrer">WhatsApp Us</a>
+
 <script>
 const API_BASE="https://iceland-transfer-server.onrender.com";
-const API_URL=API_BASE+"/api/bookings", AVAILABILITY_URL=API_BASE+"/api/availability";
-const form=document.getElementById("shuttleForm"), submitButton=document.getElementById("submitButton"), formMessage=document.getElementById("formMessage");
-const dateInput=document.getElementById("travelDate"),timeSelect=document.getElementById("travelTime");
-const pickupLocation=document.getElementById("pickupLocation"),dropoffLocation=document.getElementById("dropoffLocation");
-const pickupOther=document.getElementById("pickupOther"),dropoffOther=document.getElementById("dropoffOther");
-const pickupOtherGroup=document.getElementById("pickupOtherGroup"),dropoffOtherGroup=document.getElementById("dropoffOtherGroup");
-const vehicleType=document.getElementById("vehicleType"),passengerCount=document.getElementById("passengerCount");
-const availabilityNote=document.getElementById("availabilityNote"),invoiceCard=document.getElementById("invoiceCard"),cancelButton=document.getElementById("cancelButton"),cancelMessage=document.getElementById("cancelMessage"),pdfButton=document.getElementById("pdfButton");
-let cancellationUrl=null,availabilityRequestNumber=0;
+const API_URL=API_BASE+"/api/bookings";
+const AVAILABILITY_URL=API_BASE+"/api/availability";
+
+const form=document.getElementById("shuttleForm");
+const submitButton=document.getElementById("submitButton");
+const formMessage=document.getElementById("formMessage");
+const dateInput=document.getElementById("travelDate");
+const timeSelect=document.getElementById("travelTime");
+
+const pickupLocation=document.getElementById("pickupLocation");
+const dropoffLocation=document.getElementById("dropoffLocation");
+const pickupOther=document.getElementById("pickupOther");
+const dropoffOther=document.getElementById("dropoffOther");
+const pickupOtherGroup=document.getElementById("pickupOtherGroup");
+const dropoffOtherGroup=document.getElementById("dropoffOtherGroup");
+
+const vehicleType=document.getElementById("vehicleType");
+const passengerCount=document.getElementById("passengerCount");
+const availabilityNote=document.getElementById("availabilityNote");
+const invoiceCard=document.getElementById("invoiceCard");
+const cancelButton=document.getElementById("cancelButton");
+const cancelMessage=document.getElementById("cancelMessage");
+const pdfButton=document.getElementById("pdfButton");
+
+let cancellationUrl=null;
+let availabilityRequestNumber=0;
+
 const vehicleCapacity={sedan:4,mpv4:4,van:8,vip_van:5};
 const vehiclePrices={sedan:17900,mpv4:21900,van:26900,vip_van:32000};
+
 const vehiclePriceNote=document.getElementById("vehiclePriceNote");
 const travellingWithChildren=document.getElementById("travellingWithChildren");
 const childrenDetails=document.getElementById("childrenDetails");
 const childrenCount=document.getElementById("childrenCount");
 const childrenAges=document.getElementById("childrenAges");
-function showMessage(message,type){formMessage.textContent=message;formMessage.className="form-message "+type}
-function showCancelMessage(message,type){cancelMessage.textContent=message;cancelMessage.className="form-message "+type}
-function getIcelandDate(){const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Atlantic/Reykjavik",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());const values={};parts.forEach(p=>{if(p.type!=="literal")values[p.type]=p.value});return values.year+"-"+values.month+"-"+values.day}
+
+function showMessage(message,type){
+    formMessage.textContent=message;
+    formMessage.className="form-message "+type;
+}
+
+function showCancelMessage(message,type){
+    cancelMessage.textContent=message;
+    cancelMessage.className="form-message "+type;
+}
+
+function getIcelandDate(){
+    const parts=new Intl.DateTimeFormat("en-CA",{
+        timeZone:"Atlantic/Reykjavik",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+    }).formatToParts(new Date());
+
+    const values={};
+
+    parts.forEach(p=>{
+        if(p.type!=="literal")values[p.type]=p.value;
+    });
+
+    return values.year+"-"+values.month+"-"+values.day;
+}
+
 dateInput.min=getIcelandDate();
-function updateLocationFields(){const cp=pickupLocation.value==="Other location",cd=dropoffLocation.value==="Other location";pickupOtherGroup.classList.toggle("hidden",!cp);dropoffOtherGroup.classList.toggle("hidden",!cd);pickupOther.required=cp;dropoffOther.required=cd;updateSameLocationWarning()}
-function getPickupValue(){return pickupLocation.value==="Other location"?pickupOther.value.trim():pickupLocation.value}
-function getDropoffValue(){return dropoffLocation.value==="Other location"?dropoffOther.value.trim():dropoffLocation.value}
-function updateSameLocationWarning(){const p=getPickupValue().trim().toLowerCase(),d=getDropoffValue().trim().toLowerCase();if(p&&d&&p===d){showMessage("Pickup and destination must be different locations.","error");return false}if(formMessage.textContent==="Pickup and destination must be different locations."){formMessage.textContent="";formMessage.className="form-message"}return true}
+
+function updateLocationFields(){
+    const cp=pickupLocation.value==="Other location";
+    const cd=dropoffLocation.value==="Other location";
+
+    pickupOtherGroup.classList.toggle("hidden",!cp);
+    dropoffOtherGroup.classList.toggle("hidden",!cd);
+
+    pickupOther.required=cp;
+    dropoffOther.required=cd;
+
+    updateSameLocationWarning();
+}
+
+function getPickupValue(){
+    return pickupLocation.value==="Other location"
+        ?pickupOther.value.trim()
+        :pickupLocation.value;
+}
+
+function getDropoffValue(){
+    return dropoffLocation.value==="Other location"
+        ?dropoffOther.value.trim()
+        :dropoffLocation.value;
+}
+
+function updateSameLocationWarning(){
+    const p=getPickupValue().trim().toLowerCase();
+    const d=getDropoffValue().trim().toLowerCase();
+
+    if(p&&d&&p===d){
+        showMessage("Pickup and destination must be different locations.","error");
+        return false;
+    }
+
+    if(formMessage.textContent==="Pickup and destination must be different locations."){
+        formMessage.textContent="";
+        formMessage.className="form-message";
+    }
+
+    return true;
+}
+
 function updatePassengerOptions(){
-const cap=vehicleCapacity[vehicleType.value];
-Array.from(passengerCount.options).forEach(o=>{o.disabled=Number(o.value)>cap});
-if(Number(passengerCount.value)>cap)passengerCount.value=String(cap);
-vehiclePriceNote.textContent="Estimated vehicle price: "+formatISK(vehiclePrices[vehicleType.value])+" (temporary estimate)";
+    const cap=vehicleCapacity[vehicleType.value];
+
+    Array.from(passengerCount.options).forEach(o=>{
+        o.disabled=Number(o.value)>cap;
+    });
+
+    if(Number(passengerCount.value)>cap){
+        passengerCount.value=String(cap);
+    }
+
+    vehiclePriceNote.textContent=
+        "Estimated vehicle price: "+
+        formatISK(vehiclePrices[vehicleType.value])+
+        " (temporary estimate)";
 }
+
 function updateChildrenFields(){
-const enabled=travellingWithChildren.checked;
-childrenDetails.classList.toggle("hidden",!enabled);
-childrenCount.required=enabled;
-if(!enabled){
-childrenCount.value="";
-childrenAges.innerHTML="";
-return;
+    const enabled=travellingWithChildren.checked;
+
+    childrenDetails.classList.toggle("hidden",!enabled);
+    childrenCount.required=enabled;
+
+    if(!enabled){
+        childrenCount.value="";
+        childrenAges.innerHTML="";
+        return;
+    }
+
+    renderChildrenAgeFields();
 }
-renderChildrenAgeFields();
-}
+
 function renderChildrenAgeFields(){
-const count=Number(childrenCount.value)||0;
-const existing=Array.from(childrenAges.querySelectorAll("select")).map(el=>el.value);
-childrenAges.innerHTML="";
-for(let i=1;i<=count;i++){
-const group=document.createElement("div");
-group.className="form-group";
-const label=document.createElement("label");
-label.htmlFor="childAge"+i;
-label.textContent="Child "+i+" Age *";
-const select=document.createElement("select");
-select.id="childAge"+i;
-select.required=true;
-select.name="child_age_"+i;
-const placeholder=document.createElement("option");
-placeholder.value="";
-placeholder.textContent="Choose age";
-select.appendChild(placeholder);
-for(let age=0;age<=17;age++){
-const option=document.createElement("option");
-option.value=String(age);
-option.textContent=age===0?"Under 1 year":age+" years";
-select.appendChild(option);
+    const count=Number(childrenCount.value)||0;
+
+    const existing=Array.from(
+        childrenAges.querySelectorAll("select")
+    ).map(el=>el.value);
+
+    childrenAges.innerHTML="";
+
+    for(let i=1;i<=count;i++){
+        const group=document.createElement("div");
+        group.className="form-group";
+
+        const label=document.createElement("label");
+        label.htmlFor="childAge"+i;
+        label.textContent="Child "+i+" Age *";
+
+        const select=document.createElement("select");
+        select.id="childAge"+i;
+        select.required=true;
+        select.name="child_age_"+i;
+
+        const placeholder=document.createElement("option");
+        placeholder.value="";
+        placeholder.textContent="Choose age";
+
+        select.appendChild(placeholder);
+
+        for(let age=0;age<=17;age++){
+            const option=document.createElement("option");
+            option.value=String(age);
+            option.textContent=age===0?"Under 1 year":age+" years";
+            select.appendChild(option);
+        }
+
+        if(existing[i-1]!==undefined){
+            select.value=existing[i-1];
+        }
+
+        group.appendChild(label);
+        group.appendChild(select);
+        childrenAges.appendChild(group);
+    }
 }
-if(existing[i-1]!==undefined)select.value=existing[i-1];
-group.appendChild(label);
-group.appendChild(select);
-childrenAges.appendChild(group);
+
+function resetTimeOptions(message){
+    timeSelect.innerHTML="";
+
+    const o=document.createElement("option");
+    o.value="";
+    o.textContent=message;
+
+    timeSelect.appendChild(o);
 }
+
+function extractTimes(data,keys){
+    for(const key of keys){
+        const c=data[key];
+
+        if(Array.isArray(c)){
+            return c.map(x=>
+                typeof x==="string"
+                    ?x
+                    :(x&&(x.pickup_time||x.time||x.pickupTime))||""
+            ).filter(Boolean);
+        }
+    }
+
+    return null;
 }
-function resetTimeOptions(message){timeSelect.innerHTML="";const o=document.createElement("option");o.value="";o.textContent=message;timeSelect.appendChild(o)}
-function extractTimes(data,keys){for(const key of keys){const c=data[key];if(Array.isArray(c))return c.map(x=>typeof x==="string"?x:(x&&(x.pickup_time||x.time||x.pickupTime))||"").filter(Boolean)}return null}
-function normalizeTime(v){const m=String(v).match(/(\d{1,2}):(\d{2})/);return m?String(m[1]).padStart(2,"0")+":"+m[2]:""}
-function getCurrentIcelandHourAndMinute(){const parts=new Intl.DateTimeFormat("en-GB",{timeZone:"Atlantic/Reykjavik",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());const r={};parts.forEach(p=>{if(p.type!=="literal")r[p.type]=p.value});return{hour:Number(r.hour),minute:Number(r.minute)}}
-async function loadAvailability(){const req=++availabilityRequestNumber,day=dateInput.value;resetTimeOptions("Loading available times...");timeSelect.disabled=true;if(!day){resetTimeOptions("Choose date first");availabilityNote.textContent="Choose a date to check available times.";return}
-try{const response=await fetch(AVAILABILITY_URL+"?date="+encodeURIComponent(day));let data={};try{data=await response.json()}catch(e){}if(req!==availabilityRequestNumber)return;if(!response.ok)throw new Error(data.error||data.message||"Availability could not be checked.");
-const booked=(extractTimes(data,["booked_times","bookedTimes","unavailable_times","unavailableTimes","booked","unavailable"])||[]).map(normalizeTime);
-const avail=extractTimes(data,["available_times","availableTimes","available"]);const availSet=Array.isArray(avail)?new Set(avail.map(normalizeTime)):null;
-const today=getIcelandDate(),now=getCurrentIcelandHourAndMinute();let count=0;resetTimeOptions("Choose available time");
-for(let h=6;h<=22;h++){const t=String(h).padStart(2,"0")+":00";if(booked.includes(t)||(availSet&&!availSet.has(t)))continue;if(day===today&&h*60<=now.hour*60+now.minute)continue;const o=document.createElement("option");o.value=t;o.textContent=t;timeSelect.appendChild(o);count++}
-timeSelect.disabled=count===0;if(!count){resetTimeOptions("No times available");timeSelect.disabled=true;availabilityNote.textContent="No available times were found for this date. Please choose another date."}else availabilityNote.textContent="Times shown are between 6:00 and 22:00. Availability is checked again by the server when booking."
-}catch(err){console.error("Availability error:",err);if(req!==availabilityRequestNumber)return;resetTimeOptions("Choose pickup time");const today=getIcelandDate(),now=getCurrentIcelandHourAndMinute();for(let h=6;h<=22;h++){if(day===today&&h*60<=now.hour*60+now.minute)continue;const o=document.createElement("option");o.value=String(h).padStart(2,"0")+":00";o.textContent=o.value;timeSelect.appendChild(o)}timeSelect.disabled=false;availabilityNote.textContent="Live availability could not be loaded. The server will check the selected time when you submit."}}
-function formatISK(n){n=Number(n);return Number.isFinite(n)?new Intl.NumberFormat("en-IS",{maximumFractionDigits:0}).format(n)+" ISK":"To be confirmed"}
-function formatDisplayDate(s){if(!s)return"—";const p=s.split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:s}
-function showInvoice(result,data){const b=result.booking||result.data||result,inv=result.invoice||{};cancellationUrl=result.cancellation_url||result.cancellationUrl||null;const id=b.id||b.booking_id||b.bookingId||"";
-document.getElementById("invoiceReference").textContent=inv.invoice_number||inv.invoiceNumber||id||"Saved";
-document.getElementById("invoiceName").textContent=b.full_name||data.full_name;
-document.getElementById("invoiceRoute").textContent=(b.pickup_location||data.pickup_location)+" → "+(b.destination||data.destination);
-document.getElementById("invoiceDate").textContent=formatDisplayDate(b.pickup_date||data.pickup_date);
-document.getElementById("invoiceTime").textContent=b.pickup_time||data.pickup_time;
-document.getElementById("invoicePassengers").textContent=b.passengers||data.passengers;
-document.getElementById("invoiceStatus").textContent=b.status||"Confirmed by booking system";
-document.getElementById("invoicePrice").textContent=formatISK(inv.amount??inv.price??b.price??result.price);
-cancelButton.disabled=!cancellationUrl;cancelButton.textContent=cancellationUrl?"CANCEL BOOKING":"CANCELLATION LINK UNAVAILABLE";
-document.getElementById("cancelNote").textContent=result.cancellation_policy||"Cancellation is permitted only when more than 24 hours remain before pickup. The server checks the cancellation deadline.";
-cancelMessage.textContent="";cancelMessage.className="form-message";invoiceCard.classList.remove("hidden");invoiceCard.scrollIntoView({behavior:"smooth",block:"nearest"})}
-pdfButton.addEventListener("click",()=>{if(invoiceCard.classList.contains("hidden")){alert("Please complete a booking before saving the invoice.");return}window.print()});
+
+function normalizeTime(v){
+    const m=String(v).match(/(\d{1,2}):(\d{2})/);
+
+    if(!m)return "";
+
+    const hour=Number(m[1]);
+    const minute=Number(m[2]);
+
+    if(hour<0||hour>23||minute<0||minute>59)return "";
+
+    return String(hour).padStart(2,"0")+":"+String(minute).padStart(2,"0");
+}
+
+function getCurrentIcelandHourAndMinute(){
+    const parts=new Intl.DateTimeFormat("en-GB",{
+        timeZone:"Atlantic/Reykjavik",
+        hour:"2-digit",
+        minute:"2-digit",
+        hourCycle:"h23"
+    }).formatToParts(new Date());
+
+    const r={};
+
+    parts.forEach(p=>{
+        if(p.type!=="literal")r[p.type]=p.value;
+    });
+
+    return{
+        hour:Number(r.hour),
+        minute:Number(r.minute)
+    };
+}
+
+/*
+    Compatibility check:
+    If the availability endpoint does not return bookedTimes,
+    check each full-hour slot individually.
+*/
+async function checkBookedHour(day,time){
+    try{
+        const url=
+            AVAILABILITY_URL+
+            "?date="+encodeURIComponent(day)+
+            "&time="+encodeURIComponent(time)+
+            "&service_type=reykjavik_shuttle";
+
+        const response=await fetch(url,{cache:"no-store"});
+
+        let data={};
+
+        try{
+            data=await response.json();
+        }catch(e){}
+
+        if(!response.ok)return false;
+
+        return data.available===false ||
+               data.isAvailable===false ||
+               data.is_available===false;
+
+    }catch(error){
+        console.warn("Could not verify hour:",time,error);
+        return false;
+    }
+}
+
+async function loadAvailability(){
+    const req=++availabilityRequestNumber;
+    const day=dateInput.value;
+
+    resetTimeOptions("Loading available times...");
+    timeSelect.disabled=true;
+
+    if(!day){
+        resetTimeOptions("Choose date first");
+        availabilityNote.textContent="Choose a date to check available times.";
+        return;
+    }
+
+    try{
+        const url=
+            AVAILABILITY_URL+
+            "?date="+encodeURIComponent(day)+
+            "&service_type=reykjavik_shuttle";
+
+        const response=await fetch(url,{cache:"no-store"});
+
+        let data={};
+
+        try{
+            data=await response.json();
+        }catch(e){}
+
+        if(req!==availabilityRequestNumber)return;
+
+        if(!response.ok){
+            throw new Error(
+                data.error||
+                data.message||
+                "Availability could not be checked."
+            );
+        }
+
+        const bookedRaw=extractTimes(data,[
+            "booked_times",
+            "bookedTimes",
+            "unavailable_times",
+            "unavailableTimes",
+            "booked",
+            "unavailable"
+        ]);
+
+        const hasBookedList=Array.isArray(bookedRaw);
+
+        const booked=new Set(
+            (bookedRaw||[])
+                .map(normalizeTime)
+                .filter(Boolean)
+        );
+
+        const avail=extractTimes(data,[
+            "available_times",
+            "availableTimes",
+            "available_slots",
+            "availableSlots",
+            "times",
+            "available"
+        ]);
+
+        const availSet=Array.isArray(avail)
+            ?new Set(avail.map(normalizeTime).filter(Boolean))
+            :null;
+
+        /*
+            If the server does not provide a booked-times list,
+            verify each hourly slot separately.
+        */
+        if(!hasBookedList){
+            const checks=[];
+
+            for(let h=6;h<=21;h++){
+                const t=String(h).padStart(2,"0")+":00";
+                checks.push(
+                    checkBookedHour(day,t).then(isBooked=>{
+                        if(isBooked)booked.add(t);
+                    })
+                );
+            }
+
+            await Promise.all(checks);
+
+            if(req!==availabilityRequestNumber)return;
+        }
+
+        const today=getIcelandDate();
+        const now=getCurrentIcelandHourAndMinute();
+
+        let count=0;
+
+        resetTimeOptions("Choose available time");
+
+        for(let h=6;h<=21;h++){
+            const t=String(h).padStart(2,"0")+":00";
+
+            const isPast=
+                day===today&&
+                h*60<=now.hour*60+now.minute;
+
+            const isBooked=booked.has(t);
+
+            const isInAvailableList=
+                !availSet||availSet.has(t);
+
+            const option=document.createElement("option");
+            option.value=t;
+
+            if(isPast){
+                option.textContent=t+" — Unavailable";
+                option.disabled=true;
+            }else if(isBooked){
+                option.textContent=t+" — Booked";
+                option.disabled=true;
+            }else if(!isInAvailableList){
+                option.textContent=t+" — Unavailable";
+                option.disabled=true;
+            }else{
+                option.textContent=t;
+                count++;
+            }
+
+            timeSelect.appendChild(option);
+        }
+
+        timeSelect.disabled=count===0;
+
+        if(!count){
+            resetTimeOptions("No times available");
+            timeSelect.disabled=true;
+
+            availabilityNote.textContent=
+                "No available times were found for this date. Please choose another date.";
+        }else{
+            availabilityNote.textContent=
+                "Times shown are between 6:00 and 22:00. Availability is checked again by the server when booking.";
+        }
+
+    }catch(err){
+        console.error("Availability error:",err);
+
+        if(req!==availabilityRequestNumber)return;
+
+        resetTimeOptions("Choose pickup time");
+
+        const today=getIcelandDate();
+        const now=getCurrentIcelandHourAndMinute();
+
+        for(let h=6;h<=21;h++){
+            const t=String(h).padStart(2,"0")+":00";
+
+            if(day===today&&h*60<=now.hour*60+now.minute){
+                continue;
+            }
+
+            const o=document.createElement("option");
+            o.value=t;
+            o.textContent=t;
+
+            timeSelect.appendChild(o);
+        }
+
+        timeSelect.disabled=false;
+
+        availabilityNote.textContent=
+            "Live availability could not be loaded. The server will check the selected time when you submit.";
+    }
+}
+
+function formatISK(n){
+    n=Number(n);
+
+    return Number.isFinite(n)
+        ?new Intl.NumberFormat("en-IS",{maximumFractionDigits:0}).format(n)+" ISK"
+        :"To be confirmed";
+}
+
+function formatDisplayDate(s){
+    if(!s)return"—";
+
+    const p=s.split("-");
+
+    return p.length===3
+        ?p[2]+"/"+p[1]+"/"+p[0]
+        :s;
+}
+
+function showInvoice(result,data){
+    const b=result.booking||result.data||result;
+    const inv=result.invoice||{};
+
+    cancellationUrl=
+        result.cancellation_url||
+        result.cancellationUrl||
+        null;
+
+    const id=b.id||b.booking_id||b.bookingId||"";
+
+    document.getElementById("invoiceReference").textContent=
+        inv.invoice_number||
+        inv.invoiceNumber||
+        id||
+        "Saved";
+
+    document.getElementById("invoiceName").textContent=
+        b.full_name||data.full_name;
+
+    document.getElementById("invoiceRoute").textContent=
+        (b.pickup_location||data.pickup_location)+
+        " → "+
+        (b.destination||data.destination);
+
+    document.getElementById("invoiceDate").textContent=
+        formatDisplayDate(b.pickup_date||data.pickup_date);
+
+    document.getElementById("invoiceTime").textContent=
+        b.pickup_time||data.pickup_time;
+
+    document.getElementById("invoicePassengers").textContent=
+        b.passengers||data.passengers;
+
+    document.getElementById("invoiceStatus").textContent=
+        b.status||"Confirmed by booking system";
+
+    document.getElementById("invoicePrice").textContent=
+        formatISK(inv.amount??inv.price??b.price??result.price);
+
+    cancelButton.disabled=!cancellationUrl;
+
+    cancelButton.textContent=
+        cancellationUrl
+            ?"CANCEL BOOKING"
+            :"CANCELLATION LINK UNAVAILABLE";
+
+    document.getElementById("cancelNote").textContent=
+        result.cancellation_policy||
+        "Cancellation is permitted only when more than 24 hours remain before pickup. The server checks the cancellation deadline.";
+
+    cancelMessage.textContent="";
+    cancelMessage.className="form-message";
+
+    invoiceCard.classList.remove("hidden");
+
+    invoiceCard.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
+}
+
+pdfButton.addEventListener("click",()=>{
+    if(invoiceCard.classList.contains("hidden")){
+        alert("Please complete a booking before saving the invoice.");
+        return;
+    }
+
+    window.print();
+});
+
 vehicleType.addEventListener("change",updatePassengerOptions);
 travellingWithChildren.addEventListener("change",updateChildrenFields);
 childrenCount.addEventListener("change",renderChildrenAgeFields);
-pickupLocation.addEventListener("change",updateLocationFields);dropoffLocation.addEventListener("change",updateLocationFields);pickupOther.addEventListener("input",updateSameLocationWarning);dropoffOther.addEventListener("input",updateSameLocationWarning);dateInput.addEventListener("change",loadAvailability);
-form.addEventListener("submit",async e=>{e.preventDefault();if(!form.reportValidity())return;if(dateInput.value<getIcelandDate()){showMessage("Please select today or a future date in Iceland.","error");return}
-const pickup=getPickupValue(),destination=getDropoffValue();if(!pickup||!destination){showMessage("Please enter both your pickup and destination.","error");return}if(pickup.trim().toLowerCase()===destination.trim().toLowerCase()){showMessage("Pickup and destination must be different locations.","error");return}if(!timeSelect.value){showMessage("Please select an available pickup time.","error");return}
-const extras=[];if(document.getElementById("meetAndGreet").checked)extras.push("Airport Meet & Greet (additional price may apply)");if(document.getElementById("extraStop").checked)extras.push("Extra Stop Along the Way (additional price may apply)");
-const childAges=travellingWithChildren.checked
-?Array.from(childrenAges.querySelectorAll("select")).map(el=>Number(el.value))
-:[];
-const notes=["Service: Reykjavik Shuttle","Vehicle type: "+vehicleType.options[vehicleType.selectedIndex].text,"Vehicle price estimate: "+formatISK(vehiclePrices[vehicleType.value]),"Travelling with children: "+(travellingWithChildren.checked?"Yes":"No"),"Number of children: "+childAges.length,"Children ages: "+(childAges.length?childAges.map(age=>age===0?"under 1 year":age+" years").join(", "):"None"),"Optional services: "+(extras.length?extras.join(", "):"None"),"Flight number: "+(document.getElementById("flightNumber").value.trim()||"Not provided"),"Additional requests: "+(document.getElementById("specialRequests").value.trim()||"None"),"Price note: Temporary estimate calculated by the booking server. No payment collected."].join("\n");
-const data={full_name:document.getElementById("customerName").value.trim(),email:document.getElementById("customerEmail").value.trim(),phone:document.getElementById("customerPhone").value.trim(),pickup_location:pickup,destination:destination,pickup_date:dateInput.value,pickup_time:timeSelect.value,passengers:Number(passengerCount.value),luggage:Number(document.getElementById("luggageCount").value),vehicle_type:vehicleType.value,children_count:travellingWithChildren.checked?Number(childrenCount.value):0,children_ages:childAges,flight_number:document.getElementById("flightNumber").value.trim(),special_requests:notes,price:null};
-submitButton.disabled=true;submitButton.textContent="CREATING BOOKING...";formMessage.className="form-message";formMessage.textContent="";invoiceCard.classList.add("hidden");cancellationUrl=null;
-try{const response=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});let result={};try{result=await response.json()}catch(err){}if(!response.ok||result.success===false)throw new Error(result.error||result.message||"The server could not save your booking. Please try another time.");
-showMessage("Your Reykjavik Shuttle booking was saved successfully. Your invoice is shown below.","success");showInvoice(result,data);loadAvailability()
-}catch(err){console.error("Booking submission error:",err);showMessage(err.message||"We could not submit your booking. Please check your internet connection and try again. If the problem continues, contact us on WhatsApp at +354 833 3707.","error")}
-finally{submitButton.disabled=false;submitButton.textContent="BOOK YOUR TRANSFER"}});
-cancelButton.addEventListener("click",async()=>{if(!cancellationUrl){showCancelMessage("A cancellation link was not returned by the server. Please contact Iceland Transfer for help.","error");return}
-if(!window.confirm("Are you sure you want to cancel this booking? The server will check whether more than 24 hours remain before pickup."))return;
-cancelButton.disabled=true;cancelButton.textContent="CANCELLING...";cancelMessage.className="form-message";cancelMessage.textContent="";
-try{if(!cancellationUrl.startsWith("https://"))throw new Error("The cancellation link is not secure. Please contact Iceland Transfer.");
-const response=await fetch(cancellationUrl,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({})});let result={};try{result=await response.json()}catch(err){}if(!response.ok||result.success===false)throw new Error(result.error||result.message||"The server could not cancel this booking.");
-showCancelMessage(result.message||"Your booking has been cancelled successfully.","success");document.getElementById("invoiceStatus").textContent="Cancelled";document.getElementById("cancelNote").textContent="This booking has been cancelled. Its time slot may now be available again.";cancelButton.textContent="BOOKING CANCELLED";cancellationUrl=null;loadAvailability()
-}catch(err){console.error("Cancellation error:",err);showCancelMessage(err.message||"We could not cancel your booking. Please try again or contact us on WhatsApp at +354 833 3707.","error");cancelButton.disabled=false;cancelButton.textContent="CANCEL BOOKING"}});
-updateLocationFields();updatePassengerOptions();updateChildrenFields();loadAvailability();
+
+pickupLocation.addEventListener("change",updateLocationFields);
+dropoffLocation.addEventListener("change",updateLocationFields);
+
+pickupOther.addEventListener("input",updateSameLocationWarning);
+dropoffOther.addEventListener("input",updateSameLocationWarning);
+
+dateInput.addEventListener("change",loadAvailability);
+
+form.addEventListener("submit",async e=>{
+    e.preventDefault();
+
+    if(!form.reportValidity())return;
+
+    if(dateInput.value<getIcelandDate()){
+        showMessage("Please select today or a future date in Iceland.","error");
+        return;
+    }
+
+    const pickup=getPickupValue();
+    const destination=getDropoffValue();
+
+    if(!pickup||!destination){
+        showMessage("Please enter both your pickup and destination.","error");
+        return;
+    }
+
+    if(pickup.trim().toLowerCase()===destination.trim().toLowerCase()){
+        showMessage("Pickup and destination must be different locations.","error");
+        return;
+    }
+
+    if(!timeSelect.value){
+        showMessage("Please select an available pickup time.","error");
+        return;
+    }
+
+    const extras=[];
+
+    if(document.getElementById("meetAndGreet").checked){
+        extras.push("Airport Meet & Greet (additional price may apply)");
+    }
+
+    if(document.getElementById("extraStop").checked){
+        extras.push("Extra Stop Along the Way (additional price may apply)");
+    }
+
+    const childAges=travellingWithChildren.checked
+        ?Array.from(childrenAges.querySelectorAll("select")).map(el=>Number(el.value))
+        :[];
+
+    const notes=[
+        "Service: Reykjavik Shuttle",
+        "Vehicle type: "+vehicleType.options[vehicleType.selectedIndex].text,
+        "Vehicle price estimate: "+formatISK(vehiclePrices[vehicleType.value]),
+        "Travelling with children: "+(travellingWithChildren.checked?"Yes":"No"),
+        "Number of children: "+childAges.length,
+        "Children ages: "+(childAges.length?childAges.map(age=>age===0?"under 1 year":age+" years").join(", "):"None"),
+        "Optional services: "+(extras.length?extras.join(", "):"None"),
+        "Flight number: "+(document.getElementById("flightNumber").value.trim()||"Not provided"),
+        "Additional requests: "+(document.getElementById("specialRequests").value.trim()||"None"),
+        "Price note: Temporary estimate calculated by the booking server. No payment collected."
+    ].join("\n");
+
+    const data={
+        full_name:document.getElementById("customerName").value.trim(),
+        email:document.getElementById("customerEmail").value.trim(),
+        phone:document.getElementById("customerPhone").value.trim(),
+        pickup_location:pickup,
+        destination:destination,
+        pickup_date:dateInput.value,
+        pickup_time:timeSelect.value,
+        passengers:Number(passengerCount.value),
+        luggage:Number(document.getElementById("luggageCount").value),
+        vehicle_type:vehicleType.value,
+        children_count:travellingWithChildren.checked?Number(childrenCount.value):0,
+        children_ages:childAges,
+        flight_number:document.getElementById("flightNumber").value.trim(),
+        special_requests:notes,
+        price:null,
+        service_type:"reykjavik_shuttle"
+    };
+
+    submitButton.disabled=true;
+    submitButton.textContent="CREATING BOOKING...";
+
+    formMessage.className="form-message";
+    formMessage.textContent="";
+
+    invoiceCard.classList.add("hidden");
+    cancellationUrl=null;
+
+    try{
+        const response=await fetch(API_URL,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data)
+        });
+
+        let result={};
+
+        try{
+            result=await response.json();
+        }catch(err){}
+
+        if(!response.ok||result.success===false){
+            if(response.status===409){
+                await loadAvailability();
+
+                throw new Error(
+                    result.error||
+                    result.message||
+                    "This pickup time has just been booked. Please choose another available time."
+                );
+            }
+
+            throw new Error(
+                result.error||
+                result.message||
+                "The server could not save your booking. Please try another time."
+            );
+        }
+
+        showMessage(
+            "Your Reykjavik Shuttle booking was saved successfully. Your invoice is shown below.",
+            "success"
+        );
+
+        showInvoice(result,data);
+
+        await loadAvailability();
+
+    }catch(err){
+        console.error("Booking submission error:",err);
+
+        showMessage(
+            err.message||
+            "We could not submit your booking. Please check your internet connection and try again. If the problem continues, contact us on WhatsApp at +354 833 3707.",
+            "error"
+        );
+
+    }finally{
+        submitButton.disabled=false;
+        submitButton.textContent="BOOK YOUR TRANSFER";
+    }
+});
+
+cancelButton.addEventListener("click",async()=>{
+    if(!cancellationUrl){
+        showCancelMessage(
+            "A cancellation link was not returned by the server. Please contact Iceland Transfer for help.",
+            "error"
+        );
+        return;
+    }
+
+    if(!window.confirm(
+        "Are you sure you want to cancel this booking? The server will check whether more than 24 hours remain before pickup."
+    )){
+        return;
+    }
+
+    cancelButton.disabled=true;
+    cancelButton.textContent="CANCELLING...";
+
+    cancelMessage.className="form-message";
+    cancelMessage.textContent="";
+
+    try{
+        if(!cancellationUrl.startsWith("https://")){
+            throw new Error(
+                "The cancellation link is not secure. Please contact Iceland Transfer."
+            );
+        }
+
+        const response=await fetch(cancellationUrl,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({})
+        });
+
+        let result={};
+
+        try{
+            result=await response.json();
+        }catch(err){}
+
+        if(!response.ok||result.success===false){
+            throw new Error(
+                result.error||
+                result.message||
+                "The server could not cancel this booking."
+            );
+        }
+
+        showCancelMessage(
+            result.message||"Your booking has been cancelled successfully.",
+            "success"
+        );
+
+        document.getElementById("invoiceStatus").textContent="Cancelled";
+
+        document.getElementById("cancelNote").textContent=
+            "This booking has been cancelled. Its time slot may now be available again.";
+
+        cancelButton.textContent="BOOKING CANCELLED";
+
+        cancellationUrl=null;
+
+        await loadAvailability();
+
+    }catch(err){
+        console.error("Cancellation error:",err);
+
+        showCancelMessage(
+            err.message||
+            "We could not cancel your booking. Please try again or contact us on WhatsApp at +354 833 3707.",
+            "error"
+        );
+
+        cancelButton.disabled=false;
+        cancelButton.textContent="CANCEL BOOKING";
+    }
+});
+
+updateLocationFields();
+updatePassengerOptions();
+updateChildrenFields();
+loadAvailability();
 </script>
 </body>
 </html>
