@@ -1,1312 +1,1388 @@
+/**
+ * ICELAND TRANSFER — booking API
+ * Node.js 18+ / CommonJS
+ *
+ * Required:
+ *   SUPABASE_URL
+ *   SUPABASE_SECRET_KEY
+ *
+ * Optional integrations:
+ *   GOOGLE_MAPS_API_KEY
+ *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM
+ *   EUR_TO_ISK_RATE (default reference rate: 137.20, dated 2026-11-24)
+ *   PUBLIC_SERVER_URL
+ *
+ * IMPORTANT:
+ * Teya live card processing is deliberately NOT simulated.
+ */
+
 require("dotenv").config();
 
 const http = require("http");
 const crypto = require("crypto");
 const { createClient } = require("@supabase/supabase-js");
 
-const PORT = process.env.PORT || 3000;
+let nodemailer = null;
+try {
+  nodemailer = require("nodemailer");
+} catch (_) {}
 
+const PORT = Number(process.env.PORT || 3000);
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 
-const PUBLIC_SERVER_URL =
-    "https://iceland-transfer-server.onrender.com";
+const PUBLIC_SERVER_URL = (
+  process.env.PUBLIC_SERVER_URL ||
+  "https://iceland-transfer-server.onrender.com"
+).replace(/\/$/, "");
+
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || "";
+const EUR_TO_ISK_RATE = Number(process.env.EUR_TO_ISK_RATE || 137.20);
+const MAX_BODY_BYTES = 1024 * 1024;
 
 if (!SUPABASE_URL || !SUPABASE_SECRET_KEY) {
-    console.error(
-        "ERROR: SUPABASE_URL and SUPABASE_SECRET_KEY must be configured."
-    );
-    process.exit(1);
+  console.error("Missing SUPABASE_URL or SUPABASE_SECRET_KEY in .env");
+  process.exit(1);
+}
+
+if (!Number.isFinite(EUR_TO_ISK_RATE) || EUR_TO_ISK_RATE <= 0) {
+  console.error("EUR_TO_ISK_RATE must be a positive number.");
+  process.exit(1);
 }
 
 const supabase = createClient(
-    SUPABASE_URL,
-    SUPABASE_SECRET_KEY,
-    {
-        auth: {
-            autoRefreshToken: false,
-            persistSession: false
-        }
+  SUPABASE_URL,
+  SUPABASE_SECRET_KEY,
+  {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false
     }
+  }
 );
 
-// ========================================
-// VEHICLE PRICES
-// ========================================
+// ==========================================
+// VEHICLES
+// ==========================================
 
-const VEHICLES = {
-    sedan: {
-        name: "Sedan",
-        price: 17900,
-        capacity: 4
-    },
+const VEHICLES = [
+  {
+    code: "standard",
+    name: "Private Standard",
+    minPassengers: 1,
+    maxPassengers: 3,
+    largeBags: 2,
+    handBags: 0,
+    fromEur: 110
+  },
+  {
+    code: "comfort",
+    name: "Private Comfort",
+    minPassengers: 1,
+    maxPassengers: 4,
+    largeBags: 2,
+    handBags: 2,
+    fromEur: 136
+  },
+  {
+    code: "suv",
+    name: "Private SUV",
+    minPassengers: 1,
+    maxPassengers: 4,
+    largeBags: 4,
+    handBags: 2,
+    fromEur: 150
+  },
+  {
+    code: "van",
+    name: "Private Van",
+    minPassengers: 1,
+    maxPassengers: 8,
+    largeBags: 10,
+    handBags: 8,
+    fromEur: 191
+  }
+];
 
-    mpv: {
-        name: "MPV",
-        price: 21900,
-        capacity: 4
-    },
+// ==========================================
+// ROUTES
+// ==========================================
 
-    van: {
-        name: "Van",
-        price: 26900,
-        capacity: 8
-    },
-
-    vip_van: {
-        name: "VIP Van",
-        price: 32000,
-        capacity: 5
+const ROUTES = [
+  {
+    code: "keflavik-airport-blue-lagoon",
+    name: "Keflavík Airport → Blue Lagoon",
+    distanceKm: 22,
+    estimatedMinutes: 19,
+    prices: {
+      comfort: 90,
+      suv: 105,
+      van: 115
     }
-};
+  },
+  {
+    code: "blue-lagoon-reykjavik",
+    name: "Blue Lagoon → Reykjavík",
+    distanceKm: 49,
+    estimatedMinutes: 44,
+    prices: {
+      standard: 110,
+      comfort: 136,
+      suv: 150,
+      van: 191
+    }
+  },
+  {
+    code: "airport-blue-lagoon-reykjavik",
+    name: "Keflavík Airport → Blue Lagoon → Reykjavík",
+    distanceKm: null,
+    estimatedMinutes: null,
+    durationLabel: "About 4 hours",
+    prices: {
+      comfort: 387,
+      suv: 421,
+      van: 456
+    }
+  },
+  {
+    code: "reykjavik-blue-lagoon-airport",
+    name: "Reykjavík → Blue Lagoon → Keflavík Airport",
+    distanceKm: null,
+    estimatedMinutes: null,
+    durationLabel: "About 4 hours",
+    prices: {
+      comfort: 387,
+      suv: 421,
+      van: 456
+    }
+  }
+];
 
-const OPENING_HOUR = 6;
-const CLOSING_HOUR = 22;
+// ==========================================
+// TOURS
+// ==========================================
 
-const CANCELLATION_LIMIT_HOURS = 24;
+const TOURS = [
+  {
+    code: "northern-lights",
+    name: "Private Northern Lights Hunt from Reykjavik",
+    durationHours: 4,
+    prices: {
+      suv: 308,
+      van: 396
+    }
+  },
+  {
+    code: "classic-golden-circle",
+    name: "Classic Golden Circle Private Tour",
+    durationHours: 7,
+    prices: {
+      comfort: 665,
+      suv: 765,
+      van: 890
+    }
+  },
+  {
+    code: "south-coast",
+    name: "Iceland South Coast Day Tour from Reykjavik",
+    durationHours: 12,
+    prices: {
+      comfort: 990,
+      suv: 1135,
+      van: 1235
+    }
+  },
+  {
+    code: "golden-circle-hidden-gems",
+    name: "The Ultimate Golden Circle & Hidden Gems Full Day Tour",
+    durationHours: 9,
+    prices: {
+      comfort: 825,
+      suv: 965,
+      van: 1050
+    }
+  },
+  {
+    code: "glacier-lagoon-diamond-beach",
+    name: "South Coast, Glacier Lagoon & Diamond Beach Tour",
+    durationHours: 14,
+    prices: {
+      comfort: 1090,
+      suv: 1255,
+      van: 1335
+    }
+  },
+  {
+    code: "snaefellsnes",
+    name: "Snaefellsnes Peninsula Private Tour - Full-Day Adventure",
+    durationHours: 14,
+    prices: {
+      comfort: 1240,
+      suv: 1425,
+      van: 1500
+    }
+  },
+  {
+    code: "sliver-circle-fjord-fire",
+    name: "Sliver Circle Fjord & Fire - Private Tour",
+    durationHours: 6,
+    prices: {
+      comfort: 680,
+      suv: 780,
+      van: 885
+    }
+  },
+  {
+    code: "golden-circle-south-coast-mega",
+    name: "Golden Circle & South Coast Mega Tour",
+    durationHours: 14,
+    prices: {
+      comfort: 1095,
+      suv: 1260,
+      van: 1340
+    }
+  }
+];
 
-// ========================================
+// ==========================================
+// CHILD SEATS
+// ==========================================
+
+const CHILD_SEATS = [
+  {
+    code: "infant",
+    name: "Infant Seat",
+    ageRange: "0–12 months",
+    weightRange: "up to 13 kg",
+    priceEur: 0
+  },
+  {
+    code: "convertible",
+    name: "Convertible Seat",
+    ageRange: "0–4 years",
+    weightRange: "9–18 kg",
+    priceEur: 0
+  },
+  {
+    code: "booster",
+    name: "Booster Seat",
+    ageRange: "4–12 years",
+    weightRange: "15–36 kg",
+    priceEur: 0
+  }
+];
+
+const ALLOWED_TRANSFER_TYPES = ["one_way", "return"];
+const CANCELLATION_HOURS = 24;
+const MAX_BOOKINGS_PER_HOUR = 5;
+
+// ==========================================
 // GENERAL HELPERS
-// ========================================
+// ==========================================
 
-function sendJSON(res, statusCode, data) {
-    res.writeHead(statusCode, {
-        "Content-Type": "application/json; charset=utf-8",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Cache-Control": "no-store"
-    });
+function json(res, status, data) {
+  const body = JSON.stringify(data);
 
-    res.end(JSON.stringify(data));
+  res.writeHead(status, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization"
+  });
+
+  res.end(body);
+}
+
+function round2(n) {
+  return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+}
+
+function toIsk(eur) {
+  return Math.round(Number(eur) * EUR_TO_ISK_RATE);
+}
+
+function cleanText(v, max = 500) {
+  if (v === undefined || v === null) return "";
+  return String(v).trim().slice(0, max);
+}
+
+function isEmail(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || ""));
+}
+
+function validDate(v) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(v || "")) &&
+    !Number.isNaN(Date.parse(v + "T12:00:00Z"));
+}
+
+function validTime(v) {
+  return /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(String(v || ""));
+}
+
+function parsePickup(date, time) {
+  const hhmm = String(time).length === 5
+    ? `${time}:00`
+    : time;
+
+  return new Date(`${date}T${hhmm}Z`);
 }
 
 function readBody(req) {
-    return new Promise((resolve, reject) => {
-        let body = "";
-        let size = 0;
+  return new Promise((resolve, reject) => {
+    let raw = "";
 
-        const MAX_BODY_SIZE = 100000;
+    req.on("data", chunk => {
+      raw += chunk;
 
-        req.on("data", chunk => {
-            size += chunk.length;
-
-            if (size > MAX_BODY_SIZE) {
-                reject(new Error("REQUEST_TOO_LARGE"));
-                req.destroy();
-                return;
-            }
-
-            body += chunk;
-        });
-
-        req.on("end", () => {
-            if (!body.trim()) {
-                resolve({});
-                return;
-            }
-
-            try {
-                resolve(JSON.parse(body));
-            } catch {
-                reject(new Error("INVALID_JSON"));
-            }
-        });
-
-        req.on("error", reject);
+      if (Buffer.byteLength(raw) > MAX_BODY_BYTES) {
+        reject(new Error("Request body is too large."));
+        req.destroy();
+      }
     });
+
+    req.on("end", () => {
+      if (!raw) return resolve({});
+
+      try {
+        resolve(JSON.parse(raw));
+      } catch (_) {
+        reject(new Error("Request body must be valid JSON."));
+      }
+    });
+
+    req.on("error", reject);
+  });
 }
 
-function getValue(object, keys, fallback = "") {
-    for (const key of keys) {
-        const value = object[key];
+function findVehicle(code) {
+  const key = cleanText(code, 40)
+    .toLowerCase()
+    .replace(/[\s-]+/g, "_");
 
-        if (
-            value !== undefined &&
-            value !== null &&
-            String(value).trim() !== ""
-        ) {
-            return value;
-        }
-    }
-
-    return fallback;
+  return VEHICLES.find(v =>
+    v.code === key ||
+    v.name.toLowerCase() === key.replace(/_/g, " ")
+  );
 }
 
-function cleanText(value, maxLength = 1000) {
-    return String(value ?? "")
-        .trim()
-        .slice(0, maxLength);
+function getCatalogItem(type, code) {
+  if (type === "tour") {
+    return TOURS.find(x => x.code === code);
+  }
+
+  if (type === "route") {
+    return ROUTES.find(x => x.code === code);
+  }
+
+  return null;
 }
 
-// ========================================
-// NORMALIZE VEHICLE
-// ========================================
+// ==========================================
+// PRICE CALCULATION
+// ==========================================
 
-function normalizeVehicle(value) {
-    let original = cleanText(value, 150).toLowerCase();
+function calculateQuote(input) {
+  const kind = cleanText(
+    input.booking_kind || input.service_type || "transfer",
+    30
+  ).toLowerCase();
 
-    original = original.split(/[—–]/)[0].trim();
+  const itemType = kind.includes("tour")
+    ? "tour"
+    : (input.route_code ? "route" : "transfer");
 
-    original = original
-        .replace(/[_-]+/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
+  const vehicle = findVehicle(
+    input.vehicle_code ||
+    input.vehicle_type ||
+    input.vehicle
+  );
 
-    const aliases = {
-        "sedan": "sedan",
-        "standard sedan": "sedan",
-        "car": "sedan",
-        "sedan 4": "sedan",
-        "sedan 4 passengers": "sedan",
-        "sedan up to 4 passengers": "sedan",
-
-        "mpv": "mpv",
-        "mpv4": "mpv",
-        "mpv 4": "mpv",
-        "mpv 4 passengers": "mpv",
-        "mpv up to 4 passengers": "mpv",
-
-        "van": "van",
-        "standard van": "van",
-        "van 8": "van",
-        "van 8 passengers": "van",
-        "van up to 8 passengers": "van",
-
-        "vip van": "vip_van",
-        "vip": "vip_van",
-        "vipvan": "vip_van",
-        "vip van 5": "vip_van",
-        "vip van 5 passengers": "vip_van",
-        "vip van up to 5 passengers": "vip_van"
-    };
-
-    if (aliases[original]) {
-        return aliases[original];
-    }
-
-    if (/^sedan\b/.test(original)) {
-        return "sedan";
-    }
-
-    if (/^mpv\s*4?\b/.test(original)) {
-        return "mpv";
-    }
-
-    if (/^standard van\b/.test(original) || /^van\b/.test(original)) {
-        return "van";
-    }
-
-    if (/^vip\s*van\b/.test(original) || /^vipvan\b/.test(original)) {
-        return "vip_van";
-    }
-
-    return "";
-}
-
-// ========================================
-// NORMALIZE SERVICE TYPE
-// ========================================
-
-function normalizeServiceType(value, data = {}) {
-    const text = cleanText(
-        value ||
-        data.service_type ||
-        data.service ||
-        data.service_name ||
-        data.name,
-        150
-    ).toLowerCase();
-
-    if (text.includes("golden") || text.includes("circle")) {
-        return "golden_circle";
-    }
-
-    if (
-        text.includes("northern") ||
-        text.includes("aurora") ||
-        text.includes("lights")
-    ) {
-        return "northern_lights";
-    }
-
-    if (text.includes("keflavik") || text.includes("airport")) {
-        return "keflavik_shuttle";
-    }
-
-    if (text.includes("reykjavik")) {
-        return "reykjavik_shuttle";
-    }
-
-    return "transfer";
-}
-
-// ========================================
-// SERVICE DURATION
-// ========================================
-
-// Duration is saved for invoice/booking information.
-// It does NOT block additional hourly slots.
-
-function getServiceDuration(serviceType) {
-    if (serviceType === "golden_circle") {
-        return 8;
-    }
-
-    if (serviceType === "northern_lights") {
-        return 5;
-    }
-
-    return 1;
-}
-
-// ========================================
-// DATE AND TIME HELPERS
-// ========================================
-
-function getIcelandNow() {
-    return new Date();
-}
-
-function isValidDateString(value) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-        return false;
-    }
-
-    const date = new Date(`${value}T00:00:00Z`);
-
-    return (
-        !Number.isNaN(date.getTime()) &&
-        date.toISOString().slice(0, 10) === value
+  if (!vehicle) {
+    throw new Error(
+      "Please select one of the four available vehicles."
     );
-}
+  }
 
-function isValidTimeString(value) {
-    return /^([01]\d|2[0-3]):[0-5]\d$/.test(value);
-}
+  const passengers = Number(
+    input.passengers ?? input.max_passengers ?? 1
+  );
 
-function dateTimeAsUTC(date, time) {
-    return new Date(`${date}T${time}:00Z`);
-}
+  if (
+    !Number.isInteger(passengers) ||
+    passengers < 1 ||
+    passengers > vehicle.maxPassengers
+  ) {
+    throw new Error(
+      `${vehicle.name} supports 1–${vehicle.maxPassengers} passengers.`
+    );
+  }
 
-function isFuturePickup(date, time) {
-    const pickup = dateTimeAsUTC(date, time);
+  const largeBags = Number(
+    input.large_bags ?? input.luggage ?? 0
+  );
 
-    return pickup.getTime() > getIcelandNow().getTime();
-}
+  const handBags = Number(input.hand_bags ?? 0);
 
-function getTripEnd(date, time, durationHours) {
-    const start = dateTimeAsUTC(date, time);
+  if (
+    !Number.isInteger(largeBags) ||
+    largeBags < 0 ||
+    largeBags > vehicle.largeBags
+  ) {
+    throw new Error(
+      `${vehicle.name} supports up to ${vehicle.largeBags} large bags.`
+    );
+  }
 
-    const end = new Date(
-        start.getTime() + durationHours * 60 * 60 * 1000
+  if (
+    !Number.isInteger(handBags) ||
+    handBags < 0 ||
+    handBags > vehicle.handBags
+  ) {
+    throw new Error(
+      `${vehicle.name} supports up to ${vehicle.handBags} hand bags.`
+    );
+  }
+
+  let eur = null;
+  let item = null;
+
+  if (itemType === "tour") {
+    item = getCatalogItem(
+      "tour",
+      cleanText(input.tour_code || input.package_type, 80)
     );
 
-    return end.toISOString().slice(0, 19);
-}
+    if (!item) {
+      throw new Error(
+        "The selected tour is not in the approved tour list."
+      );
+    }
 
-function createCancellationToken() {
-    return crypto.randomBytes(32).toString("hex");
-}
+    eur = item.prices[vehicle.code];
 
-function getBookingStart(booking) {
-    return dateTimeAsUTC(
-        booking.pickup_date,
-        booking.pickup_time
+  } else if (itemType === "route") {
+    item = getCatalogItem(
+      "route",
+      cleanText(input.route_code, 80)
     );
-}
 
-// ========================================
-// GLOBAL HOURLY SLOT HELPERS
-// ========================================
+    if (!item) {
+      throw new Error(
+        "The selected route is not in the approved route list."
+      );
+    }
 
-// All services share the same hourly schedule.
-// A booking at 06:30 also locks the 06:00 hour.
+    eur = item.prices[vehicle.code];
 
-function getHourSlot(time) {
-    return String(time).slice(0, 2);
-}
+  } else {
+    eur = vehicle.fromEur;
+  }
 
-function isSameHourSlot(booking, date, time) {
-    return (
-        booking.pickup_date === date &&
-        getHourSlot(booking.pickup_time) === getHourSlot(time) &&
-        String(booking.status || "").toLowerCase() !== "cancelled"
+  if (eur === undefined || eur === null) {
+    throw new Error(
+      `${vehicle.name} is not available for this route/tour. Please choose another vehicle.`
     );
-}
+  }
 
-// ========================================
-// LOAD BOOKINGS FOR A DATE
-// ========================================
-
-async function loadBookingsForDate(date) {
-    const { data, error } = await supabase
-        .from("bookings")
-        .select(
-            "id,pickup_date,pickup_time,status,service_duration_hours,trip_end_time"
+  const childSeats = Array.isArray(input.child_seats)
+    ? input.child_seats.slice(0, 3).map(s => ({
+        type: cleanText(s.type || s.code, 30),
+        age: cleanText(s.age, 30),
+        quantity: Math.max(
+          1,
+          Math.min(3, Number(s.quantity || 1))
         )
-        .eq("pickup_date", date);
+      }))
+    : [];
 
-    if (error) {
-        console.error(
-            "Supabase availability error:",
-            error.message
-        );
-
-        throw new Error("AVAILABILITY_CHECK_FAILED");
+  for (const seat of childSeats) {
+    if (!CHILD_SEATS.some(s => s.code === seat.type)) {
+      throw new Error(
+        "One of the selected child seat types is invalid."
+      );
     }
+  }
 
-    return (data || []).filter(booking => {
-        return (
-            String(booking.status || "").toLowerCase() !== "cancelled"
-        );
+  const transferType = ALLOWED_TRANSFER_TYPES.includes(
+    input.transfer_type
+  )
+    ? input.transfer_type
+    : "one_way";
+
+  if (
+    transferType === "return" &&
+    (!validDate(input.return_date) || !validTime(input.return_time))
+  ) {
+    throw new Error(
+      "A valid return date and time are required for a return transfer."
+    );
+  }
+
+  const discountCode = cleanText(input.discount_code, 50);
+  const discountAmountEur = 0;
+  const totalEur = round2(eur + discountAmountEur);
+
+  return {
+    bookingKind: itemType,
+    item,
+    vehicle,
+    passengers,
+    largeBags,
+    handBags,
+    childSeats,
+    transferType,
+    basePriceEur: round2(eur),
+    discountCode,
+    discountAmountEur,
+    totalEur,
+    totalIsk: toIsk(totalEur),
+    currency: "ISK",
+    eurToIskRate: EUR_TO_ISK_RATE
+  };
+}
+
+// ==========================================
+// BOOKING REFERENCE
+// ==========================================
+
+function makeBookingReference() {
+  return "IT-" +
+    new Date().toISOString().slice(2, 10).replace(/-/g, "") +
+    "-" +
+    crypto.randomBytes(3).toString("hex").toUpperCase();
+}
+
+// ==========================================
+// BOOKING EMAIL
+// ==========================================
+
+async function sendBookingEmail(booking, quote) {
+  const configured =
+    process.env.SMTP_HOST &&
+    process.env.SMTP_USER &&
+    process.env.SMTP_PASS &&
+    process.env.EMAIL_FROM;
+
+  if (!configured || !nodemailer) {
+    return {
+      sent: false,
+      reason: "Email service is not configured."
+    };
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: Number(process.env.SMTP_PORT || 587) === 465,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    }
+  });
+
+  const dateTime =
+    `${booking.pickup_date} ${String(booking.pickup_time).slice(0, 5)} (Iceland time)`;
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#293c2e">
+      <h2>We received your booking request</h2>
+
+      <p>Hello ${escapeHtml(booking.full_name)},</p>
+
+      <p>
+        Your booking request has been received.
+        It is <b>pending payment/confirmation</b>;
+        this email is not a paid ticket.
+      </p>
+
+      <hr>
+
+      <p><b>Reference:</b> ${escapeHtml(booking.booking_reference)}</p>
+      <p><b>Service:</b> ${escapeHtml(booking.service_type || "Private transfer")}</p>
+      <p><b>Pickup:</b> ${escapeHtml(booking.pickup_location)}</p>
+      <p><b>Drop-off:</b> ${escapeHtml(booking.destination)}</p>
+      <p><b>Date/time:</b> ${escapeHtml(dateTime)}</p>
+      <p><b>Passengers:</b> ${booking.passengers}</p>
+      <p><b>Vehicle:</b> ${escapeHtml(booking.vehicle_name || "")}</p>
+
+      <p>
+        <b>Amount:</b>
+        ${Number(booking.price).toLocaleString("en-US")} ISK
+        (${Number(booking.price_eur).toFixed(2)} EUR)
+      </p>
+
+      <p>
+        We will send a further confirmation when payment is verified.
+      </p>
+
+      <p>ICELAND TRANSFER</p>
+    </div>`;
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: booking.email,
+    subject: `Booking request received — ${booking.booking_reference}`,
+    html
+  });
+
+  return { sent: true };
+}
+
+function escapeHtml(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[c]));
+}
+
+// ==========================================
+// GOOGLE MAPS ROUTE
+// ==========================================
+
+async function googleRoute(
+  origin,
+  destination,
+  intermediates = []
+) {
+  if (!GOOGLE_MAPS_API_KEY) {
+    const err = new Error(
+      "Google Maps is not configured. Add GOOGLE_MAPS_API_KEY to the server environment."
+    );
+
+    err.status = 503;
+    throw err;
+  }
+
+  const body = {
+    origin: { address: origin },
+    destination: { address: destination },
+    intermediates: intermediates.map(address => ({
+      address
+    })),
+    travelMode: "DRIVE",
+    routingPreference: "TRAFFIC_AWARE",
+    units: "METRIC"
+  };
+
+  const response = await fetch(
+    "https://routes.googleapis.com/directions/v2:computeRoutes",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": GOOGLE_MAPS_API_KEY,
+        "X-Goog-FieldMask": "routes.distanceMeters,routes.duration"
+      },
+      body: JSON.stringify(body)
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok || !data.routes?.[0]) {
+    const err = new Error(
+      data.error?.message ||
+      "Google Maps could not calculate this route."
+    );
+
+    err.status = response.status || 502;
+    throw err;
+  }
+
+  const route = data.routes[0];
+
+  return {
+    distanceKm: round2(route.distanceMeters / 1000),
+    durationMinutes: Math.round(
+      parseFloat(route.duration) / 60
+    )
+  };
+}
+
+// ==========================================
+// PLACES SEARCH — PHOTON / OPENSTREETMAP
+// ==========================================
+
+async function searchPlaces(query) {
+  const q = cleanText(query, 120);
+
+  if (q.length < 3) {
+    return [];
+  }
+
+  const photonUrl = new URL(
+    "https://photon.komoot.io/api/"
+  );
+
+  photonUrl.searchParams.set("q", q);
+  photonUrl.searchParams.set("limit", "8");
+  photonUrl.searchParams.set("lang", "en");
+
+  // Approximate Iceland geographic boundaries.
+  photonUrl.searchParams.set(
+    "bbox",
+    "-25.0,63.0,-12.0,67.5"
+  );
+
+  let response;
+
+  try {
+    response = await fetch(photonUrl, {
+      headers: {
+        "Accept": "application/json",
+        "User-Agent": "ICELAND-TRANSFER-Booking/1.0"
+      },
+      signal: AbortSignal.timeout(10000)
     });
-}
 
-// ========================================
-// CHECK GLOBAL HOURLY AVAILABILITY
-// ========================================
+  } catch (_) {
+    const error = new Error(
+      "Place search is temporarily unavailable. Please try again."
+    );
 
-function findBookingForHour(bookings, date, time) {
-    return bookings.find(booking =>
-        isSameHourSlot(booking, date, time)
+    error.status = 502;
+    throw error;
+  }
+
+  if (!response.ok) {
+    const error = new Error(
+      "Place search is temporarily unavailable. Please try again."
+    );
+
+    error.status = 502;
+    throw error;
+  }
+
+  let data;
+
+  try {
+    data = await response.json();
+
+  } catch (_) {
+    const error = new Error(
+      "The place search service returned an invalid response."
+    );
+
+    error.status = 502;
+    throw error;
+  }
+
+  return (data.features || [])
+    .map(feature => {
+      const properties = feature.properties || {};
+      const coordinates = feature.geometry?.coordinates || [];
+
+      const longitude = Number(coordinates[0]);
+      const latitude = Number(coordinates[1]);
+
+      const addressParts = [
+        properties.name,
+        properties.street,
+        properties.housenumber,
+        properties.city,
+        properties.state,
+        properties.country
+      ].filter(Boolean);
+
+      return {
+        name: properties.name || "Unnamed place",
+        address: [...new Set(addressParts)].join(", "),
+        latitude,
+        longitude,
+        osmId: properties.osm_id || null,
+        osmType: properties.osm_type || null
+      };
+    })
+    .filter(place =>
+      Number.isFinite(place.latitude) &&
+      Number.isFinite(place.longitude)
     );
 }
 
-async function checkAvailability(date, time) {
-    const bookings = await loadBookingsForDate(date);
+// ==========================================
+// CREATE BOOKING
+// ==========================================
 
-    const existingBooking = findBookingForHour(
-        bookings,
-        date,
-        time
+async function createBooking(input) {
+  const fullName = cleanText(
+    input.full_name || input.name,
+    160
+  );
+
+  const email = cleanText(
+    input.email,
+    254
+  ).toLowerCase();
+
+  const phone = cleanText(input.phone, 50);
+
+  const pickup = cleanText(
+    input.pickup_location || input.pickup,
+    300
+  );
+
+  const destination = cleanText(
+    input.destination ||
+    input.dropoff_location ||
+    input.dropoff,
+    300
+  );
+
+  const pickupDate = cleanText(
+    input.pickup_date || input.date,
+    10
+  );
+
+  const pickupTime = cleanText(
+    input.pickup_time || input.time,
+    8
+  );
+
+  if (
+    !fullName ||
+    !isEmail(email) ||
+    !phone ||
+    !pickup ||
+    !destination ||
+    !validDate(pickupDate) ||
+    !validTime(pickupTime)
+  ) {
+    throw new Error(
+      "Please complete your name, valid email, phone, pickup, drop-off, date and time."
     );
+  }
 
-    return {
-        available: !existingBooking,
-        overlappingBookings: existingBooking ? 1 : 0,
-        remainingSlots: existingBooking ? 0 : 1,
-        maxBookings: 1
-    };
-}
+  const pickupAt = parsePickup(
+    pickupDate,
+    pickupTime
+  );
 
-// ========================================
-// GENERATE AVAILABLE TIMES
-// ========================================
-
-async function getAvailableTimes(date) {
-    const bookings = await loadBookingsForDate(date);
-
-    const availableTimes = [];
-    const bookedTimes = [];
-
-    for (
-        let hour = OPENING_HOUR;
-        hour < CLOSING_HOUR;
-        hour++
-    ) {
-        const time = String(hour).padStart(2, "0") + ":00";
-
-        if (!isFuturePickup(date, time)) {
-            continue;
-        }
-
-        const existingBooking = findBookingForHour(
-            bookings,
-            date,
-            time
-        );
-
-        if (existingBooking) {
-            bookedTimes.push(time);
-        } else {
-            availableTimes.push(time);
-        }
-    }
-
-    return {
-        availableTimes,
-        bookedTimes
-    };
-}
-
-// ========================================
-// CREATE A BOOKING
-// ========================================
-
-async function createBooking(data) {
-    const fullName = cleanText(
-        getValue(data, ["full_name", "customerName", "name"]),
-        150
+  if (pickupAt.getTime() < Date.now() - 60 * 1000) {
+    throw new Error(
+      "Pickup date/time must be in the future."
     );
+  }
 
-    const email = cleanText(
-        getValue(data, ["email"]),
-        254
-    ).toLowerCase();
+  const quote = calculateQuote(input);
 
-    const phone = cleanText(
-        getValue(data, ["phone", "telephone"]),
-        50
-    );
+  const cancellationToken =
+    crypto.randomBytes(32).toString("hex");
 
-    const pickupLocation = cleanText(
-        getValue(data, [
-            "pickup_location",
-            "pickupLocation",
-            "pickup"
-        ]),
-        300
-    );
+  const bookingReference = makeBookingReference();
 
-    const destination = cleanText(
-        getValue(data, [
-            "destination",
-            "destination_location",
-            "dropoff_location",
-            "dropoff"
-        ]),
-        300
-    );
+  const serviceName =
+    quote.item?.name || "Private transfer";
 
-    const pickupDate = cleanText(
-        getValue(data, ["pickup_date", "date"]),
-        10
-    );
+  const durationHours =
+    quote.item?.durationHours || null;
 
-    const pickupTime = cleanText(
-        getValue(data, ["pickup_time", "time"]),
-        5
-    );
+  const returnDate =
+    quote.transferType === "return"
+      ? input.return_date
+      : null;
 
-    const vehicleInput = getValue(data, [
-        "vehicle_type",
-        "vehicle_name",
-        "vehicle"
-    ]);
+  const returnTime =
+    quote.transferType === "return"
+      ? input.return_time
+      : null;
 
-    const vehicleKey = normalizeVehicle(vehicleInput);
+  const row = {
+    booking_reference: bookingReference,
+    full_name: fullName,
+    email,
+    phone,
+    pickup_location: pickup,
+    destination,
+    pickup_date: pickupDate,
 
-    const passengers = Number(
-        getValue(data, ["passengers", "passenger_count"], 1)
-    );
+    pickup_time: pickupTime.length === 5
+      ? `${pickupTime}:00`
+      : pickupTime,
 
-    const luggage = Number(
-        getValue(data, ["luggage", "luggage_count"], 0)
-    );
+    passengers: quote.passengers,
+    luggage: quote.largeBags,
+    large_bags: quote.largeBags,
+    hand_bags: quote.handBags,
 
-    const serviceType = normalizeServiceType(
-        getValue(data, [
-            "service_type",
-            "service",
-            "service_name"
-        ]),
-        data
-    );
+    flight_number:
+      cleanText(input.flight_number, 80) || null,
 
-    const durationHours = getServiceDuration(serviceType);
-
-    const specialRequests = cleanText(
-        getValue(data, [
-            "special_requests",
-            "specialRequests",
-            "notes"
-        ]),
+    special_requests:
+      cleanText(
+        input.special_requests || input.notes,
         2000
-    );
+      ) || null,
 
-    const flightNumber = cleanText(
-        getValue(data, ["flight_number", "flightNumber"]),
-        100
-    );
+    price: quote.totalIsk,
+    price_eur: quote.totalEur,
+    base_price: toIsk(quote.basePriceEur),
+    currency: "ISK",
 
-    const packageType = cleanText(
-        getValue(data, ["package_type", "packageType", "package"]),
-        150
-    );
+    status: "pending",
+    payment_status: "unpaid",
 
-    const countryOfOrigin = cleanText(
-        getValue(data, [
-            "country_of_origin",
-            "countryOfOrigin",
-            "country"
-        ]),
-        100
-    );
+    cancellation_token: cancellationToken,
+    cancelled_at: null,
 
-    const childrenCount = Number(
-        getValue(data, ["children_count", "childrenCount"], 0)
-    );
+    service_type: serviceName,
 
-    const childrenAges = getValue(data, [
-        "children_ages",
-        "child_ages",
-        "childrenAges"
-    ], "");
+    package_type:
+      quote.bookingKind === "tour"
+        ? quote.item.code
+        : null,
 
-    const travellingWithChildren = getValue(data, [
-        "travelling_with_children",
-        "travellingWithChildren"
-    ], "");
+    addons: quote.childSeats,
+    child_seats: quote.childSeats,
+    extras_total: 0,
 
-    const selectedStops = getValue(data, [
-        "selected_stops",
-        "selectedStops",
-        "stops"
-    ], []);
+    service_duration_hours: durationHours,
 
-    const addons = getValue(data, ["addons", "extras"], []);
+    selected_stops:
+      Array.isArray(input.selected_stops)
+        ? input.selected_stops
+        : [],
 
-    // ========================================
-    // VALIDATE REQUIRED FIELDS
-    // ========================================
+    return_date: returnDate || null,
+    return_time: returnTime || null,
+    transfer_type: quote.transferType,
 
+    vehicle_code: quote.vehicle.code,
+    vehicle_name: quote.vehicle.name,
+
+    billing_country:
+      cleanText(input.billing_country, 100) || null,
+
+    billing_city:
+      cleanText(input.billing_city, 120) || null,
+
+    billing_address:
+      cleanText(input.billing_address, 250) || null,
+
+    billing_postcode:
+      cleanText(input.billing_postcode, 40) || null,
+
+    discount_code: quote.discountCode || null,
+    discount_amount: 0,
+    confirmation_email_sent_at: null
+  };
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert(row)
+    .select("*")
+    .single();
+
+  // Maximum five active bookings per pickup hour.
+  if (error) {
     if (
-        !fullName ||
-        !email ||
-        !phone ||
-        !pickupLocation ||
-        !destination ||
-        !pickupDate ||
-        !pickupTime
+      error.code === "P0001" &&
+      String(error.message || "").includes(
+        "Maximum 5 bookings"
+      )
     ) {
-        throw {
-            status: 400,
-            code: "MISSING_REQUIRED_FIELDS",
-            message: "Please complete all required booking fields."
-        };
+      const capacityError = new Error(
+        `This pickup hour is full. Maximum ${MAX_BOOKINGS_PER_HOUR} bookings are allowed per hour. Please choose another time.`
+      );
+
+      capacityError.status = 409;
+      throw capacityError;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        throw {
-            status: 400,
-            code: "INVALID_EMAIL",
-            message: "Please enter a valid email address."
-        };
-    }
-
-    if (!isValidDateString(pickupDate)) {
-        throw {
-            status: 400,
-            code: "INVALID_DATE",
-            message: "Please select a valid pickup date."
-        };
-    }
-
-    if (!isValidTimeString(pickupTime)) {
-        throw {
-            status: 400,
-            code: "INVALID_TIME",
-            message: "Please select a valid pickup time."
-        };
-    }
-
-    if (!isFuturePickup(pickupDate, pickupTime)) {
-        throw {
-            status: 400,
-            code: "PICKUP_MUST_BE_IN_FUTURE",
-            message: "Pickup date and time must be in the future."
-        };
-    }
-
-    const [hour, minute] = pickupTime.split(":").map(Number);
-
-    const pickupMinutes = hour * 60 + minute;
-
-    if (
-        pickupMinutes < OPENING_HOUR * 60 ||
-        pickupMinutes >= CLOSING_HOUR * 60
-    ) {
-        throw {
-            status: 400,
-            code: "OUTSIDE_OPERATING_HOURS",
-            message: "Bookings are available between 06:00 and 22:00."
-        };
-    }
-
-    if (
-        pickupLocation.toLowerCase() === destination.toLowerCase() &&
-        serviceType !== "northern_lights"
-    ) {
-        throw {
-            status: 400,
-            code: "SAME_PICKUP_AND_DESTINATION",
-            message: "Pickup and destination must be different."
-        };
-    }
-
-    if (
-        !Number.isInteger(passengers) ||
-        passengers < 1 ||
-        passengers > 20
-    ) {
-        throw {
-            status: 400,
-            code: "INVALID_PASSENGER_COUNT",
-            message: "Passenger count must be between 1 and 20."
-        };
-    }
-
-    if (
-        !Number.isInteger(luggage) ||
-        luggage < 0 ||
-        luggage > 50
-    ) {
-        throw {
-            status: 400,
-            code: "INVALID_LUGGAGE_COUNT",
-            message: "Please enter a valid luggage count."
-        };
-    }
-
-    if (
-        !Number.isInteger(childrenCount) ||
-        childrenCount < 0 ||
-        childrenCount > passengers
-    ) {
-        throw {
-            status: 400,
-            code: "INVALID_CHILDREN_COUNT",
-            message: "Please enter a valid number of children."
-        };
-    }
-
-    if (!vehicleKey || !VEHICLES[vehicleKey]) {
-        throw {
-            status: 400,
-            code: "INVALID_VEHICLE",
-            message:
-                "Please select a valid vehicle. Received vehicle: " +
-                cleanText(vehicleInput, 100)
-        };
-    }
-
-    const vehicle = VEHICLES[vehicleKey];
-
-    if (passengers > vehicle.capacity) {
-        throw {
-            status: 400,
-            code: "VEHICLE_CAPACITY_EXCEEDED",
-            message:
-                `${vehicle.name} can carry up to ${vehicle.capacity} passengers. Please select a suitable vehicle.`
-        };
-    }
-
-    // ========================================
-    // SERVER-SIDE VEHICLE PRICE
-    // ========================================
-
-    const price = vehicle.price;
-    const extrasTotal = 0;
-    const total = price + extrasTotal;
-
-    // Duration is stored for information only.
-    // It does not block other hourly slots.
-
-    const tripEndTime = getTripEnd(
-        pickupDate,
-        pickupTime,
-        durationHours
+    throw new Error(
+      `Database could not save the booking: ${error.message}`
     );
+  }
 
-    // ========================================
-    // CHECK GLOBAL HOURLY AVAILABILITY
-    // ========================================
+  const cancellationUrl =
+    `${PUBLIC_SERVER_URL}/cancel/${cancellationToken}`;
 
-    const availability = await checkAvailability(
-        pickupDate,
-        pickupTime
-    );
+  let emailResult = { sent: false };
 
-    if (!availability.available) {
-        throw {
-            status: 409,
-            code: "TIME_SLOT_FULL",
-            message:
-                "This hour is already booked. Please choose another time."
-        };
-    }
+  try {
+    emailResult = await sendBookingEmail(data, quote);
 
-    // ========================================
-    // SAVE ADDITIONAL DETAILS
-    // ========================================
-
-    const details = [];
-
-    if (specialRequests) {
-        details.push(`Special requests: ${specialRequests}`);
-    }
-
-    details.push(`Selected vehicle: ${vehicle.name}`);
-    details.push(`Vehicle price: ${price} ISK`);
-
-    if (countryOfOrigin) {
-        details.push(`Country of origin: ${countryOfOrigin}`);
-    }
-
-    if (childrenCount > 0) {
-        details.push(`Children count: ${childrenCount}`);
-    }
-
-    if (String(childrenAges).trim()) {
-        details.push(
-            `Children ages: ${cleanText(childrenAges, 200)}`
-        );
-    }
-
-    if (String(travellingWithChildren).trim()) {
-        details.push(
-            `Travelling with children: ${cleanText(travellingWithChildren, 100)}`
-        );
-    }
-
-    const savedSpecialRequests = details.join("\n");
-
-    const token = createCancellationToken();
-
-    const safeAddons = Array.isArray(addons)
-        ? addons.map(item => cleanText(item, 150))
-        : [];
-
-    const safeStops = Array.isArray(selectedStops)
-        ? selectedStops.map(item => cleanText(item, 150))
-        : [];
-
-    // ========================================
-    // SAVE BOOKING IN SUPABASE
-    // ========================================
-
-    const bookingData = {
-        full_name: fullName,
-        email,
-        phone,
-        pickup_location: pickupLocation,
-        destination,
-        pickup_date: pickupDate,
-        pickup_time: pickupTime,
-        passengers,
-        luggage,
-        flight_number: flightNumber || null,
-        special_requests: savedSpecialRequests,
-        price: total,
-        status: "confirmed",
-        cancellation_token: token,
-        cancelled_at: null,
-        service_type: serviceType,
-        package_type: packageType || null,
-        addons: safeAddons,
-        extras_total: extrasTotal,
-        trip_end_time: tripEndTime,
-        service_duration_hours: durationHours,
-        selected_stops: safeStops
-    };
-
-    const { data: savedBooking, error } = await supabase
+    if (emailResult.sent) {
+      await supabase
         .from("bookings")
-        .insert([bookingData])
-        .select()
-        .single();
-
-    if (error) {
-        console.error(
-            "Supabase booking error:",
-            error.message
-        );
-
-        // Database unique index prevents simultaneous duplicate bookings.
-        if (error.code === "23505") {
-            throw {
-                status: 409,
-                code: "TIME_SLOT_FULL",
-                message:
-                    "This hour has just been booked. Please choose another time."
-            };
-        }
-
-        throw {
-            status: 500,
-            code: "BOOKING_SAVE_FAILED",
-            message:
-                "We could not save your booking. Please try again."
-        };
+        .update({
+          confirmation_email_sent_at:
+            new Date().toISOString()
+        })
+        .eq("id", data.id);
     }
 
-    const cancellationURL =
-        `${PUBLIC_SERVER_URL}/api/bookings/cancel/${token}`;
+  } catch (e) {
+    console.error(
+      "Booking email failed:",
+      e.message
+    );
 
-    // ========================================
-    // BOOKING RESPONSE AND INVOICE
-    // ========================================
-
-    const bookingResponse = {
-        ...savedBooking,
-        vehicle_type: vehicleKey,
-        vehicle_name: vehicle.name,
-        vehicle_capacity: vehicle.capacity,
-        price: total,
-        extras_total: extrasTotal,
-        total
+    emailResult = {
+      sent: false,
+      reason: "Booking saved, but email delivery failed."
     };
+  }
 
-    return {
-        success: true,
+  return {
+    booking: {
+      id: data.id,
+      reference: bookingReference,
+      status: "pending",
+      paymentStatus: "unpaid",
+      fullName,
+      email,
+      phone,
+      pickup,
+      destination,
+      pickupDate,
+      pickupTime,
+      vehicle: quote.vehicle.name,
+      passengers: quote.passengers,
 
-        message: "Your booking has been confirmed.",
+      price: {
+        currency: "ISK",
+        amount: quote.totalIsk,
+        eur: quote.totalEur,
+        rate: EUR_TO_ISK_RATE
+      },
 
-        booking: bookingResponse,
+      cancellationUrl
+    },
 
-        data: bookingResponse,
+    email: emailResult,
 
-        invoice: {
-            booking_id: savedBooking.id,
-            full_name: fullName,
-            email,
-            phone,
-            pickup_location: pickupLocation,
-            destination,
-            pickup_date: pickupDate,
-            pickup_time: pickupTime,
-            passengers,
-            luggage,
-            flight_number: flightNumber,
-            service_type: serviceType,
-            package_type: packageType || null,
-            vehicle_type: vehicleKey,
-            vehicle_name: vehicle.name,
-            vehicle_capacity: vehicle.capacity,
-            price: total,
-            extras_total: extrasTotal,
-            total,
-            currency: "ISK",
-            cancellation_url: cancellationURL,
-            cancellation_token: token
-        },
-
-        cancellation_token: token,
-        cancellation_url: cancellationURL
-    };
+    message:
+      "Booking request saved. It is pending payment/confirmation; it is not confirmed as paid."
+  };
 }
 
-// ========================================
-// CANCEL A BOOKING
-// ========================================
+// ==========================================
+// CANCEL BOOKING
+// ==========================================
 
 async function cancelBooking(token) {
-    const cancellationToken = cleanText(token, 200);
+  const cleanToken = cleanText(token, 128);
 
-    if (!cancellationToken) {
-        throw {
-            status: 400,
-            code: "MISSING_CANCELLATION_TOKEN",
-            message: "A cancellation token is required."
-        };
-    }
+  if (!/^[a-f0-9]{64}$/i.test(cleanToken)) {
+    throw new Error("Invalid cancellation link.");
+  }
 
-    const { data: booking, error: findError } =
-        await supabase
-            .from("bookings")
-            .select("*")
-            .eq("cancellation_token", cancellationToken)
-            .maybeSingle();
+  const { data: booking, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .eq("cancellation_token", cleanToken)
+    .maybeSingle();
 
-    if (findError) {
-        console.error(
-            "Cancellation lookup error:",
-            findError.message
-        );
+  if (error) {
+    throw new Error(error.message);
+  }
 
-        throw {
-            status: 500,
-            code: "CANCELLATION_LOOKUP_FAILED",
-            message: "We could not look up this booking."
-        };
-    }
+  if (!booking) {
+    throw new Error("Booking not found.");
+  }
 
-    if (!booking) {
-        throw {
-            status: 404,
-            code: "BOOKING_NOT_FOUND",
-            message:
-                "Booking not found. Please check your cancellation link."
-        };
-    }
-
-    if (String(booking.status || "").toLowerCase() === "cancelled") {
-        throw {
-            status: 409,
-            code: "ALREADY_CANCELLED",
-            message: "This booking has already been cancelled."
-        };
-    }
-
-    const pickup = getBookingStart(booking);
-
-    const hoursUntilPickup =
-        (pickup.getTime() - Date.now()) / (60 * 60 * 1000);
-
-    if (hoursUntilPickup <= CANCELLATION_LIMIT_HOURS) {
-        throw {
-            status: 400,
-            code: "CANCELLATION_DEADLINE_PASSED",
-            message:
-                "Bookings can only be cancelled more than 24 hours before pickup."
-        };
-    }
-
-    const { data: updatedBooking, error: updateError } =
-        await supabase
-            .from("bookings")
-            .update({
-                status: "cancelled",
-                cancelled_at: new Date().toISOString()
-            })
-            .eq("id", booking.id)
-            .select()
-            .single();
-
-    if (updateError) {
-        console.error(
-            "Cancellation update error:",
-            updateError.message
-        );
-
-        throw {
-            status: 500,
-            code: "CANCELLATION_FAILED",
-            message:
-                "We could not cancel this booking. Please try again."
-        };
-    }
-
+  if (booking.status === "cancelled") {
     return {
-        success: true,
-        message: "Your booking has been cancelled.",
-        booking: updatedBooking
+      cancelled: true,
+      message: "This booking is already cancelled."
     };
+  }
+
+  const pickupAt = parsePickup(
+    booking.pickup_date,
+    String(booking.pickup_time).slice(0, 5)
+  );
+
+  const hoursLeft =
+    (pickupAt.getTime() - Date.now()) / 3600000;
+
+  if (hoursLeft < CANCELLATION_HOURS) {
+    throw new Error(
+      `Cancellation is available until ${CANCELLATION_HOURS} hours before pickup.`
+    );
+  }
+
+  const { error: updateError } = await supabase
+    .from("bookings")
+    .update({
+      status: "cancelled",
+      cancelled_at: new Date().toISOString()
+    })
+    .eq("id", booking.id);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
+  return {
+    cancelled: true,
+    bookingId: booking.id,
+    message: "Booking cancelled successfully."
+  };
 }
 
-// ========================================
-// HTTP SERVER
-// ========================================
+// ==========================================
+// HTTP SERVER AND API ROUTES
+// ==========================================
 
 const server = http.createServer(async (req, res) => {
+  if (req.method === "OPTIONS") {
+    return json(res, 204, {});
+  }
 
-    if (req.method === "OPTIONS") {
-        res.writeHead(204, {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization",
-            "Access-Control-Max-Age": "86400"
-        });
+  const url = new URL(
+    req.url,
+    `http://${req.headers.host || "localhost"}`
+  );
 
-        res.end();
-        return;
+  try {
+
+    // HOME
+    if (req.method === "GET" && url.pathname === "/") {
+      return json(res, 200, {
+        name: "ICELAND TRANSFER API",
+        status: "running",
+        version: "2.0.0"
+      });
     }
 
-    let pathname;
-
-    try {
-        const requestURL = new URL(
-            req.url,
-            `http://${req.headers.host || "localhost"}`
-        );
-
-        pathname = requestURL.pathname;
-
-        // ========================================
-        // HEALTH CHECK
-        // ========================================
-
-        if (req.method === "GET" && pathname === "/health") {
-            sendJSON(res, 200, {
-                success: true,
-                status: "online",
-                service: "Iceland Transfer server"
-            });
-
-            return;
-        }
-
-        // ========================================
-        // AVAILABILITY ENDPOINT
-        // ========================================
-
-        if (
-            req.method === "GET" &&
-            pathname === "/api/availability"
-        ) {
-            const date = cleanText(
-                requestURL.searchParams.get("date"),
-                10
-            );
-
-            const time = cleanText(
-                requestURL.searchParams.get("time"),
-                5
-            );
-
-            const serviceType = normalizeServiceType(
-                requestURL.searchParams.get("service_type") ||
-                requestURL.searchParams.get("service") ||
-                ""
-            );
-
-            if (!isValidDateString(date)) {
-                sendJSON(res, 400, {
-                    success: false,
-                    code: "INVALID_DATE",
-                    message:
-                        "Please provide a valid date in YYYY-MM-DD format."
-                });
-
-                return;
-            }
-
-            // Return all available and booked hourly slots.
-
-            if (!time) {
-                const result = await getAvailableTimes(date);
-
-                const times = result.availableTimes;
-
-                sendJSON(res, 200, {
-                    success: true,
-                    date,
-                    service_type: serviceType,
-
-                    times,
-                    availableTimes: times,
-                    available_times: times,
-                    availableSlots: times,
-                    available_slots: times,
-
-                    bookedTimes: result.bookedTimes,
-                    booked_times: result.bookedTimes
-                });
-
-                return;
-            }
-
-            if (!isValidTimeString(time)) {
-                sendJSON(res, 400, {
-                    success: false,
-                    code: "INVALID_TIME",
-                    message: "Please provide a valid time."
-                });
-
-                return;
-            }
-
-            const [hour, minute] = time.split(":").map(Number);
-
-            const requestedMinutes = hour * 60 + minute;
-
-            if (
-                !isFuturePickup(date, time) ||
-                requestedMinutes < OPENING_HOUR * 60 ||
-                requestedMinutes >= CLOSING_HOUR * 60
-            ) {
-                sendJSON(res, 200, {
-                    success: true,
-                    available: false,
-                    remainingSlots: 0,
-                    message:
-                        "This time is outside the available booking period."
-                });
-
-                return;
-            }
-
-            const result = await checkAvailability(date, time);
-
-            sendJSON(res, 200, {
-                success: true,
-                date,
-                time,
-                ...result
-            });
-
-            return;
-        }
-
-        // ========================================
-        // CREATE BOOKING ENDPOINT
-        // ========================================
-
-        if (
-            req.method === "POST" &&
-            pathname === "/api/bookings"
-        ) {
-            let body;
-
-            try {
-                body = await readBody(req);
-            } catch (error) {
-                sendJSON(res, 400, {
-                    success: false,
-                    code:
-                        error.message === "REQUEST_TOO_LARGE"
-                            ? "REQUEST_TOO_LARGE"
-                            : "INVALID_JSON",
-                    message:
-                        "The request body is invalid or too large."
-                });
-
-                return;
-            }
-
-            try {
-                const result = await createBooking(body);
-
-                sendJSON(res, 201, result);
-
-            } catch (error) {
-                const status = error.status || 500;
-
-                if (status === 500) {
-                    console.error(
-                        "Booking request failed:",
-                        error.message || error
-                    );
-                }
-
-                sendJSON(res, status, {
-                    success: false,
-                    code: error.code || "SERVER_ERROR",
-                    message:
-                        error.message ||
-                        "Something went wrong. Please try again."
-                });
-            }
-
-            return;
-        }
-
-        // ========================================
-        // CANCEL BOOKING WITH TOKEN IN URL
-        // ========================================
-
-        const cancelPathMatch = pathname.match(
-            /^\/api\/bookings\/cancel\/([^/]+)$/
-        );
-
-        if (req.method === "POST" && cancelPathMatch) {
-            try {
-                const token = decodeURIComponent(
-                    cancelPathMatch[1]
-                );
-
-                const result = await cancelBooking(token);
-
-                sendJSON(res, 200, result);
-
-            } catch (error) {
-                const status = error.status || 500;
-
-                if (status === 500) {
-                    console.error(
-                        "Cancellation request failed:",
-                        error.message || error
-                    );
-                }
-
-                sendJSON(res, status, {
-                    success: false,
-                    code: error.code || "SERVER_ERROR",
-                    message:
-                        error.message ||
-                        "We could not cancel this booking."
-                });
-            }
-
-            return;
-        }
-
-        // ========================================
-        // CANCEL BOOKING WITH TOKEN IN BODY
-        // ========================================
-
-        if (
-            req.method === "POST" &&
-            pathname === "/api/bookings/cancel"
-        ) {
-            let body;
-
-            try {
-                body = await readBody(req);
-            } catch {
-                sendJSON(res, 400, {
-                    success: false,
-                    code: "INVALID_JSON",
-                    message: "Invalid request body."
-                });
-
-                return;
-            }
-
-            try {
-                const token = getValue(body, [
-                    "cancellation_token",
-                    "cancellationToken",
-                    "token"
-                ]);
-
-                const result = await cancelBooking(token);
-
-                sendJSON(res, 200, result);
-
-            } catch (error) {
-                const status = error.status || 500;
-
-                if (status === 500) {
-                    console.error(
-                        "Cancellation request failed:",
-                        error.message || error
-                    );
-                }
-
-                sendJSON(res, status, {
-                    success: false,
-                    code: error.code || "SERVER_ERROR",
-                    message:
-                        error.message ||
-                        "We could not cancel this booking."
-                });
-            }
-
-            return;
-        }
-
-        // ========================================
-        // NOT FOUND
-        // ========================================
-
-        sendJSON(res, 404, {
-            success: false,
-            code: "NOT_FOUND",
-            message: "The requested endpoint was not found."
+    // HEALTH CHECK
+    if (req.method === "GET" && url.pathname === "/health") {
+      const { error } = await supabase
+        .from("bookings")
+        .select("id", {
+          head: true,
+          count: "exact"
         });
 
-    } catch (error) {
-        console.error(
-            "Unexpected server error:",
-            error.message || error
-        );
-
-        sendJSON(res, 500, {
-            success: false,
-            code: "SERVER_ERROR",
-            message: "An unexpected server error occurred."
-        });
+      return json(res, error ? 503 : 200, {
+        ok: !error,
+        database: error ? "error" : "connected",
+        version: "2.0.0"
+      });
     }
+
+    // CATALOG
+    if (
+      req.method === "GET" &&
+      url.pathname === "/api/catalog"
+    ) {
+      return json(res, 200, {
+        currency: "ISK",
+        secondaryCurrency: "EUR",
+        eurToIskRate: EUR_TO_ISK_RATE,
+
+        rateDate: process.env.EUR_TO_ISK_RATE
+          ? "configured in environment"
+          : "2026-11-24 reference rate",
+
+        vehicles: VEHICLES.map(v => ({
+          ...v,
+          fromIsk: toIsk(v.fromEur),
+          fromCurrency: "EUR"
+        })),
+
+        routes: ROUTES.map(r => ({
+          ...r,
+
+          prices: Object.fromEntries(
+            Object.entries(r.prices).map(([k, v]) => [
+              k,
+              {
+                eur: v,
+                isk: toIsk(v)
+              }
+            ])
+          )
+        })),
+
+        tours: TOURS.map(t => ({
+          ...t,
+
+          prices: Object.fromEntries(
+            Object.entries(t.prices).map(([k, v]) => [
+              k,
+              {
+                eur: v,
+                isk: toIsk(v)
+              }
+            ])
+          )
+        })),
+
+        childSeats: CHILD_SEATS,
+
+        policies: {
+          cancellationHours: CANCELLATION_HOURS,
+          maxBookingsPerHour: MAX_BOOKINGS_PER_HOUR,
+          timeZone: "Atlantic/Reykjavik",
+          childSeatsFree: true
+        }
+      });
+    }
+
+    // PRICE QUOTE
+    if (
+      req.method === "POST" &&
+      url.pathname === "/api/quote"
+    ) {
+      const input = await readBody(req);
+      const quote = calculateQuote(input);
+
+      return json(res, 200, {
+        bookingKind: quote.bookingKind,
+        item: quote.item,
+        vehicle: quote.vehicle,
+        passengers: quote.passengers,
+        largeBags: quote.largeBags,
+        handBags: quote.handBags,
+        childSeats: quote.childSeats,
+
+        basePrice: {
+          eur: quote.basePriceEur,
+          isk: toIsk(quote.basePriceEur)
+        },
+
+        total: {
+          currency: "ISK",
+          isk: quote.totalIsk,
+          eur: quote.totalEur
+        },
+
+        eurToIskRate: EUR_TO_ISK_RATE,
+
+        note:
+          "For unspecified transfer routes, the amount is a fleet starting-price estimate, not a route-confirmed fixed quote."
+      });
+    }
+
+    // ======================================
+    // PLACES SEARCH — PHOTON / OPENSTREETMAP
+    // ======================================
+
+    if (
+      req.method === "GET" &&
+      url.pathname === "/api/places/search"
+    ) {
+      const query = cleanText(
+        url.searchParams.get("q"),
+        120
+      );
+
+      const places = await searchPlaces(query);
+
+      return json(res, 200, {
+        success: true,
+        places,
+        attribution:
+          "Place data © OpenStreetMap contributors, via Photon"
+      });
+    }
+
+    // GOOGLE MAPS ROUTE
+    if (
+      req.method === "POST" &&
+      url.pathname === "/api/maps/route"
+    ) {
+      const input = await readBody(req);
+
+      const origin = cleanText(input.origin, 300);
+      const destination = cleanText(input.destination, 300);
+
+      if (!origin || !destination) {
+        return json(res, 400, {
+          error: "Origin and destination are required."
+        });
+      }
+
+      const result = await googleRoute(
+        origin,
+        destination,
+        Array.isArray(input.waypoints)
+          ? input.waypoints.slice(0, 8)
+          : []
+      );
+
+      return json(res, 200, result);
+    }
+
+    // CREATE BOOKING
+    if (
+      req.method === "POST" &&
+      url.pathname === "/api/bookings"
+    ) {
+      const input = await readBody(req);
+      const result = await createBooking(input);
+
+      return json(res, 201, result);
+    }
+
+    // CANCEL BOOKING
+    if (
+      req.method === "POST" &&
+      url.pathname === "/api/bookings/cancel"
+    ) {
+      const input = await readBody(req);
+
+      const result = await cancelBooking(
+        input.token || input.cancellation_token
+      );
+
+      return json(res, 200, result);
+    }
+
+    // CANCEL BOOKING BY TOKEN
+    const cancelMatch = url.pathname.match(
+      /^\/api\/bookings\/cancel\/([a-f0-9]{64})$/i
+    );
+
+    if (
+      req.method === "POST" &&
+      cancelMatch
+    ) {
+      const result = await cancelBooking(
+        cancelMatch[1]
+      );
+
+      return json(res, 200, result);
+    }
+
+    // TEYA PAYMENT — NOT ENABLED
+    if (
+      req.method === "POST" &&
+      url.pathname === "/api/payments/teya/create-session"
+    ) {
+      return json(res, 501, {
+        error: "Teya live payments are not enabled yet.",
+
+        reason:
+          "Merchant API credentials and the correct Teya integration contract are required. No card details should be collected by this server."
+      });
+    }
+
+    // UNKNOWN ROUTE
+    return json(res, 404, {
+      error: "Endpoint not found."
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return json(res, error.status || 400, {
+      error: error.message || "Unexpected server error."
+    });
+  }
 });
 
-// ========================================
+// ==========================================
 // START SERVER
-// ========================================
+// ==========================================
 
 server.listen(PORT, () => {
-    console.log(
-        `Iceland Transfer server running on port ${PORT}`
-    );
+  console.log(
+    `ICELAND TRANSFER API v2 running on port ${PORT}`
+  );
 });
