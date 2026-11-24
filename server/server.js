@@ -1,19 +1,19 @@
 /**
- * ICELAND TRANSFER — booking API
+ * ICELAND TRANSFER — Booking API
+ * Version 2.1.0
  * Node.js 18+ / CommonJS
  *
  * Required:
- *   SUPABASE_URL
- *   SUPABASE_SECRET_KEY
+ * SUPABASE_URL
+ * SUPABASE_SECRET_KEY
  *
- * Optional integrations:
- *   GOOGLE_MAPS_API_KEY
- *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM
- *   EUR_TO_ISK_RATE (default reference rate: 137.20, dated 2026-11-24)
- *   PUBLIC_SERVER_URL
+ * Optional:
+ * GOOGLE_MAPS_API_KEY
+ * SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM
+ * EUR_TO_ISK_RATE
+ * PUBLIC_SERVER_URL
  *
- * IMPORTANT:
- * Teya live card processing is deliberately NOT simulated.
+ * Teya payments are deliberately disabled.
  */
 
 require("dotenv").config();
@@ -23,11 +23,13 @@ const crypto = require("crypto");
 const { createClient } = require("@supabase/supabase-js");
 
 let nodemailer = null;
+
 try {
   nodemailer = require("nodemailer");
 } catch (_) {}
 
 const PORT = Number(process.env.PORT || 3000);
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SECRET_KEY = process.env.SUPABASE_SECRET_KEY;
 
@@ -36,17 +38,34 @@ const PUBLIC_SERVER_URL = (
   "https://iceland-transfer-server.onrender.com"
 ).replace(/\/$/, "");
 
-const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || "";
-const EUR_TO_ISK_RATE = Number(process.env.EUR_TO_ISK_RATE || 137.20);
+const GOOGLE_MAPS_API_KEY =
+  process.env.GOOGLE_MAPS_API_KEY || "";
+
+const EUR_TO_ISK_RATE = Number(
+  process.env.EUR_TO_ISK_RATE || 137.20
+);
+
 const MAX_BODY_BYTES = 1024 * 1024;
 
+const TIME_ZONE = "Atlantic/Reykjavik";
+const OPENING_HOUR = 6;
+const CLOSING_HOUR = 22;
+
+const MAX_BOOKINGS_PER_HOUR = 5;
+const CANCELLATION_HOURS = 24;
+
 if (!SUPABASE_URL || !SUPABASE_SECRET_KEY) {
-  console.error("Missing SUPABASE_URL or SUPABASE_SECRET_KEY in .env");
+  console.error(
+    "Missing SUPABASE_URL or SUPABASE_SECRET_KEY."
+  );
   process.exit(1);
 }
 
-if (!Number.isFinite(EUR_TO_ISK_RATE) || EUR_TO_ISK_RATE <= 0) {
-  console.error("EUR_TO_ISK_RATE must be a positive number.");
+if (
+  !Number.isFinite(EUR_TO_ISK_RATE) ||
+  EUR_TO_ISK_RATE <= 0
+) {
+  console.error("Invalid EUR_TO_ISK_RATE.");
   process.exit(1);
 }
 
@@ -154,6 +173,34 @@ const ROUTES = [
       comfort: 387,
       suv: 421,
       van: 456
+    }
+  },
+
+  // Starting-price estimates, not fixed route tariffs.
+  {
+    code: "keflavik-airport-reykjavik",
+    name: "Keflavík Airport → Reykjavík",
+    distanceKm: null,
+    estimatedMinutes: null,
+    pricingType: "starting_estimate",
+    prices: {
+      standard: 110,
+      comfort: 136,
+      suv: 150,
+      van: 191
+    }
+  },
+  {
+    code: "reykjavik-keflavik-airport",
+    name: "Reykjavík → Keflavík Airport",
+    distanceKm: null,
+    estimatedMinutes: null,
+    pricingType: "starting_estimate",
+    prices: {
+      standard: 110,
+      comfort: 136,
+      suv: 150,
+      van: 191
     }
   }
 ];
@@ -272,9 +319,10 @@ const CHILD_SEATS = [
   }
 ];
 
-const ALLOWED_TRANSFER_TYPES = ["one_way", "return"];
-const CANCELLATION_HOURS = 24;
-const MAX_BOOKINGS_PER_HOUR = 5;
+const ALLOWED_TRANSFER_TYPES = [
+  "one_way",
+  "return"
+];
 
 // ==========================================
 // GENERAL HELPERS
@@ -287,66 +335,169 @@ function json(res, status, data) {
     "Content-Type": "application/json; charset=utf-8",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization"
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Cache-Control": "no-store"
   });
 
   res.end(body);
 }
 
-function round2(n) {
-  return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+function round2(value) {
+  return Math.round(
+    (Number(value) + Number.EPSILON) * 100
+  ) / 100;
 }
 
 function toIsk(eur) {
   return Math.round(Number(eur) * EUR_TO_ISK_RATE);
 }
 
-function cleanText(v, max = 500) {
-  if (v === undefined || v === null) return "";
-  return String(v).trim().slice(0, max);
+function cleanText(value, max = 500) {
+  if (value === undefined || value === null) {
+    return "";
+  }
+
+  return String(value).trim().slice(0, max);
 }
 
-function isEmail(v) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || ""));
+function isEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+    String(value || "")
+  );
 }
 
-function validDate(v) {
-  return /^\d{4}-\d{2}-\d{2}$/.test(String(v || "")) &&
-    !Number.isNaN(Date.parse(v + "T12:00:00Z"));
+function validDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) {
+    return false;
+  }
+
+  const [year, month, day] = value.split("-").map(Number);
+
+  const date = new Date(
+    Date.UTC(year, month - 1, day)
+  );
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
 }
 
-function validTime(v) {
-  return /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(String(v || ""));
+function validTime(value) {
+  return /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(
+    String(value || "")
+  );
 }
 
+function normalizeTime(value) {
+  return String(value).length === 5
+    ? `${value}:00`
+    : String(value);
+}
+
+// Iceland uses UTC year-round.
 function parsePickup(date, time) {
-  const hhmm = String(time).length === 5
-    ? `${time}:00`
-    : time;
+  return new Date(
+    `${date}T${normalizeTime(time)}Z`
+  );
+}
 
-  return new Date(`${date}T${hhmm}Z`);
+function isOperatingTime(time) {
+  if (!validTime(time)) {
+    return false;
+  }
+
+  const hour = Number(String(time).slice(0, 2));
+
+  return (
+    hour >= OPENING_HOUR &&
+    hour < CLOSING_HOUR
+  );
+}
+
+function validateFutureDateTime(date, time, label = "Pickup") {
+  if (!validDate(date) || !validTime(time)) {
+    const error = new Error(
+      `${label}: please enter a valid date and time.`
+    );
+
+    error.status = 400;
+    throw error;
+  }
+
+  if (!isOperatingTime(time)) {
+    const error = new Error(
+      `${label} must be between 06:00 and 22:00 Iceland time.`
+    );
+
+    error.status = 400;
+    throw error;
+  }
+
+  const dateTime = parsePickup(date, time);
+
+  if (dateTime.getTime() <= Date.now()) {
+    const error = new Error(
+      `${label} date and time must be in the future.`
+    );
+
+    error.status = 400;
+    throw error;
+  }
+
+  return dateTime;
 }
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let raw = "";
+    let tooLarge = false;
 
     req.on("data", chunk => {
+      if (tooLarge) return;
+
       raw += chunk;
 
       if (Buffer.byteLength(raw) > MAX_BODY_BYTES) {
-        reject(new Error("Request body is too large."));
+        tooLarge = true;
+
+        const error = new Error(
+          "Request body is too large."
+        );
+
+        error.status = 413;
+        reject(error);
         req.destroy();
       }
     });
 
     req.on("end", () => {
-      if (!raw) return resolve({});
+      if (tooLarge) return;
+
+      if (!raw) {
+        return resolve({});
+      }
 
       try {
-        resolve(JSON.parse(raw));
+        const parsed = JSON.parse(raw);
+
+        if (
+          !parsed ||
+          typeof parsed !== "object" ||
+          Array.isArray(parsed)
+        ) {
+          throw new Error("Invalid JSON object.");
+        }
+
+        resolve(parsed);
       } catch (_) {
-        reject(new Error("Request body must be valid JSON."));
+        const error = new Error(
+          "Request body must be a valid JSON object."
+        );
+
+        error.status = 400;
+        reject(error);
       }
     });
 
@@ -355,26 +506,50 @@ function readBody(req) {
 }
 
 function findVehicle(code) {
-  const key = cleanText(code, 40)
+  const key = cleanText(code, 50)
     .toLowerCase()
     .replace(/[\s-]+/g, "_");
 
-  return VEHICLES.find(v =>
-    v.code === key ||
-    v.name.toLowerCase() === key.replace(/_/g, " ")
+  return VEHICLES.find(vehicle =>
+    vehicle.code === key ||
+    vehicle.name.toLowerCase() === key.replace(/_/g, " ")
   );
 }
 
 function getCatalogItem(type, code) {
   if (type === "tour") {
-    return TOURS.find(x => x.code === code);
+    return TOURS.find(item => item.code === code);
   }
 
   if (type === "route") {
-    return ROUTES.find(x => x.code === code);
+    return ROUTES.find(item => item.code === code);
   }
 
   return null;
+}
+
+function makeBookingReference() {
+  return (
+    "IT-" +
+    new Date().toISOString()
+      .slice(2, 10)
+      .replace(/-/g, "") +
+    "-" +
+    crypto.randomBytes(3).toString("hex").toUpperCase()
+  );
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]
+  );
 }
 
 // ==========================================
@@ -383,13 +558,17 @@ function getCatalogItem(type, code) {
 
 function calculateQuote(input) {
   const kind = cleanText(
-    input.booking_kind || input.service_type || "transfer",
-    30
+    input.booking_kind ||
+    input.service_type ||
+    "transfer",
+    50
   ).toLowerCase();
 
   const itemType = kind.includes("tour")
     ? "tour"
-    : (input.route_code ? "route" : "transfer");
+    : input.route_code
+      ? "route"
+      : "transfer";
 
   const vehicle = findVehicle(
     input.vehicle_code ||
@@ -404,24 +583,30 @@ function calculateQuote(input) {
   }
 
   const passengers = Number(
-    input.passengers ?? input.max_passengers ?? 1
+    input.passengers ??
+    input.max_passengers ??
+    1
   );
 
   if (
     !Number.isInteger(passengers) ||
-    passengers < 1 ||
+    passengers < vehicle.minPassengers ||
     passengers > vehicle.maxPassengers
   ) {
     throw new Error(
-      `${vehicle.name} supports 1–${vehicle.maxPassengers} passengers.`
+      `${vehicle.name} supports ${vehicle.minPassengers}–${vehicle.maxPassengers} passengers.`
     );
   }
 
   const largeBags = Number(
-    input.large_bags ?? input.luggage ?? 0
+    input.large_bags ??
+    input.luggage ??
+    0
   );
 
-  const handBags = Number(input.hand_bags ?? 0);
+  const handBags = Number(
+    input.hand_bags ?? 0
+  );
 
   if (
     !Number.isInteger(largeBags) ||
@@ -443,13 +628,16 @@ function calculateQuote(input) {
     );
   }
 
-  let eur = null;
   let item = null;
+  let eur = null;
 
   if (itemType === "tour") {
     item = getCatalogItem(
       "tour",
-      cleanText(input.tour_code || input.package_type, 80)
+      cleanText(
+        input.tour_code || input.package_type,
+        100
+      )
     );
 
     if (!item) {
@@ -463,7 +651,7 @@ function calculateQuote(input) {
   } else if (itemType === "route") {
     item = getCatalogItem(
       "route",
-      cleanText(input.route_code, 80)
+      cleanText(input.route_code, 100)
     );
 
     if (!item) {
@@ -480,47 +668,92 @@ function calculateQuote(input) {
 
   if (eur === undefined || eur === null) {
     throw new Error(
-      `${vehicle.name} is not available for this route/tour. Please choose another vehicle.`
+      `${vehicle.name} is not available for this route or tour.`
     );
   }
 
-  const childSeats = Array.isArray(input.child_seats)
-    ? input.child_seats.slice(0, 3).map(s => ({
-        type: cleanText(s.type || s.code, 30),
-        age: cleanText(s.age, 30),
-        quantity: Math.max(
-          1,
-          Math.min(3, Number(s.quantity || 1))
-        )
-      }))
-    : [];
+  // Child seat validation.
+  const childSeats = [];
 
-  for (const seat of childSeats) {
-    if (!CHILD_SEATS.some(s => s.code === seat.type)) {
+  if (
+    input.child_seats !== undefined &&
+    !Array.isArray(input.child_seats)
+  ) {
+    throw new Error("Child seats must be provided as a list.");
+  }
+
+  for (const seat of (input.child_seats || [])) {
+    const type = cleanText(
+      seat.type || seat.code,
+      30
+    );
+
+    const quantity = Number(
+      seat.quantity === undefined ? 1 : seat.quantity
+    );
+
+    const age = cleanText(seat.age, 30);
+
+    if (!CHILD_SEATS.some(item => item.code === type)) {
       throw new Error(
         "One of the selected child seat types is invalid."
       );
     }
+
+    if (
+      !Number.isInteger(quantity) ||
+      quantity < 1 ||
+      quantity > 3
+    ) {
+      throw new Error(
+        "Each child seat quantity must be between 1 and 3."
+      );
+    }
+
+    childSeats.push({
+      type,
+      age,
+      quantity
+    });
   }
 
-  const transferType = ALLOWED_TRANSFER_TYPES.includes(
-    input.transfer_type
-  )
-    ? input.transfer_type
-    : "one_way";
+  const transferType = cleanText(
+    input.transfer_type || "one_way",
+    30
+  );
 
-  if (
-    transferType === "return" &&
-    (!validDate(input.return_date) || !validTime(input.return_time))
-  ) {
-    throw new Error(
-      "A valid return date and time are required for a return transfer."
-    );
+  if (!ALLOWED_TRANSFER_TYPES.includes(transferType)) {
+    throw new Error("Invalid transfer type.");
   }
 
-  const discountCode = cleanText(input.discount_code, 50);
+  if (transferType === "return") {
+    if (
+      !validDate(input.return_date) ||
+      !validTime(input.return_time)
+    ) {
+      throw new Error(
+        "A valid return date and time are required."
+      );
+    }
+
+    if (!isOperatingTime(input.return_time)) {
+      throw new Error(
+        "Return time must be between 06:00 and 22:00 Iceland time."
+      );
+    }
+  }
+
+  const discountCode = cleanText(
+    input.discount_code,
+    50
+  );
+
+  // Discounts are not enabled yet.
   const discountAmountEur = 0;
-  const totalEur = round2(eur + discountAmountEur);
+
+  const totalEur = round2(
+    Number(eur) - discountAmountEur
+  );
 
   return {
     bookingKind: itemType,
@@ -542,21 +775,94 @@ function calculateQuote(input) {
 }
 
 // ==========================================
-// BOOKING REFERENCE
+// AVAILABILITY
 // ==========================================
 
-function makeBookingReference() {
-  return "IT-" +
-    new Date().toISOString().slice(2, 10).replace(/-/g, "") +
-    "-" +
-    crypto.randomBytes(3).toString("hex").toUpperCase();
+async function getAvailability(date) {
+  if (!validDate(date)) {
+    const error = new Error(
+      "Please provide a valid date in YYYY-MM-DD format."
+    );
+
+    error.status = 400;
+    throw error;
+  }
+
+  if (date < new Date().toISOString().slice(0, 10)) {
+    const error = new Error(
+      "Availability cannot be checked for a past date."
+    );
+
+    error.status = 400;
+    throw error;
+  }
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("pickup_time,status")
+    .eq("pickup_date", date)
+    .neq("status", "cancelled");
+
+  if (error) {
+    const dbError = new Error(
+      `Could not check availability: ${error.message}`
+    );
+
+    dbError.status = 503;
+    throw dbError;
+  }
+
+  const counts = {};
+
+  for (let hour = OPENING_HOUR; hour < CLOSING_HOUR; hour++) {
+    counts[String(hour).padStart(2, "0") + ":00"] = 0;
+  }
+
+  for (const booking of (data || [])) {
+    if (!booking.pickup_time) continue;
+
+    const hour = String(
+      booking.pickup_time
+    ).slice(0, 2);
+
+    const slot = `${hour}:00`;
+
+    if (Object.prototype.hasOwnProperty.call(counts, slot)) {
+      counts[slot]++;
+    }
+  }
+
+  const slots = Object.entries(counts).map(
+    ([time, booked]) => {
+      const remaining = Math.max(
+        0,
+        MAX_BOOKINGS_PER_HOUR - booked
+      );
+
+      return {
+        time,
+        booked,
+        remaining,
+        available: remaining > 0
+      };
+    }
+  );
+
+  return {
+    date,
+    timeZone: TIME_ZONE,
+    openingTime: "06:00",
+    closingTime: "22:00",
+    maxBookingsPerHour: MAX_BOOKINGS_PER_HOUR,
+    slots
+  };
 }
 
 // ==========================================
 // BOOKING EMAIL
 // ==========================================
 
-async function sendBookingEmail(booking, quote) {
+async function sendBookingEmail(booking) {
   const configured =
     process.env.SMTP_HOST &&
     process.env.SMTP_USER &&
@@ -570,10 +876,14 @@ async function sendBookingEmail(booking, quote) {
     };
   }
 
+  const port = Number(
+    process.env.SMTP_PORT || 587
+  );
+
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: Number(process.env.SMTP_PORT || 587) === 465,
+    port,
+    secure: port === 465,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
@@ -591,8 +901,8 @@ async function sendBookingEmail(booking, quote) {
 
       <p>
         Your booking request has been received.
-        It is <b>pending payment/confirmation</b>;
-        this email is not a paid ticket.
+        It is <b>pending payment/confirmation</b>.
+        This email is not a paid ticket.
       </p>
 
       <hr>
@@ -602,7 +912,7 @@ async function sendBookingEmail(booking, quote) {
       <p><b>Pickup:</b> ${escapeHtml(booking.pickup_location)}</p>
       <p><b>Drop-off:</b> ${escapeHtml(booking.destination)}</p>
       <p><b>Date/time:</b> ${escapeHtml(dateTime)}</p>
-      <p><b>Passengers:</b> ${booking.passengers}</p>
+      <p><b>Passengers:</b> ${Number(booking.passengers)}</p>
       <p><b>Vehicle:</b> ${escapeHtml(booking.vehicle_name || "")}</p>
 
       <p>
@@ -616,7 +926,8 @@ async function sendBookingEmail(booking, quote) {
       </p>
 
       <p>ICELAND TRANSFER</p>
-    </div>`;
+    </div>
+  `;
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
@@ -626,180 +937,6 @@ async function sendBookingEmail(booking, quote) {
   });
 
   return { sent: true };
-}
-
-function escapeHtml(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[c]));
-}
-
-// ==========================================
-// GOOGLE MAPS ROUTE
-// ==========================================
-
-async function googleRoute(
-  origin,
-  destination,
-  intermediates = []
-) {
-  if (!GOOGLE_MAPS_API_KEY) {
-    const err = new Error(
-      "Google Maps is not configured. Add GOOGLE_MAPS_API_KEY to the server environment."
-    );
-
-    err.status = 503;
-    throw err;
-  }
-
-  const body = {
-    origin: { address: origin },
-    destination: { address: destination },
-    intermediates: intermediates.map(address => ({
-      address
-    })),
-    travelMode: "DRIVE",
-    routingPreference: "TRAFFIC_AWARE",
-    units: "METRIC"
-  };
-
-  const response = await fetch(
-    "https://routes.googleapis.com/directions/v2:computeRoutes",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": GOOGLE_MAPS_API_KEY,
-        "X-Goog-FieldMask": "routes.distanceMeters,routes.duration"
-      },
-      body: JSON.stringify(body)
-    }
-  );
-
-  const data = await response.json();
-
-  if (!response.ok || !data.routes?.[0]) {
-    const err = new Error(
-      data.error?.message ||
-      "Google Maps could not calculate this route."
-    );
-
-    err.status = response.status || 502;
-    throw err;
-  }
-
-  const route = data.routes[0];
-
-  return {
-    distanceKm: round2(route.distanceMeters / 1000),
-    durationMinutes: Math.round(
-      parseFloat(route.duration) / 60
-    )
-  };
-}
-
-// ==========================================
-// PLACES SEARCH — PHOTON / OPENSTREETMAP
-// ==========================================
-
-async function searchPlaces(query) {
-  const q = cleanText(query, 120);
-
-  if (q.length < 3) {
-    return [];
-  }
-
-  const photonUrl = new URL(
-    "https://photon.komoot.io/api/"
-  );
-
-  photonUrl.searchParams.set("q", q);
-  photonUrl.searchParams.set("limit", "8");
-  photonUrl.searchParams.set("lang", "en");
-
-  // Approximate Iceland geographic boundaries.
-  photonUrl.searchParams.set(
-    "bbox",
-    "-25.0,63.0,-12.0,67.5"
-  );
-
-  let response;
-
-  try {
-    response = await fetch(photonUrl, {
-      headers: {
-        "Accept": "application/json",
-        "User-Agent": "ICELAND-TRANSFER-Booking/1.0"
-      },
-      signal: AbortSignal.timeout(10000)
-    });
-
-  } catch (_) {
-    const error = new Error(
-      "Place search is temporarily unavailable. Please try again."
-    );
-
-    error.status = 502;
-    throw error;
-  }
-
-  if (!response.ok) {
-    const error = new Error(
-      "Place search is temporarily unavailable. Please try again."
-    );
-
-    error.status = 502;
-    throw error;
-  }
-
-  let data;
-
-  try {
-    data = await response.json();
-
-  } catch (_) {
-    const error = new Error(
-      "The place search service returned an invalid response."
-    );
-
-    error.status = 502;
-    throw error;
-  }
-
-  return (data.features || [])
-    .map(feature => {
-      const properties = feature.properties || {};
-      const coordinates = feature.geometry?.coordinates || [];
-
-      const longitude = Number(coordinates[0]);
-      const latitude = Number(coordinates[1]);
-
-      const addressParts = [
-        properties.name,
-        properties.street,
-        properties.housenumber,
-        properties.city,
-        properties.state,
-        properties.country
-      ].filter(Boolean);
-
-      return {
-        name: properties.name || "Unnamed place",
-        address: [...new Set(addressParts)].join(", "),
-        latitude,
-        longitude,
-        osmId: properties.osm_id || null,
-        osmType: properties.osm_type || null
-      };
-    })
-    .filter(place =>
-      Number.isFinite(place.latitude) &&
-      Number.isFinite(place.longitude)
-    );
 }
 
 // ==========================================
@@ -817,7 +954,10 @@ async function createBooking(input) {
     254
   ).toLowerCase();
 
-  const phone = cleanText(input.phone, 50);
+  const phone = cleanText(
+    input.phone,
+    50
+  );
 
   const pickup = cleanText(
     input.pickup_location || input.pickup,
@@ -846,27 +986,40 @@ async function createBooking(input) {
     !isEmail(email) ||
     !phone ||
     !pickup ||
-    !destination ||
-    !validDate(pickupDate) ||
-    !validTime(pickupTime)
+    !destination
   ) {
-    throw new Error(
-      "Please complete your name, valid email, phone, pickup, drop-off, date and time."
+    const error = new Error(
+      "Please complete your name, valid email, phone, pickup and drop-off."
     );
+
+    error.status = 400;
+    throw error;
   }
 
-  const pickupAt = parsePickup(
+  const pickupAt = validateFutureDateTime(
     pickupDate,
-    pickupTime
+    pickupTime,
+    "Pickup"
   );
 
-  if (pickupAt.getTime() < Date.now() - 60 * 1000) {
-    throw new Error(
-      "Pickup date/time must be in the future."
-    );
-  }
-
   const quote = calculateQuote(input);
+
+  // Validate return date and ensure it is after pickup.
+  if (quote.transferType === "return") {
+    const returnAt = parsePickup(
+      input.return_date,
+      input.return_time
+    );
+
+    if (returnAt.getTime() <= pickupAt.getTime()) {
+      const error = new Error(
+        "Return date and time must be later than pickup."
+      );
+
+      error.status = 400;
+      throw error;
+    }
+  }
 
   const cancellationToken =
     crypto.randomBytes(32).toString("hex");
@@ -886,7 +1039,7 @@ async function createBooking(input) {
 
   const returnTime =
     quote.transferType === "return"
-      ? input.return_time
+      ? normalizeTime(input.return_time)
       : null;
 
   const row = {
@@ -894,15 +1047,15 @@ async function createBooking(input) {
     full_name: fullName,
     email,
     phone,
+
     pickup_location: pickup,
     destination,
-    pickup_date: pickupDate,
 
-    pickup_time: pickupTime.length === 5
-      ? `${pickupTime}:00`
-      : pickupTime,
+    pickup_date: pickupDate,
+    pickup_time: normalizeTime(pickupTime),
 
     passengers: quote.passengers,
+
     luggage: quote.largeBags,
     large_bags: quote.largeBags,
     hand_bags: quote.handBags,
@@ -945,15 +1098,19 @@ async function createBooking(input) {
         ? input.selected_stops
         : [],
 
-    return_date: returnDate || null,
-    return_time: returnTime || null,
+    return_date: returnDate,
+    return_time: returnTime,
     transfer_type: quote.transferType,
 
     vehicle_code: quote.vehicle.code,
     vehicle_name: quote.vehicle.name,
 
     billing_country:
-      cleanText(input.billing_country, 100) || null,
+      cleanText(
+        input.billing_country ||
+        input.country_of_origin,
+        100
+      ) || null,
 
     billing_city:
       cleanText(input.billing_city, 120) || null,
@@ -964,8 +1121,11 @@ async function createBooking(input) {
     billing_postcode:
       cleanText(input.billing_postcode, 40) || null,
 
-    discount_code: quote.discountCode || null,
+    discount_code:
+      quote.discountCode || null,
+
     discount_amount: 0,
+
     confirmation_email_sent_at: null
   };
 
@@ -975,7 +1135,6 @@ async function createBooking(input) {
     .select("*")
     .single();
 
-  // Maximum five active bookings per pickup hour.
   if (error) {
     if (
       error.code === "P0001" &&
@@ -991,33 +1150,47 @@ async function createBooking(input) {
       throw capacityError;
     }
 
-    throw new Error(
+    console.error("Supabase insert error:", error);
+
+    const dbError = new Error(
       `Database could not save the booking: ${error.message}`
     );
+
+    dbError.status = 500;
+    throw dbError;
   }
 
   const cancellationUrl =
     `${PUBLIC_SERVER_URL}/cancel/${cancellationToken}`;
 
-  let emailResult = { sent: false };
+  let emailResult = {
+    sent: false,
+    reason: "Email not configured."
+  };
 
   try {
-    emailResult = await sendBookingEmail(data, quote);
+    emailResult = await sendBookingEmail(data);
 
     if (emailResult.sent) {
-      await supabase
+      const { error: emailUpdateError } = await supabase
         .from("bookings")
         .update({
           confirmation_email_sent_at:
             new Date().toISOString()
         })
         .eq("id", data.id);
-    }
 
-  } catch (e) {
+      if (emailUpdateError) {
+        console.error(
+          "Could not update email timestamp:",
+          emailUpdateError.message
+        );
+      }
+    }
+  } catch (emailError) {
     console.error(
       "Booking email failed:",
-      e.message
+      emailError.message
     );
 
     emailResult = {
@@ -1032,13 +1205,22 @@ async function createBooking(input) {
       reference: bookingReference,
       status: "pending",
       paymentStatus: "unpaid",
+
       fullName,
       email,
       phone,
+
       pickup,
       destination,
+
       pickupDate,
-      pickupTime,
+      pickupTime: normalizeTime(pickupTime),
+
+      returnDate,
+      returnTime,
+
+      transferType: quote.transferType,
+
       vehicle: quote.vehicle.name,
       passengers: quote.passengers,
 
@@ -1055,7 +1237,7 @@ async function createBooking(input) {
     email: emailResult,
 
     message:
-      "Booking request saved. It is pending payment/confirmation; it is not confirmed as paid."
+      "Booking request saved. It is pending payment/confirmation and is not confirmed as paid."
   };
 }
 
@@ -1067,7 +1249,12 @@ async function cancelBooking(token) {
   const cleanToken = cleanText(token, 128);
 
   if (!/^[a-f0-9]{64}$/i.test(cleanToken)) {
-    throw new Error("Invalid cancellation link.");
+    const error = new Error(
+      "Invalid cancellation link."
+    );
+
+    error.status = 400;
+    throw error;
   }
 
   const { data: booking, error } = await supabase
@@ -1077,11 +1264,15 @@ async function cancelBooking(token) {
     .maybeSingle();
 
   if (error) {
-    throw new Error(error.message);
+    const dbError = new Error(error.message);
+    dbError.status = 500;
+    throw dbError;
   }
 
   if (!booking) {
-    throw new Error("Booking not found.");
+    const error = new Error("Booking not found.");
+    error.status = 404;
+    throw error;
   }
 
   if (booking.status === "cancelled") {
@@ -1100,9 +1291,12 @@ async function cancelBooking(token) {
     (pickupAt.getTime() - Date.now()) / 3600000;
 
   if (hoursLeft < CANCELLATION_HOURS) {
-    throw new Error(
+    const error = new Error(
       `Cancellation is available until ${CANCELLATION_HOURS} hours before pickup.`
     );
+
+    error.status = 400;
+    throw error;
   }
 
   const { error: updateError } = await supabase
@@ -1111,26 +1305,318 @@ async function cancelBooking(token) {
       status: "cancelled",
       cancelled_at: new Date().toISOString()
     })
-    .eq("id", booking.id);
+    .eq("id", booking.id)
+    .neq("status", "cancelled");
 
   if (updateError) {
-    throw new Error(updateError.message);
+    const dbError = new Error(updateError.message);
+    dbError.status = 500;
+    throw dbError;
   }
 
   return {
     cancelled: true,
     bookingId: booking.id,
+    reference: booking.booking_reference,
     message: "Booking cancelled successfully."
   };
 }
 
 // ==========================================
-// HTTP SERVER AND API ROUTES
+// CANCELLATION PAGE
+// ==========================================
+
+function cancellationPage(token) {
+  const safeToken = escapeHtml(token);
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cancel Booking | Iceland Transfer</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:#f5f1e8;
+  font-family:Arial,sans-serif;
+  color:#293c2e
+}
+.card{
+  width:100%;
+  max-width:480px;
+  background:#fffdf9;
+  padding:35px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 10px 35px rgba(0,0,0,.08)
+}
+h1{font-size:25px;margin-top:0}
+p{line-height:1.7;color:#555}
+button{
+  border:0;
+  border-radius:8px;
+  background:#465b45;
+  color:white;
+  padding:14px 24px;
+  font-size:15px;
+  cursor:pointer
+}
+button:disabled{opacity:.6;cursor:not-allowed}
+#message{margin-top:20px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>ICELAND TRANSFER</h1>
+<h2>Cancel your booking</h2>
+<p>
+If you cancel, your booking will be marked as cancelled.
+Cancellation is available until 24 hours before pickup.
+</p>
+<button id="cancelButton">Confirm Cancellation</button>
+<div id="message"></div>
+</div>
+
+<script>
+const token = "${safeToken}";
+const button = document.getElementById("cancelButton");
+const message = document.getElementById("message");
+
+button.addEventListener("click", async () => {
+  if (!confirm("Are you sure you want to cancel this booking?")) {
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = "Processing cancellation...";
+
+  try {
+    const response = await fetch("/api/bookings/cancel", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({token})
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Cancellation failed.");
+    }
+
+    message.textContent = result.message;
+    button.style.display = "none";
+
+  } catch (error) {
+    message.textContent = error.message;
+    button.disabled = false;
+  }
+});
+</script>
+</body>
+</html>`;
+}
+
+// ==========================================
+// GOOGLE MAPS ROUTE
+// ==========================================
+
+async function googleRoute(
+  origin,
+  destination,
+  intermediates = []
+) {
+  if (!GOOGLE_MAPS_API_KEY) {
+    const error = new Error(
+      "Google Maps is not configured. Add GOOGLE_MAPS_API_KEY to the server environment."
+    );
+
+    error.status = 503;
+    throw error;
+  }
+
+  const body = {
+    origin: { address: origin },
+    destination: { address: destination },
+
+    intermediates: intermediates.map(address => ({
+      address: cleanText(address, 300)
+    })),
+
+    travelMode: "DRIVE",
+    routingPreference: "TRAFFIC_AWARE",
+    units: "METRIC"
+  };
+
+  const response = await fetch(
+    "https://routes.googleapis.com/directions/v2:computeRoutes",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": GOOGLE_MAPS_API_KEY,
+        "X-Goog-FieldMask":
+          "routes.distanceMeters,routes.duration"
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(15000)
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok || !data.routes?.[0]) {
+    const error = new Error(
+      data.error?.message ||
+      "Google Maps could not calculate this route."
+    );
+
+    error.status = response.status || 502;
+    throw error;
+  }
+
+  const route = data.routes[0];
+
+  return {
+    distanceKm: round2(
+      route.distanceMeters / 1000
+    ),
+
+    durationMinutes: Math.round(
+      parseFloat(route.duration) / 60
+    )
+  };
+}
+
+// ==========================================
+// PLACES SEARCH — PHOTON / OPENSTREETMAP
+// ==========================================
+
+async function searchPlaces(query) {
+  const q = cleanText(query, 120);
+
+  if (q.length < 3) {
+    return [];
+  }
+
+  const photonUrl = new URL(
+    "https://photon.komoot.io/api/"
+  );
+
+  photonUrl.searchParams.set("q", q);
+  photonUrl.searchParams.set("limit", "8");
+  photonUrl.searchParams.set("lang", "en");
+
+  photonUrl.searchParams.set(
+    "bbox",
+    "-25.0,63.0,-12.0,67.5"
+  );
+
+  let response;
+
+  try {
+    response = await fetch(photonUrl, {
+      headers: {
+        "Accept": "application/json",
+        "User-Agent": "ICELAND-TRANSFER-Booking/2.1"
+      },
+      signal: AbortSignal.timeout(10000)
+    });
+  } catch (_) {
+    const error = new Error(
+      "Place search is temporarily unavailable. Please try again."
+    );
+
+    error.status = 502;
+    throw error;
+  }
+
+  if (!response.ok) {
+    const error = new Error(
+      "Place search is temporarily unavailable."
+    );
+
+    error.status = 502;
+    throw error;
+  }
+
+  let data;
+
+  try {
+    data = await response.json();
+  } catch (_) {
+    const error = new Error(
+      "The place search service returned an invalid response."
+    );
+
+    error.status = 502;
+    throw error;
+  }
+
+  return (data.features || [])
+    .map(feature => {
+      const properties = feature.properties || {};
+      const coordinates =
+        feature.geometry?.coordinates || [];
+
+      const longitude = Number(coordinates[0]);
+      const latitude = Number(coordinates[1]);
+
+      const addressParts = [
+        properties.name,
+        properties.street,
+        properties.housenumber,
+        properties.city,
+        properties.state,
+        properties.country
+      ].filter(Boolean);
+
+      return {
+        name: properties.name || "Unnamed place",
+
+        address: [
+          ...new Set(addressParts)
+        ].join(", "),
+
+        latitude,
+        longitude,
+
+        osmId: properties.osm_id || null,
+        osmType: properties.osm_type || null
+      };
+    })
+    .filter(place =>
+      Number.isFinite(place.latitude) &&
+      Number.isFinite(place.longitude) &&
+
+      // Keep results within Iceland's approximate bounds.
+      place.latitude >= 63 &&
+      place.latitude <= 67.5 &&
+      place.longitude >= -25 &&
+      place.longitude <= -12
+    );
+}
+
+// ==========================================
+// HTTP SERVER
 // ==========================================
 
 const server = http.createServer(async (req, res) => {
   if (req.method === "OPTIONS") {
-    return json(res, 204, {});
+    res.writeHead(204, {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Content-Type, Authorization"
+    });
+
+    return res.end();
   }
 
   const url = new URL(
@@ -1140,17 +1626,29 @@ const server = http.createServer(async (req, res) => {
 
   try {
 
+    // ======================================
     // HOME
-    if (req.method === "GET" && url.pathname === "/") {
+    // ======================================
+
+    if (
+      req.method === "GET" &&
+      url.pathname === "/"
+    ) {
       return json(res, 200, {
         name: "ICELAND TRANSFER API",
         status: "running",
-        version: "2.0.0"
+        version: "2.1.0"
       });
     }
 
+    // ======================================
     // HEALTH CHECK
-    if (req.method === "GET" && url.pathname === "/health") {
+    // ======================================
+
+    if (
+      req.method === "GET" &&
+      url.pathname === "/health"
+    ) {
       const { error } = await supabase
         .from("bookings")
         .select("id", {
@@ -1161,11 +1659,14 @@ const server = http.createServer(async (req, res) => {
       return json(res, error ? 503 : 200, {
         ok: !error,
         database: error ? "error" : "connected",
-        version: "2.0.0"
+        version: "2.1.0"
       });
     }
 
+    // ======================================
     // CATALOG
+    // ======================================
+
     if (
       req.method === "GET" &&
       url.pathname === "/api/catalog"
@@ -1179,37 +1680,43 @@ const server = http.createServer(async (req, res) => {
           ? "configured in environment"
           : "2026-11-24 reference rate",
 
-        vehicles: VEHICLES.map(v => ({
-          ...v,
-          fromIsk: toIsk(v.fromEur),
+        paymentEnabled: false,
+
+        vehicles: VEHICLES.map(vehicle => ({
+          ...vehicle,
+          fromIsk: toIsk(vehicle.fromEur),
           fromCurrency: "EUR"
         })),
 
-        routes: ROUTES.map(r => ({
-          ...r,
+        routes: ROUTES.map(route => ({
+          ...route,
 
           prices: Object.fromEntries(
-            Object.entries(r.prices).map(([k, v]) => [
-              k,
-              {
-                eur: v,
-                isk: toIsk(v)
-              }
-            ])
+            Object.entries(route.prices).map(
+              ([code, price]) => [
+                code,
+                {
+                  eur: price,
+                  isk: toIsk(price)
+                }
+              ]
+            )
           )
         })),
 
-        tours: TOURS.map(t => ({
-          ...t,
+        tours: TOURS.map(tour => ({
+          ...tour,
 
           prices: Object.fromEntries(
-            Object.entries(t.prices).map(([k, v]) => [
-              k,
-              {
-                eur: v,
-                isk: toIsk(v)
-              }
-            ])
+            Object.entries(tour.prices).map(
+              ([code, price]) => [
+                code,
+                {
+                  eur: price,
+                  isk: toIsk(price)
+                }
+              ]
+            )
           )
         })),
 
@@ -1218,13 +1725,37 @@ const server = http.createServer(async (req, res) => {
         policies: {
           cancellationHours: CANCELLATION_HOURS,
           maxBookingsPerHour: MAX_BOOKINGS_PER_HOUR,
-          timeZone: "Atlantic/Reykjavik",
+          openingTime: "06:00",
+          closingTime: "22:00",
+          timeZone: TIME_ZONE,
           childSeatsFree: true
         }
       });
     }
 
+    // ======================================
+    // AVAILABILITY
+    // GET /api/availability?date=YYYY-MM-DD
+    // ======================================
+
+    if (
+      req.method === "GET" &&
+      url.pathname === "/api/availability"
+    ) {
+      const date = cleanText(
+        url.searchParams.get("date"),
+        10
+      );
+
+      const result = await getAvailability(date);
+
+      return json(res, 200, result);
+    }
+
+    // ======================================
     // PRICE QUOTE
+    // ======================================
+
     if (
       req.method === "POST" &&
       url.pathname === "/api/quote"
@@ -1236,10 +1767,13 @@ const server = http.createServer(async (req, res) => {
         bookingKind: quote.bookingKind,
         item: quote.item,
         vehicle: quote.vehicle,
+
         passengers: quote.passengers,
         largeBags: quote.largeBags,
         handBags: quote.handBags,
+
         childSeats: quote.childSeats,
+        transferType: quote.transferType,
 
         basePrice: {
           eur: quote.basePriceEur,
@@ -1260,7 +1794,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     // ======================================
-    // PLACES SEARCH — PHOTON / OPENSTREETMAP
+    // PLACES SEARCH
     // ======================================
 
     if (
@@ -1277,12 +1811,16 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, {
         success: true,
         places,
+
         attribution:
           "Place data © OpenStreetMap contributors, via Photon"
       });
     }
 
+    // ======================================
     // GOOGLE MAPS ROUTE
+    // ======================================
+
     if (
       req.method === "POST" &&
       url.pathname === "/api/maps/route"
@@ -1290,26 +1828,40 @@ const server = http.createServer(async (req, res) => {
       const input = await readBody(req);
 
       const origin = cleanText(input.origin, 300);
-      const destination = cleanText(input.destination, 300);
+      const destination = cleanText(
+        input.destination,
+        300
+      );
 
       if (!origin || !destination) {
-        return json(res, 400, {
-          error: "Origin and destination are required."
-        });
+        const error = new Error(
+          "Origin and destination are required."
+        );
+
+        error.status = 400;
+        throw error;
       }
+
+      const waypoints = Array.isArray(input.waypoints)
+        ? input.waypoints
+            .slice(0, 8)
+            .map(value => cleanText(value, 300))
+            .filter(Boolean)
+        : [];
 
       const result = await googleRoute(
         origin,
         destination,
-        Array.isArray(input.waypoints)
-          ? input.waypoints.slice(0, 8)
-          : []
+        waypoints
       );
 
       return json(res, 200, result);
     }
 
+    // ======================================
     // CREATE BOOKING
+    // ======================================
+
     if (
       req.method === "POST" &&
       url.pathname === "/api/bookings"
@@ -1320,7 +1872,10 @@ const server = http.createServer(async (req, res) => {
       return json(res, 201, result);
     }
 
-    // CANCEL BOOKING
+    // ======================================
+    // CANCEL BOOKING — POST
+    // ======================================
+
     if (
       req.method === "POST" &&
       url.pathname === "/api/bookings/cancel"
@@ -1328,13 +1883,17 @@ const server = http.createServer(async (req, res) => {
       const input = await readBody(req);
 
       const result = await cancelBooking(
-        input.token || input.cancellation_token
+        input.token ||
+        input.cancellation_token
       );
 
       return json(res, 200, result);
     }
 
+    // ======================================
     // CANCEL BOOKING BY TOKEN
+    // ======================================
+
     const cancelMatch = url.pathname.match(
       /^\/api\/bookings\/cancel\/([a-f0-9]{64})$/i
     );
@@ -1350,30 +1909,73 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, result);
     }
 
-    // TEYA PAYMENT — NOT ENABLED
+    // ======================================
+    // CUSTOMER CANCELLATION PAGE
+    // GET /cancel/TOKEN
+    // ======================================
+
+    const publicCancelMatch = url.pathname.match(
+      /^\/cancel\/([a-f0-9]{64})$/i
+    );
+
+    if (
+      req.method === "GET" &&
+      publicCancelMatch
+    ) {
+      const html = cancellationPage(
+        publicCancelMatch[1]
+      );
+
+      res.writeHead(200, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store"
+      });
+
+      return res.end(html);
+    }
+
+    // ======================================
+    // TEYA PAYMENT — DISABLED
+    // ======================================
+
     if (
       req.method === "POST" &&
       url.pathname === "/api/payments/teya/create-session"
     ) {
       return json(res, 501, {
-        error: "Teya live payments are not enabled yet.",
+        paymentEnabled: false,
+
+        error:
+          "Teya live payments are not enabled yet.",
 
         reason:
           "Merchant API credentials and the correct Teya integration contract are required. No card details should be collected by this server."
       });
     }
 
+    // ======================================
     // UNKNOWN ROUTE
+    // ======================================
+
     return json(res, 404, {
       error: "Endpoint not found."
     });
 
   } catch (error) {
-    console.error(error);
+    console.error(
+      "API error:",
+      error.message
+    );
 
-    return json(res, error.status || 400, {
-      error: error.message || "Unexpected server error."
-    });
+    return json(
+      res,
+      error.status || 400,
+      {
+        error:
+          error.message ||
+          "Unexpected server error."
+      }
+    );
   }
 });
 
@@ -1383,6 +1985,18 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(
-    `ICELAND TRANSFER API v2 running on port ${PORT}`
+    `ICELAND TRANSFER API v2.1.0 running on port ${PORT}`
+  );
+
+  console.log(
+    `Operating hours: ${OPENING_HOUR}:00–${CLOSING_HOUR}:00 Iceland time`
+  );
+
+  console.log(
+    `Maximum bookings per pickup hour: ${MAX_BOOKINGS_PER_HOUR}`
+  );
+
+  console.log(
+    `Payments enabled: NO`
   );
 });
