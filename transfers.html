@@ -6,18 +6,161 @@
 <title>Tourist Services | Iceland Transfer</title>
 <style>
 :root{--green:#465b45;--deep-green:#293c2e;--beige:#f5f1e8;--gold:#b99b61;--white:#fffdf9;--text:#3d4239;--muted:#777a70}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Arial,Helvetica,sans-serif;background:var(--white);color:var(--text);line-height:1.6}a{text-decoration:none;color:inherit}button,input,select{font:inherit}img{display:block;width:100%;object-fit:cover}
-header{background:var(--white);border-bottom:1px solid #e9e4d9;position:sticky;top:0;z-index:100}.header-container{max-width:1200px;margin:auto;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:25px}.logo{color:var(--deep-green);font-size:22px;font-weight:bold;letter-spacing:1.5px;white-space:nowrap}.logo span{display:block;color:var(--gold);font-size:9px;letter-spacing:3px;font-weight:normal}nav{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px}nav a{color:var(--text);font-size:13px}nav a:hover{color:var(--gold)}.header-button{background:var(--green);color:white;padding:11px 19px;border-radius:4px;font-size:13px;white-space:nowrap}
-.page-intro{background:var(--beige);text-align:center;padding:65px 20px 55px}.eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:3px;font-size:11px;font-weight:bold;margin-bottom:13px}.page-intro h1{color:var(--deep-green);font-family:Georgia,serif;font-size:clamp(35px,5vw,52px);font-weight:normal;margin-bottom:15px}.page-intro p{max-width:650px;margin:auto;color:var(--muted);font-size:15px}
-.section{max-width:1200px;margin:auto;padding:65px 25px}.section-heading{text-align:center;margin-bottom:35px}.section-heading h2{color:var(--deep-green);font-family:Georgia,serif;font-size:clamp(28px,4vw,38px);font-weight:normal;margin-bottom:10px}.section-heading p{color:var(--muted);font-size:14px;max-width:620px;margin:auto}
-.category-grid,.tour-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}.category-card,.tour-card{background:white;border:1px solid #e9e4d9;overflow:hidden;border-radius:7px}.category-card img,.tour-card img{height:220px}.card-content,.tour-content{padding:24px}.category-card h3,.tour-card h3{color:var(--deep-green);font-family:Georgia,serif;font-size:23px;font-weight:normal;margin-bottom:10px}.category-card p,.tour-card p{color:var(--muted);font-size:14px;margin-bottom:18px}.text-link{display:inline-block;color:var(--green);font-size:13px;font-weight:bold;border-bottom:1px solid var(--gold);padding-bottom:4px}
-.featured-transfer{background:var(--beige)}.featured-layout{max-width:1150px;margin:auto;padding:65px 25px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:50px}.featured-image{position:relative;min-width:0}.featured-image img{height:390px;border-radius:7px;background:#e5e0d5}.image-label{position:absolute;bottom:18px;left:18px;background:rgba(41,60,46,.92);color:white;padding:9px 15px;border-radius:3px;font-size:12px}.featured-content h2{color:var(--deep-green);font-family:Georgia,serif;font-size:clamp(30px,4vw,43px);line-height:1.2;font-weight:normal;margin-bottom:17px}.featured-content p{color:var(--muted);font-size:14px;margin-bottom:20px}.price-label{color:var(--muted);font-size:12px}.price{color:var(--deep-green);font-size:29px;font-weight:bold;margin-bottom:20px}.price small,.tour-price small{color:var(--muted);font-size:12px;font-weight:normal}.primary-button{display:inline-block;background:var(--green);color:white;border:none;padding:13px 24px;border-radius:4px;cursor:pointer;text-align:center}.primary-button:hover,.header-button:hover{background:var(--deep-green)}.primary-button:disabled{opacity:.65;cursor:wait}.tour-content{display:flex;flex-direction:column;height:100%}.tour-type{color:var(--gold);text-transform:uppercase;font-size:10px;letter-spacing:1.8px;font-weight:bold;margin-bottom:8px}.tour-card h3{font-size:22px;line-height:1.3}.tour-card p{font-size:13px;flex:1}.tour-price{color:var(--deep-green);font-size:22px;font-weight:bold;margin-bottom:15px}.tour-card .primary-button{width:100%}
-.booking-section{background:var(--deep-green);padding:65px 25px;scroll-margin-top:90px}.booking-container{max-width:900px;margin:auto}.booking-heading{text-align:center;margin-bottom:30px}.booking-heading .eyebrow{color:#d7c49b}.booking-heading h2{color:white;font-family:Georgia,serif;font-size:clamp(30px,4vw,40px);font-weight:normal;margin-bottom:10px}.booking-heading p{color:#d5dbd3;font-size:14px}.booking-form{background:var(--white);padding:30px;border-radius:7px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.form-group{display:flex;flex-direction:column;gap:7px;min-width:0}.form-group.full-width{grid-column:1/-1}.form-group label{font-size:12px;color:var(--deep-green);font-weight:bold}.form-group input,.form-group select{width:100%;padding:12px;border:1px solid #ddd8cd;border-radius:4px;background:white;color:var(--text);outline:none}.form-group input:focus,.form-group select:focus{border-color:var(--green)}.price-preview{background:#f2f4ee;border:1px solid #dce3d6;padding:13px 15px;border-radius:4px;color:var(--deep-green);font-size:14px}.price-preview strong{font-size:20px;display:block}.children-box{display:none;grid-column:1/-1;background:#f8f6f0;border:1px solid #e5dfd2;border-radius:5px;padding:16px}.children-box.visible{display:block}.children-ages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:14px}.booking-form>.primary-button{width:100%;margin-top:23px}.form-note{color:var(--muted);font-size:11px;margin-top:13px;text-align:center}.booking-message{display:none;margin-top:18px;padding:15px;background:#edf3e9;border:1px solid #d5e2ce;border-radius:4px;color:var(--deep-green);font-size:13px;overflow-wrap:anywhere}
-footer{background:#202e24;color:#e8e8df;padding:35px 25px}.footer-container{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:25px}.footer-logo{font-size:18px;font-weight:bold;letter-spacing:1.5px}.footer-logo span{display:block;font-size:9px;font-weight:normal;letter-spacing:2px;color:#d7c49b}.footer-text{color:#c7cec4;font-size:12px}.footer-links{display:flex;flex-wrap:wrap;gap:17px;font-size:12px}.footer-links a:hover{color:#d7c49b}
-@media(max-width:950px){.header-container{flex-wrap:wrap;justify-content:center}nav{order:3;width:100%;gap:15px}.category-grid,.tour-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.featured-layout{gap:30px}.featured-image img{height:330px}.footer-container{flex-direction:column;text-align:center}}
-@media(max-width:600px){.header-container{padding:15px}.logo{font-size:19px}nav{gap:11px 15px}nav a{font-size:12px}.page-intro{padding:45px 18px}.section{padding:45px 18px}.category-grid,.tour-grid{grid-template-columns:1fr}.featured-layout{grid-template-columns:1fr;padding:45px 18px}.featured-image img{height:260px}.form-grid{grid-template-columns:1fr}.form-group.full-width,.children-box{grid-column:auto}.booking-section{padding:45px 18px}.booking-form{padding:20px}.children-ages{grid-template-columns:1fr}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--white);color:var(--text);line-height:1.6}
+a{text-decoration:none;color:inherit}
+button,input,select{font:inherit}
+img{display:block;width:100%;object-fit:cover}
 
-/* Tourist Trips cards: balanced layout matching the reference screenshot */
+header{background:var(--white);border-bottom:1px solid #e9e4d9;position:sticky;top:0;z-index:100}
+.header-container{max-width:1200px;margin:auto;padding:17px 25px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+.logo{color:var(--deep-green);font-size:22px;font-weight:bold;letter-spacing:1.5px;white-space:nowrap}
+.logo span{display:block;color:var(--gold);font-size:9px;letter-spacing:3px;font-weight:normal}
+nav{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:22px}
+nav a{color:var(--text);font-size:13px}
+nav a:hover{color:var(--gold)}
+.header-button{background:var(--green);color:white;padding:11px 19px;border-radius:4px;font-size:13px;white-space:nowrap}
+
+.page-intro{background:var(--beige);text-align:center;padding:65px 20px 55px}
+.eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:3px;font-size:11px;font-weight:bold;margin-bottom:13px}
+.page-intro h1{color:var(--deep-green);font-family:Georgia,serif;font-size:clamp(35px,5vw,52px);font-weight:normal;margin-bottom:15px}
+.page-intro p{max-width:650px;margin:auto;color:var(--muted);font-size:15px}
+
+.section{max-width:1200px;margin:auto;padding:65px 25px}
+.section-heading{text-align:center;margin-bottom:35px}
+.section-heading h2{color:var(--deep-green);font-family:Georgia,serif;font-size:clamp(28px,4vw,38px);font-weight:normal;margin-bottom:10px}
+.section-heading p{color:var(--muted);font-size:14px;max-width:620px;margin:auto}
+
+.category-grid,.tour-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}
+.category-card,.tour-card{background:white;border:1px solid #e9e4d9;overflow:hidden;border-radius:7px}
+.category-card img,.tour-card img{height:220px}
+.card-content,.tour-content{padding:24px}
+.category-card h3,.tour-card h3{color:var(--deep-green);font-family:Georgia,serif;font-size:23px;font-weight:normal;margin-bottom:10px}
+.category-card p,.tour-card p{color:var(--muted);font-size:14px;margin-bottom:18px}
+.text-link{display:inline-block;color:var(--green);font-size:13px;font-weight:bold;border-bottom:1px solid var(--gold);padding-bottom:4px}
+
+.featured-transfer{background:var(--beige)}
+.featured-layout{max-width:1150px;margin:auto;padding:65px 25px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:50px}
+.featured-image{position:relative;min-width:0}
+.featured-image img{height:390px;border-radius:7px;background:#e5e0d5}
+.image-label{position:absolute;bottom:18px;left:18px;background:rgba(41,60,46,.92);color:white;padding:9px 15px;border-radius:3px;font-size:12px}
+.featured-content h2{color:var(--deep-green);font-family:Georgia,serif;font-size:clamp(30px,4vw,43px);line-height:1.2;font-weight:normal;margin-bottom:17px}
+.featured-content p{color:var(--muted);font-size:14px;margin-bottom:20px}
+.price-label{color:var(--muted);font-size:12px}
+.price{color:var(--deep-green);font-size:29px;font-weight:bold;margin-bottom:20px}
+.price small,.tour-price small{color:var(--muted);font-size:12px;font-weight:normal}
+.primary-button{display:inline-block;background:var(--green);color:white;border:none;padding:13px 24px;border-radius:4px;cursor:pointer;text-align:center}
+.primary-button:hover,.header-button:hover{background:var(--deep-green)}
+.primary-button:disabled{opacity:.65;cursor:wait}
+.tour-content{display:flex;flex-direction:column;height:100%}
+.tour-type{color:var(--gold);text-transform:uppercase;font-size:10px;letter-spacing:1.8px;font-weight:bold;margin-bottom:8px}
+.tour-card h3{font-size:22px;line-height:1.3}
+.tour-card p{font-size:13px;flex:1}
+.tour-price{color:var(--deep-green);font-size:22px;font-weight:bold;margin-bottom:15px}
+.tour-card .primary-button{width:100%}
+
+.booking-section{background:var(--deep-green);padding:65px 25px;scroll-margin-top:90px}
+.booking-container{max-width:900px;margin:auto}
+.booking-heading{text-align:center;margin-bottom:30px}
+.booking-heading .eyebrow{color:#d7c49b}
+.booking-heading h2{color:white;font-family:Georgia,serif;font-size:clamp(30px,4vw,40px);font-weight:normal;margin-bottom:10px}
+.booking-heading p{color:#d5dbd3;font-size:14px}
+.booking-form{background:var(--white);padding:30px;border-radius:7px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.form-group{display:flex;flex-direction:column;gap:7px;min-width:0}
+.form-group.full-width{grid-column:1/-1}
+.form-group label{font-size:12px;color:var(--deep-green);font-weight:bold}
+.form-group input,.form-group select{width:100%;padding:12px;border:1px solid #ddd8cd;border-radius:4px;background:white;color:var(--text);outline:none}
+.form-group input:focus,.form-group select:focus{border-color:var(--green)}
+
+.price-preview{background:#f2f4ee;border:1px solid #dce3d6;padding:13px 15px;border-radius:4px;color:var(--deep-green);font-size:14px}
+.price-preview strong{font-size:20px;display:block}
+.children-box{display:none;grid-column:1/-1;background:#f8f6f0;border:1px solid #e5dfd2;border-radius:5px;padding:16px}
+.children-box.visible{display:block}
+.children-ages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:14px}
+.booking-form>.primary-button{width:100%;margin-top:23px}
+.form-note{color:var(--muted);font-size:11px;margin-top:13px;text-align:center}
+.booking-message{display:none;margin-top:18px;padding:15px;background:#edf3e9;border:1px solid #d5e2ce;border-radius:4px;color:var(--deep-green);font-size:13px;overflow-wrap:anywhere}
+
+footer{background:#202e24;color:#e8e8df;padding:35px 25px}
+.footer-container{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:25px}
+.footer-logo{font-size:18px;font-weight:bold;letter-spacing:1.5px}
+.footer-logo span{display:block;font-size:9px;font-weight:normal;letter-spacing:2px;color:#d7c49b}
+.footer-text{color:#c7cec4;font-size:12px}
+.footer-links{display:flex;flex-wrap:wrap;gap:17px;font-size:12px}
+.footer-links a:hover{color:#d7c49b}
+
+/* Location autocomplete */
+.location-search-wrap{position:relative;width:100%}
+.location-search-wrap input{width:100%;padding:12px;border:1px solid #ddd8cd;border-radius:4px;background:white;color:var(--text);outline:none}
+.location-search-wrap input:focus{border-color:var(--green)}
+.location-results{
+ position:absolute;
+ top:calc(100% + 5px);
+ left:0;
+ right:0;
+ max-height:280px;
+ overflow-y:auto;
+ background:#fff;
+ border:1px solid #dedbd1;
+ border-radius:5px;
+ box-shadow:0 8px 22px rgba(0,0,0,.13);
+ z-index:50;
+}
+.location-results[hidden]{display:none}
+.location-result{
+ display:block;
+ width:100%;
+ border:0;
+ border-bottom:1px solid #f0eee8;
+ background:#fff;
+ padding:11px 13px;
+ text-align:left;
+ color:var(--text);
+ cursor:pointer;
+ font-size:13px;
+}
+.location-result:hover,.location-result:focus{background:#f2f4ee;color:var(--deep-green)}
+.location-result:last-child{border-bottom:0}
+.location-category{
+ padding:8px 12px 5px;
+ background:#f7f5ef;
+ color:#9a8151;
+ font-size:10px;
+ font-weight:bold;
+ letter-spacing:1.2px;
+ text-transform:uppercase;
+}
+.location-hint{font-size:10px;color:var(--muted);margin-top:4px}
+.location-empty{padding:12px;color:var(--muted);font-size:12px}
+
+@media(max-width:950px){
+ .header-container{flex-wrap:wrap;justify-content:center}
+ nav{order:3;width:100%;gap:15px}
+ .category-grid,.tour-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .featured-layout{gap:30px}
+ .featured-image img{height:330px}
+ .footer-container{flex-direction:column;text-align:center}
+}
+@media(max-width:600px){
+ .header-container{padding:15px}
+ .logo{font-size:19px}
+ nav{gap:11px 15px}
+ nav a{font-size:12px}
+ .page-intro{padding:45px 18px}
+ .section{padding:45px 18px}
+ .category-grid,.tour-grid{grid-template-columns:1fr}
+ .featured-layout{grid-template-columns:1fr;padding:45px 18px}
+ .featured-image img{height:260px}
+ .form-grid{grid-template-columns:1fr}
+ .form-group.full-width,.children-box{grid-column:auto}
+ .booking-section{padding:45px 18px}
+ .booking-form{padding:20px}
+ .children-ages{grid-template-columns:1fr}
+}
+
+/* Tourist Trips cards */
 #tourist-trips .tour-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px;align-items:stretch}
 #tourist-trips .tour-card{display:flex;flex-direction:column;min-width:0;background:#fff;border:1px solid #e9e4d9;border-radius:6px;overflow:hidden}
 #tourist-trips .tour-card>img{width:100%;height:205px;object-fit:cover}
@@ -29,57 +172,253 @@ footer{background:#202e24;color:#e8e8df;padding:35px 25px}.footer-container{max-
 #tourist-trips .tour-card .primary-button{width:100%;margin-top:auto}
 @media(max-width:950px){#tourist-trips .tour-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){#tourist-trips .tour-grid{grid-template-columns:1fr}#tourist-trips .tour-card>img{height:220px}}
-
 </style>
 </head>
 <body>
+
 <header><div class="header-container">
 <a href="index.html" class="logo">ICELAND TRANSFER<span>YOUR JOURNEY, OUR DRIVE</span></a>
 <nav><a href="index.html">Home</a><a href="transfers.html">Transfers</a><a href="golden-circle-tour.html">Destinations</a><a href="about.html">About Us</a><a href="contact.html">Contact</a></nav>
 <a href="booking.html" class="header-button">Book a Transfer</a>
 </div></header>
 
-<section class="page-intro"><div class="eyebrow">Explore Iceland With Us</div><h1>Tourist Services</h1><p>Discover Iceland with comfortable transportation, reliable airport transfers, and unforgettable journeys through the country's beautiful landscapes.</p></section>
+<section class="page-intro">
+<div class="eyebrow">Explore Iceland With Us</div>
+<h1>Tourist Services</h1>
+<p>Discover Iceland with comfortable transportation, reliable airport transfers, and unforgettable journeys through the country's beautiful landscapes.</p>
+</section>
 
-<section class="section" id="tourist-services"><div class="section-heading"><div class="eyebrow">Our Services</div><h2>How Can We Help You?</h2><p>Choose the service that suits your journey and let us make your Iceland experience easier.</p></div>
+<section class="section" id="tourist-services">
+<div class="section-heading">
+<div class="eyebrow">Our Services</div>
+<h2>How Can We Help You?</h2>
+<p>Choose the service that suits your journey and let us make your Iceland experience easier.</p>
+</div>
 <div class="category-grid">
-<article class="category-card"><img src="images2/airport-transfer.jpg" alt="Airport transportation in Iceland" loading="lazy" onerror="useFallbackImage(this,'airport')"><div class="card-content"><h3>Airport Transportation</h3><p>Convenient transportation to and from Keflavik International Airport.</p><a href="airport-transportation.html" class="text-link">Explore Airport Transfers →</a></div></article>
-<article class="category-card"><img src="images2/private-transfer.jpg" alt="Cruise port shuttle" loading="lazy" onerror="useFallbackImage(this,'private')"><div class="card-content"><h3>Cruise Port Shuttle</h3><p>Transportation between cruise ports, hotels, and selected destinations in Iceland.</p><a href="booking.html" class="text-link">Plan Your Transfer →</a></div></article>
-<article class="category-card"><img src="images2/day-trips.jpg" alt="Tourist trips in Iceland" loading="lazy" onerror="useFallbackImage(this,'tour')"><div class="card-content"><h3>Tourist Trips</h3><p>Explore Iceland's natural wonders and memorable attractions.</p><a href="#tourist-trips" class="text-link">Discover Our Trips →</a></div></article>
-</div></section>
-
-<section class="featured-transfer" id="keflavik-shuttle"><div class="featured-layout"><div class="featured-image"><img src="images2/airport-transfer.jpg" alt="Keflavik airport transfer" loading="lazy" onerror="useFallbackImage(this,'airport')"><div class="image-label">Keflavik International Airport</div></div><div class="featured-content"><div class="eyebrow">Airport Transportation</div><h2>Keflavik KEF Shuttle</h2><p>Start your Iceland journey with a convenient transfer from Keflavik International Airport. Travel comfortably to your selected destination.</p><a href="keflavik-shuttle.html" class="primary-button">Book This Transfer</a></div></div></section>
-
-<section class="section" id="tourist-trips"><div class="section-heading"><div class="eyebrow">Discover Iceland</div><h2>Tourist Trips</h2><p>Experience some of Iceland's most memorable landscapes and natural attractions.</p></div>
-<div class="tour-grid">
-<article class="tour-card"><img src="images2/day-trips.jpg" alt="Golden Circle Tour" loading="lazy" onerror="useFallbackImage(this,'tour')"><div class="tour-content"><div class="tour-type">Guided Tourist Trip</div><h3>Golden Circle Tour</h3><p>Discover Iceland's famous Golden Circle and enjoy a journey through remarkable landscapes and natural attractions.</p><div class="tour-price">Private tour</div><a href="golden-circle-tour.html" class="primary-button">Explore Golden Circle</a></div></article>
-<article class="tour-card"><img src="images2/aurora2.jpg" alt="Northern Lights in Iceland" loading="lazy" onerror="useFallbackImage(this,'aurora')"><div class="tour-content"><div class="tour-type">Evening Experience</div><h3>Magical Northern Lights Tour</h3><p>Experience the magic of Iceland's winter skies on a journey to look for the beautiful Northern Lights.</p><div class="tour-price">Private tour</div><a href="magical-northern-lights-tour.html" class="primary-button">Explore Northern Lights</a></div></article>
-<article class="tour-card"><img src="images2/hotel-transfer.jpg" alt="Private transfer in Iceland" loading="lazy" onerror="useFallbackImage(this,'private')"><div class="tour-content"><div class="tour-type">Private Transportation</div><h3>Private Transfer</h3><p>Arrange private transportation between your hotel, accommodation, airport, or another destination in Iceland.</p><div class="tour-price">Personalized journey</div><a href="Reykjavik-shuttle.html" class="primary-button">Book a Transfer</a></div></article>
+<article class="category-card">
+<img src="images2/airport-transfer.jpg" alt="Airport transportation in Iceland" loading="lazy" onerror="useFallbackImage(this,'airport')">
+<div class="card-content">
+<h3>Airport Transportation</h3>
+<p>Convenient transportation to and from Keflavik International Airport.</p>
+<a href="airport-transportation.html" class="text-link">Explore Airport Transfers →</a>
+</div>
+</article>
+<article class="category-card">
+<img src="images2/private-transfer.jpg" alt="Cruise port shuttle" loading="lazy" onerror="useFallbackImage(this,'private')">
+<div class="card-content">
+<h3>Cruise Port Shuttle</h3>
+<p>Transportation between cruise ports, hotels, and selected destinations in Iceland.</p>
+<a href="booking.html" class="text-link">Plan Your Transfer →</a>
+</div>
+</article>
+<article class="category-card">
+<img src="images2/day-trips.jpg" alt="Tourist trips in Iceland" loading="lazy" onerror="useFallbackImage(this,'tour')">
+<div class="card-content">
+<h3>Tourist Trips</h3>
+<p>Explore Iceland's natural wonders and memorable attractions.</p>
+<a href="#tourist-trips" class="text-link">Discover Our Trips →</a>
+</div>
+</article>
 </div>
 </section>
 
-<section class="booking-section" id="booking"><div class="booking-container"><div class="booking-heading"><div class="eyebrow">Plan Your Journey</div><h2>Request a Booking</h2><p>Enter your travel details and add your request to your order overview.</p></div>
-<form class="booking-form" id="bookingForm"><div class="form-grid">
-<div class="form-group full-width"><label for="service">Choose Your Service</label><select id="service" name="service" required><option value="">Select a service</option><option value="Keflavik KEF Shuttle">Keflavik KEF Shuttle</option><option value="Reykjavik Shuttle">Reykjavik Shuttle</option><option value="Golden Circle Tour">Golden Circle Tour</option><option value="Magical Northern Lights Tour">Magical Northern Lights Tour</option><option value="Cruise Port Shuttle">Cruise Port Shuttle</option><option value="Private Transfer">Private Transfer</option></select></div>
-<div class="form-group"><label for="vehicleType">Vehicle Type</label><select id="vehicleType" name="vehicleType" required><option value="Sedan">Sedan — up to 4 passengers</option><option value="MPV4">MPV4 — up to 4 passengers</option><option value="Van">Van — up to 8 passengers</option><option value="VIP VAN">VIP VAN — up to 5 passengers</option></select></div>
-<div class="form-group"><label>Selected Vehicle Price</label><div class="price-preview"><span id="vehiclePriceLabel">Sedan</span><strong id="vehiclePrice">17,900 ISK</strong><span>Price per vehicle</span></div></div>
-<div class="form-group"><label for="travelDate">Travel Date</label><input type="date" id="travelDate" name="travelDate" required></div>
-<div class="form-group"><label for="travelTime">Preferred Time (Iceland)</label><select id="travelTime" name="travelTime" required><option value="">Choose a time</option></select></div>
-<div class="form-group"><label for="pickup">Pickup Location</label><input type="text" id="pickup" name="pickup" placeholder="Enter pickup location" required></div>
-<div class="form-group"><label for="destination">Destination</label><input type="text" id="destination" name="destination" placeholder="Enter your destination" required></div>
-<div class="form-group"><label for="passengers">Number of Passengers</label><select id="passengers" name="passengers" required></select></div>
-<div class="form-group"><label for="customerName">Full Name</label><input type="text" id="customerName" name="customerName" autocomplete="name" placeholder="Enter your full name" required></div>
-<div class="form-group"><label for="customerPhone">Phone Number</label><input type="tel" id="customerPhone" name="customerPhone" autocomplete="tel" placeholder="Include country code, e.g. +354..." required></div>
-<div class="form-group full-width"><label for="customerEmail">Email Address</label><input type="email" id="customerEmail" name="customerEmail" autocomplete="email" placeholder="Enter your email address" required></div>
-<div class="form-group full-width"><label><input type="checkbox" id="travellingWithChildren" style="width:auto;margin-right:7px">I am travelling with children</label></div>
-<div class="children-box" id="childrenBox"><div class="form-group"><label for="childrenCount">Number of Children</label><select id="childrenCount"><option value="">Choose number of children</option><option value="1">1 child</option><option value="2">2 children</option><option value="3">3 children</option><option value="4">4 children</option><option value="5">5 children</option><option value="6">6 children</option><option value="7">7 children</option><option value="8">8 children</option></select></div><div class="children-ages" id="childrenAges"></div></div>
-</div><button class="primary-button" type="submit">Add Booking to Order Overview</button><p class="form-note" id="availabilityNote">Times shown are between 6:00 and 21:00 Iceland time. Availability is checked again when the booking is confirmed.</p><div class="booking-message" id="bookingMessage" role="status"></div></form>
-</div></section>
+<section class="featured-transfer" id="keflavik-shuttle">
+<div class="featured-layout">
+<div class="featured-image">
+<img src="images2/airport-transfer.jpg" alt="Keflavik airport transfer" loading="lazy" onerror="useFallbackImage(this,'airport')">
+<div class="image-label">Keflavik International Airport</div>
+</div>
+<div class="featured-content">
+<div class="eyebrow">Airport Transportation</div>
+<h2>Keflavik KEF Shuttle</h2>
+<p>Start your Iceland journey with a convenient transfer from Keflavik International Airport. Travel comfortably to your selected destination.</p>
+<a href="keflavik-shuttle.html" class="primary-button">Book This Transfer</a>
+</div>
+</div>
+</section>
 
-<footer><div class="footer-container"><a href="index.html" class="footer-logo">ICELAND TRANSFER<span>YOUR JOURNEY, OUR DRIVE</span></a><p class="footer-text">Discover Iceland. Travel comfortably.</p><div class="footer-links"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="airport-transportation.html">Airport Transfers</a><a href="booking.html">Book Now</a><a href="contact.html">Contact</a></div></div></footer>
+<section class="section" id="tourist-trips">
+<div class="section-heading">
+<div class="eyebrow">Discover Iceland</div>
+<h2>Tourist Trips</h2>
+<p>Experience some of Iceland's most memorable landscapes and natural attractions.</p>
+</div>
+<div class="tour-grid">
+<article class="tour-card">
+<img src="images2/day-trips.jpg" alt="Golden Circle Tour" loading="lazy" onerror="useFallbackImage(this,'tour')">
+<div class="tour-content">
+<div class="tour-type">Guided Tourist Trip</div>
+<h3>Golden Circle Tour</h3>
+<p>Discover Iceland's famous Golden Circle and enjoy a journey through remarkable landscapes and natural attractions.</p>
+<div class="tour-price">Private tour</div>
+<a href="golden-circle-tour.html" class="primary-button">Explore Golden Circle</a>
+</div>
+</article>
+<article class="tour-card">
+<img src="images2/aurora2.jpg" alt="Northern Lights in Iceland" loading="lazy" onerror="useFallbackImage(this,'aurora')">
+<div class="tour-content">
+<div class="tour-type">Evening Experience</div>
+<h3>Magical Northern Lights Tour</h3>
+<p>Experience the magic of Iceland's winter skies on a journey to look for the beautiful Northern Lights.</p>
+<div class="tour-price">Private tour</div>
+<a href="magical-northern-lights-tour.html" class="primary-button">Explore Northern Lights</a>
+</div>
+</article>
+<article class="tour-card">
+<img src="images2/hotel-transfer.jpg" alt="Private transfer in Iceland" loading="lazy" onerror="useFallbackImage(this,'private')">
+<div class="tour-content">
+<div class="tour-type">Private Transportation</div>
+<h3>Private Transfer</h3>
+<p>Arrange private transportation between your hotel, accommodation, airport, or another destination in Iceland.</p>
+<div class="tour-price">Personalized journey</div>
+<a href="reykjavik-shuttle.html" class="primary-button">Book a Transfer</a>
+</div>
+</article>
+</div>
+</section>
+
+<section class="booking-section" id="booking">
+<div class="booking-container">
+<div class="booking-heading">
+<div class="eyebrow">Plan Your Journey</div>
+<h2>Request a Booking</h2>
+<p>Enter your travel details and add your request to your order overview.</p>
+</div>
+
+<form class="booking-form" id="bookingForm">
+<div class="form-grid">
+
+<div class="form-group full-width">
+<label for="service">Choose Your Service</label>
+<select id="service" name="service" required>
+<option value="">Select a service</option>
+<option value="Keflavik KEF Shuttle">Keflavik KEF Shuttle</option>
+<option value="Reykjavik Shuttle">Reykjavik Shuttle</option>
+<option value="Golden Circle Tour">Golden Circle Tour</option>
+<option value="Magical Northern Lights Tour">Magical Northern Lights Tour</option>
+<option value="Cruise Port Shuttle">Cruise Port Shuttle</option>
+<option value="Private Transfer">Private Transfer</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="vehicleType">Vehicle Type</label>
+<select id="vehicleType" name="vehicleType" required>
+<option value="standard">Private Standard — up to 3 passengers</option>
+<option value="comfort">Private Comfort — up to 4 passengers</option>
+<option value="suv">Private SUV — up to 4 passengers</option>
+<option value="van">Private Van — up to 8 passengers</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Selected Vehicle Price</label>
+<div class="price-preview">
+<span id="vehiclePriceLabel">Selected vehicle</span>
+<strong id="vehiclePrice">Calculated from route</strong>
+<span>Price per vehicle</span>
+</div>
+</div>
+
+<div class="form-group">
+<label for="travelDate">Travel Date</label>
+<input type="date" id="travelDate" name="travelDate" required>
+</div>
+
+<div class="form-group">
+<label for="travelTime">Preferred Time (Iceland)</label>
+<select id="travelTime" name="travelTime" required>
+<option value="">Choose a time</option>
+</select>
+</div>
+
+<!-- Pickup Location with search suggestions -->
+<div class="form-group">
+<label for="pickup">Pickup Location</label>
+<div class="location-search-wrap">
+<input type="text" id="pickup" name="pickup" placeholder="Type at least 2 letters to search..." autocomplete="off" required>
+<div class="location-results" id="pickupResults" hidden></div>
+</div>
+<div class="location-hint">Start typing to see suggested locations. You can also enter another location.</div>
+</div>
+
+<!-- Destination with search suggestions -->
+<div class="form-group">
+<label for="destination">Destination</label>
+<div class="location-search-wrap">
+<input type="text" id="destination" name="destination" placeholder="Type at least 2 letters to search..." autocomplete="off" required>
+<div class="location-results" id="destinationResults" hidden></div>
+</div>
+<div class="location-hint">Start typing to see suggested locations. You can also enter another location.</div>
+</div>
+
+<div class="form-group">
+<label for="passengers">Number of Passengers</label>
+<select id="passengers" name="passengers" required></select>
+</div>
+
+<div class="form-group">
+<label for="customerName">Full Name</label>
+<input type="text" id="customerName" name="customerName" autocomplete="name" placeholder="Enter your full name" required>
+</div>
+
+<div class="form-group">
+<label for="customerPhone">Phone Number</label>
+<input type="tel" id="customerPhone" name="customerPhone" autocomplete="tel" placeholder="Include country code, e.g. +354..." required>
+</div>
+
+<div class="form-group full-width">
+<label for="customerEmail">Email Address</label>
+<input type="email" id="customerEmail" name="customerEmail" autocomplete="email" placeholder="Enter your email address" required>
+</div>
+
+<div class="form-group full-width">
+<label><input type="checkbox" id="travellingWithChildren" style="width:auto;margin-right:7px">I am travelling with children</label>
+</div>
+
+<div class="children-box" id="childrenBox">
+<div class="form-group">
+<label for="childrenCount">Number of Children</label>
+<select id="childrenCount">
+<option value="">Choose number of children</option>
+<option value="1">1 child</option>
+<option value="2">2 children</option>
+<option value="3">3 children</option>
+<option value="4">4 children</option>
+<option value="5">5 children</option>
+<option value="6">6 children</option>
+<option value="7">7 children</option>
+<option value="8">8 children</option>
+</select>
+</div>
+<div class="children-ages" id="childrenAges"></div>
+</div>
+
+</div>
+
+<button class="primary-button" type="submit">Add Booking to Order Overview</button>
+<p class="form-note" id="availabilityNote">Service operates 24/7 in Iceland local time. Published fixed fares currently cover Keflavík Airport departures.</p>
+<div class="booking-message" id="bookingMessage" role="status"></div>
+</form>
+</div>
+</section>
+
+<footer>
+<div class="footer-container">
+<a href="index.html" class="footer-logo">ICELAND TRANSFER<span>YOUR JOURNEY, OUR DRIVE</span></a>
+<p class="footer-text">Discover Iceland. Travel comfortably.</p>
+<div class="footer-links">
+<a href="index.html">Home</a>
+<a href="about.html">About Us</a>
+<a href="keflavik-shuttle.html">Airport Transfers</a>
+<a href="booking.html">Book Now</a>
+<a href="contact.html">Contact</a>
+</div>
+</div>
+</footer>
 
 <script>
-const imageFallbacks={
+  const imageFallbacks={
  airport:["images2/transfers-hero.jpg","images2/private-transfer.jpg"],
  private:["images2/transfers-hero.jpg","images2/airport-transfer.jpg"],
  tour:["images2/iceland-road.jpg","images2/transfers-hero.jpg"],
@@ -94,8 +433,350 @@ function useFallbackImage(img,type){
  img.src=list[i];
 }
 
-const vehiclePrices={"Sedan":17900,"MPV4":21900,"Van":26900,"VIP VAN":32000};
-const vehicleCapacities={"Sedan":4,"MPV4":4,"Van":8,"VIP VAN":5};
+/* ==========================================
+   ICELAND LOCATION SEARCH
+   ========================================== */
+
+const locationGroups={
+ "Towns & Cities":[
+  "Reykjavík",
+  "Kópavogur",
+  "Hafnarfjörður",
+  "Garðabær",
+  "Mosfellsbær",
+  "Seltjarnarnes",
+  "Álftanes",
+  "Selfoss",
+  "Hveragerði",
+  "Þorlákshöfn",
+  "Eyrarbakki",
+  "Stokkseyri",
+  "Hella",
+  "Hvolsvöllur",
+  "Flúðir",
+  "Laugarvatn",
+  "Reykholt",
+  "Borgarnes",
+  "Akranes",
+  "Keflavík",
+  "Reykjanesbær",
+  "Grindavík",
+  "Vík",
+  "Vík í Mýrdal",
+  "Húsavík",
+  "Akureyri",
+  "Egilsstaðir",
+  "Höfn",
+  "Ísafjörður",
+  "Stykkishólmur",
+  "Blönduós",
+  "Sauðárkrókur",
+  "Siglufjörður",
+  "Dalvík",
+  "Ólafsfjörður",
+  "Seyðisfjörður",
+  "Neskaupstaður",
+  "Fáskrúðsfjörður",
+  "Djúpivogur",
+  "Kirkjubæjarklaustur",
+  "Búðardalur",
+  "Grundarfjörður",
+  "Ólafsvík"
+ ],
+
+ "Airports & Transport":[
+  "Keflavík International Airport (KEF)",
+  "Reykjavík Domestic Airport (RKV)",
+  "Reykjavík Airport",
+  "BSÍ Bus Terminal",
+  "Reykjavík Harbour",
+  "Skarfabakki Cruise Port",
+  "Sundahöfn",
+  "Landeyjahöfn Ferry Terminal",
+  "Þorlákshöfn Harbour",
+  "Akureyri Airport",
+  "Egilsstaðir Airport",
+  "Ísafjörður Airport",
+  "Húsavík Airport",
+  "Höfn Airport"
+ ],
+
+ "Golden Circle & Attractions":[
+  "Golden Circle",
+  "Þingvellir National Park",
+  "Thingvellir National Park",
+  "Geysir Geothermal Area",
+  "Geysir",
+  "Strokkur",
+  "Gullfoss Waterfall",
+  "Kerið Crater",
+  "Friðheimar Greenhouse",
+  "Secret Lagoon",
+  "Skálholt Cathedral",
+  "Laugarvatn Fontana",
+  "Brúarfoss Waterfall",
+  "Faxi Waterfall",
+  "Öxarárfoss",
+  "Silfra",
+  "Efstidalur Farm",
+  "Laugarvatn",
+  "Haukadalur Valley",
+  "Fontana Geothermal Baths",
+  "Þjórsárdalur",
+  "Háifoss Waterfall",
+  "Gjáin Valley",
+  "Urriðafoss Waterfall"
+ ],
+
+ "South Iceland":[
+  "Seljalandsfoss",
+  "Gljúfrabúi Waterfall",
+  "Skógafoss",
+  "Kvernufoss",
+  "Reynisfjara Black Sand Beach",
+  "Reynisdrangar",
+  "Dyrhólaey",
+  "Sólheimajökull Glacier",
+  "Mýrdalsjökull Glacier",
+  "Fjaðrárgljúfur Canyon",
+  "Skaftafell",
+  "Jökulsárlón Glacier Lagoon",
+  "Diamond Beach",
+  "Vík Church",
+  "Vík Village",
+  "Hella",
+  "Hvolsvöllur",
+  "Keldur",
+  "Vestmannaeyjar",
+  "Vestmannaeyjar Ferry Terminal",
+  "Landmannalaugar",
+  "Þórsmörk",
+  "Eldhraun Lava Field",
+  "Kirkjubæjarklaustur"
+ ],
+
+ "Hot Springs & Swimming Pools":[
+  "Blue Lagoon",
+  "Sky Lagoon",
+  "Hvammsvík Hot Springs",
+  "Reykjadalur Hot Spring Thermal River",
+  "Secret Lagoon",
+  "Laugarvatn Fontana",
+  "Laugardalslaug",
+  "Sundhöll Reykjavíkur",
+  "Vesturbæjarlaug",
+  "Kópavogslaug",
+  "Árbæjarlaug",
+  "Nauthólsvík Geothermal Beach",
+  "Hrunalaug Hot Spring",
+  "Vök Baths",
+  "Mývatn Nature Baths",
+  "Forest Lagoon",
+  "GeoSea Geothermal Sea Baths",
+  "Krauma Baths",
+  "Húsafell Canyon Baths",
+  "Lýsuhólslaug"
+ ],
+
+ "Hotels & Accommodation":[
+  "Hotel Reykjavík Grand",
+  "Center Hotels Plaza",
+  "Hotel Borg",
+  "Reykjavik Marina Hotel",
+  "Exeter Hotel",
+  "Fosshótel Reykjavík",
+  "Hilton Reykjavík Nordica",
+  "Hotel Kría",
+  "Hotel Rangá",
+  "UMI Hotel",
+  "Stracta Hotel",
+  "Hotel Selfoss",
+  "ION Adventure Hotel",
+  "Frost and Fire Hotel",
+  "Hotel Geysir",
+  "Litli Geysir Hotel",
+  "Grímsborgir",
+  "Hótel Laugarvatn",
+  "Blue Hotel Fagrilundur",
+  "Hotel Örk",
+  "Hotel Eldhestar",
+  "The Reykjavík EDITION",
+  "Canopy by Hilton Reykjavík",
+  "Alda Hotel Reykjavík",
+  "Sand Hotel",
+  "Kvosin Downtown Hotel",
+  "Hotel Ísland",
+  "Hotel Cabin",
+  "Berjaya Reykjavík Natura Hotel",
+  "Hotel Viking",
+  "Hotel Keflavik",
+  "Courtyard by Marriott Reykjavik Keflavik Airport",
+  "Aurora Hotel",
+  "Northern Light Inn",
+  "Hotel Vík í Mýrdal",
+  "Hotel Katla",
+  "Hotel Skaftafell",
+  "Fosshotel Glacier Lagoon",
+  "Hótel Kría",
+  "Hótel Flúðir",
+  "ION City Hotel",
+  "Reykjavik Lights Hotel"
+ ],
+
+ "Popular Places & Landmarks":[
+  "Hallgrímskirkja",
+  "Harpa Concert Hall",
+  "Perlan",
+  "Sun Voyager",
+  "Laugavegur",
+  "Old Harbour Reykjavík",
+  "Reykjavík City Hall",
+  "Tjörnin Pond",
+  "Grótta Lighthouse",
+  "Ásbyrgi Canyon",
+  "Dettifoss Waterfall",
+  "Goðafoss Waterfall",
+  "Kirkjufell Mountain",
+  "Snæfellsjökull National Park",
+  "Arnarstapi",
+  "Búðir Black Church",
+  "Hraunfossar Waterfalls",
+  "Barnafoss Waterfall",
+  "Deildartunguhver",
+  "Stuðlagil Canyon",
+  "Vestrahorn Mountain",
+  "Stokksnes",
+  "Hengifoss Waterfall",
+  "Mývatn",
+  "Dimmuborgir",
+  "Hverir Geothermal Area"
+ ]
+};
+
+function normalizeLocation(value){
+ return String(value||"")
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g,"")
+  .replace(/[ðÐ]/g,"d")
+  .replace(/[þÞ]/g,"th")
+  .replace(/[æÆ]/g,"ae")
+  .replace(/[øØ]/g,"o")
+  .toLowerCase()
+  .replace(/[^a-z0-9\s]/g," ")
+  .replace(/\s+/g," ")
+  .trim();
+}
+
+function setupLocationSearch(inputId,resultsId){
+ const input=document.getElementById(inputId);
+ const results=document.getElementById(resultsId);
+
+ if(!input||!results)return;
+
+ function closeResults(){
+  results.hidden=true;
+  results.innerHTML="";
+ }
+
+ function showResults(){
+  const query=input.value.trim();
+  const normalizedQuery=normalizeLocation(query);
+
+  results.innerHTML="";
+
+  if(normalizedQuery.length<2){
+   closeResults();
+   return;
+  }
+
+  let totalMatches=0;
+  const maxResults=35;
+
+  Object.entries(locationGroups).forEach(([category,locations])=>{
+   if(totalMatches>=maxResults)return;
+
+   const matches=locations.filter(location=>
+    normalizeLocation(location).includes(normalizedQuery)
+   );
+
+   if(matches.length===0)return;
+
+   const heading=document.createElement("div");
+   heading.className="location-category";
+   heading.textContent=category;
+   results.appendChild(heading);
+
+   matches.forEach(location=>{
+    if(totalMatches>=maxResults)return;
+
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="location-result";
+    button.textContent=location;
+
+    button.addEventListener("mousedown",event=>{
+     event.preventDefault();
+     input.value=location;
+     closeResults();
+     input.dispatchEvent(new Event("change",{bubbles:true}));
+    });
+
+    results.appendChild(button);
+    totalMatches++;
+   });
+  });
+
+  if(totalMatches===0){
+   const empty=document.createElement("div");
+   empty.className="location-empty";
+   empty.textContent="No matching suggestions. You can enter this location manually.";
+   results.appendChild(empty);
+  }
+
+  results.hidden=false;
+ }
+
+ input.addEventListener("input",showResults);
+ input.addEventListener("focus",showResults);
+
+ input.addEventListener("keydown",event=>{
+  if(event.key==="Escape"){
+   closeResults();
+  }
+
+  if(event.key==="ArrowDown"){
+   const first=results.querySelector(".location-result");
+   if(first){
+    event.preventDefault();
+    first.focus();
+   }
+  }
+
+  if(event.key==="Enter"&&!results.hidden){
+   const first=results.querySelector(".location-result");
+   if(first){
+    event.preventDefault();
+    first.click();
+   }
+  }
+ });
+
+ document.addEventListener("click",event=>{
+  if(!input.parentElement.contains(event.target)){
+   closeResults();
+  }
+ });
+}
+
+setupLocationSearch("pickup","pickupResults");
+setupLocationSearch("destination","destinationResults");
+
+/* ==========================================
+   VEHICLE & PASSENGER SETTINGS
+   ========================================== */
+
+const vehiclePrices={standard:null,comfort:null,suv:null,van:null};
+const vehicleCapacities={standard:3,comfort:4,suv:4,van:8};
 
 const vehicleType=document.getElementById("vehicleType");
 const passengers=document.getElementById("passengers");
@@ -113,7 +794,7 @@ function updateVehicle(){
  const cap=vehicleCapacities[type];
 
  vehiclePriceLabel.textContent=type;
- vehiclePrice.textContent=vehiclePrices[type].toLocaleString("en-US")+" ISK";
+ vehiclePrice.textContent="Price depends on the selected route";
 
  const previous=Number(passengers.value)||2;
  passengers.innerHTML="";
@@ -353,11 +1034,6 @@ async function loadAvailability(){
    });
 
   }else{
-   /*
-     Compatibility check:
-     If the server does not return a booked-times list,
-     check each full-hour slot individually.
-   */
    const checks=[];
 
    for(let hour=6;hour<=21;hour++){
@@ -407,10 +1083,6 @@ async function loadAvailability(){
 
   if(requestNumber!==availabilityRequestNumber)return;
 
-  /*
-    If availability cannot be reached, keep the time choices visible.
-    The final booking system must still validate the selected slot.
-  */
   renderTimeOptions(new Set(),false);
   lastAvailabilityLoadedDate=dateValue;
  }
@@ -478,15 +1150,16 @@ travelDate.min=[
 ].join("-");
 
 updateVehicle();
-
-/* Load availability when the page opens */
 loadAvailability();
 
 function selectBookingService(serviceName){
  const serviceSelect=document.getElementById("service");
  serviceSelect.value=serviceName;
- // Allow the anchor navigation to scroll to the booking form.
 }
+
+/* ==========================================
+   BOOKING FORM SUBMISSION
+   ========================================== */
 
 document.getElementById("bookingForm").addEventListener("submit",function(event){
  event.preventDefault();
@@ -570,9 +1243,9 @@ document.getElementById("bookingForm").addEventListener("submit",function(event)
   numberOfPassengers:passengerCount,
   vehicleType:vehicleType.value,
   vehicle_type:vehicleType.value,
-  unitPrice:price,
-  total:price,
-  price:price,
+  unitPrice:null,
+  total:null,
+  price:null,
   customerName:customerName,
   nameOfCustomer:customerName,
   email:customerEmail,
@@ -584,7 +1257,7 @@ document.getElementById("bookingForm").addEventListener("submit",function(event)
   children_count:count,
   childrenAges:ages,
   children_ages:ages,
-  notes:"Booking request from Tourist Services page. Vehicle: "+vehicleType.value+" ("+price.toLocaleString("en-US")+" ISK per vehicle). Children: "+(count?count+"; ages "+ages.map(a=>a==="0"?"under 1 year":a).join(", "):"none")+". Price is a vehicle estimate; availability and final price must be confirmed."
+  notes:"Booking request from Transfers page. Vehicle: "+vehicleType.value+". Children: "+(count?count+"; ages "+ages.map(a=>a==="0"?"under 1 year":a).join(", "):"none")+". The server must confirm an exact published route fare."
  };
 
  let cart=[];

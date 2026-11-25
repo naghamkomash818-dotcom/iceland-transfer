@@ -30,10 +30,7 @@ body{
 button,input,select,textarea{font:inherit}
 button,.button{cursor:pointer}
 
-/* Important: make hidden fields actually disappear */
-[hidden]{
-    display:none !important;
-}
+[hidden]{display:none !important}
 
 header{
     background:var(--white);
@@ -171,6 +168,80 @@ textarea{
 .hint{
     font-size:12px;
     color:#747970;
+}
+
+/* Location search */
+
+.location-search-wrap{
+    position:relative;
+    width:100%;
+}
+
+.location-search{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:white;
+}
+
+.location-search:focus{
+    outline:2px solid #465b4530;
+    border-color:var(--green);
+}
+
+.location-results{
+    position:absolute;
+    top:calc(100% + 5px);
+    left:0;
+    right:0;
+    z-index:1000;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    box-shadow:0 10px 30px #00000018;
+    max-height:320px;
+    overflow-y:auto;
+    padding:6px;
+}
+
+.location-category-title{
+    padding:9px 10px 5px;
+    color:var(--green);
+    font-size:11px;
+    font-weight:bold;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+}
+
+.location-result{
+    width:100%;
+    border:0;
+    background:white;
+    text-align:left;
+    padding:10px;
+    border-radius:6px;
+    color:var(--text);
+    font-size:14px;
+    display:block;
+}
+
+.location-result:hover,
+.location-result:focus{
+    background:var(--beige);
+    outline:none;
+}
+
+.location-empty{
+    padding:12px 10px;
+    color:#777;
+    font-size:13px;
+}
+
+.location-selected{
+    font-size:12px;
+    color:var(--green);
+    margin-top:4px;
 }
 
 .estimate{
@@ -401,10 +472,9 @@ footer a{
                 <div class="form-group">
                     <label for="vehicleType">Vehicle Type *</label>
                     <select id="vehicleType" name="vehicle_type" required>
-                        <option value="sedan">Sedan (up to 4 passengers)</option>
-                        <option value="mpv4">MPV4 (up to 4 passengers)</option>
-                        <option value="van">Van (up to 8 passengers)</option>
-                        <option value="vip_van">VIP VAN (up to 5 passengers)</option>
+                        <option value="comfort">Private Comfort (up to 4 passengers)</option>
+                        <option value="suv">Private SUV (up to 4 passengers)</option>
+                        <option value="van">Private Van (up to 8 passengers)</option>
                     </select>
                     <span class="hint">
                         Choose a vehicle to see its estimated price below.
@@ -412,9 +482,33 @@ footer a{
                     </span>
                 </div>
 
+                <!-- PICKUP LOCATION SEARCH -->
+
                 <div class="form-group">
-                    <label for="pickupLocation">Pickup Location *</label>
-                    <select id="pickupLocation" name="pickup_location" required>
+                    <label for="pickupSearch">Pickup Location *</label>
+
+                    <div class="location-search-wrap">
+                        <input
+                            type="text"
+                            id="pickupSearch"
+                            class="location-search"
+                            placeholder="Type at least 2 letters to search..."
+                            autocomplete="off"
+                        >
+
+                        <div
+                            id="pickupResults"
+                            class="location-results"
+                            hidden
+                        ></div>
+                    </div>
+
+                    <div id="pickupSelected" class="location-selected">
+                        No pickup location selected.
+                    </div>
+
+                    <select id="pickupLocation"
+                        name="pickup_location" required hidden>
                         <option value="">Choose pickup location</option>
                         <option value="Reykjavík">Reykjavík</option>
                         <option value="Kópavogur">Kópavogur</option>
@@ -433,9 +527,33 @@ footer a{
                         maxlength="200" placeholder="Enter the pickup location">
                 </div>
 
+                <!-- DESTINATION SEARCH -->
+
                 <div class="form-group">
-                    <label for="destination">Destination *</label>
-                    <select id="destination" name="destination" required>
+                    <label for="destinationSearch">Destination *</label>
+
+                    <div class="location-search-wrap">
+                        <input
+                            type="text"
+                            id="destinationSearch"
+                            class="location-search"
+                            placeholder="Type at least 2 letters to search..."
+                            autocomplete="off"
+                        >
+
+                        <div
+                            id="destinationResults"
+                            class="location-results"
+                            hidden
+                        ></div>
+                    </div>
+
+                    <div id="destinationSelected" class="location-selected">
+                        No destination selected.
+                    </div>
+
+                    <select id="destination"
+                        name="destination" required hidden>
                         <option value="">Choose Golden Circle destination</option>
                         <option value="Golden Circle Tour">Golden Circle Tour (main route)</option>
                         <option value="Þingvellir National Park">Þingvellir National Park</option>
@@ -481,7 +599,7 @@ footer a{
                         <option value="">Choose a date first</option>
                     </select>
                     <span class="hint">
-                        Times are between 06:00 and 21:00 Iceland time.
+                        Service is available 24/7 in Iceland local time.
                         Booked times are displayed but cannot be selected.
                     </span>
                 </div>
@@ -602,7 +720,7 @@ footer a{
                 </div>
 
                 <p class="hint">
-                    This is an estimate. The final price is confirmed
+                    The final price is calculated by the booking server
                     by the server when you submit your booking.
                 </p>
             </div>
@@ -679,17 +797,15 @@ footer a{
         <a href="https://wa.me/3548333707">WhatsApp: +354 833 3707</a>
     </p>
 </footer>
-
 <script>
 "use strict";
 
 const API_BASE = "https://iceland-transfer-server.onrender.com";
 
 const VEHICLES = {
-    sedan: { name:"Sedan", price:17900, capacity:4 },
-    mpv4: { name:"MPV4", price:21900, capacity:4 },
-    van: { name:"Van", price:26900, capacity:8 },
-    vip_van: { name:"VIP VAN", price:32000, capacity:5 }
+    comfort: { name:"Private Comfort", capacity:4 },
+    suv: { name:"Private SUV", capacity:4 },
+    van: { name:"Private Van", capacity:8 }
 };
 
 const form = document.getElementById("bookingForm");
@@ -719,6 +835,483 @@ let latestBooking = null;
 let cancellationToken = null;
 let cancellationUrl = null;
 let availabilityRequestId = 0;
+
+/* LOCATION DATABASE */
+
+const locationGroups = {
+    "Popular Cities and Towns": [
+        "Reykjavík",
+        "Kópavogur",
+        "Hafnarfjörður",
+        "Garðabær",
+        "Mosfellsbær",
+        "Seltjarnarnes",
+        "Akranes",
+        "Borgarnes",
+        "Selfoss",
+        "Hveragerði",
+        "Þorlákshöfn",
+        "Eyrarbakki",
+        "Stokkseyri",
+        "Hella",
+        "Hvolsvöllur",
+        "Vík í Mýrdal",
+        "Kirkjubæjarklaustur",
+        "Höfn",
+        "Egilsstaðir",
+        "Seyðisfjörður",
+        "Akureyri",
+        "Húsavík",
+        "Ísafjörður",
+        "Stykkishólmur",
+        "Ólafsvík",
+        "Grundarfjörður",
+        "Sauðárkrókur",
+        "Blönduós",
+        "Siglufjörður",
+        "Dalvík",
+        "Fáskrúðsfjörður",
+        "Neskaupstaður",
+        "Reyðarfjörður"
+    ],
+
+    "Airports and Transport": [
+        "Keflavík International Airport",
+        "Reykjavík Domestic Airport",
+        "Akureyri Airport",
+        "Egilsstaðir Airport",
+        "Ísafjörður Airport",
+        "Húsavík Airport",
+        "Vestmannaeyjar Airport",
+        "Reykjavík Harbour",
+        "Sundahöfn Harbour",
+        "Skarfabakki Cruise Terminal",
+        "Old Harbour Reykjavík",
+        "Landeyjahöfn Ferry Terminal",
+        "Þorlákshöfn Harbour",
+        "Seyðisfjörður Ferry Terminal"
+    ],
+
+    "Golden Circle Attractions": [
+        "Golden Circle Tour",
+        "Þingvellir National Park",
+        "Almannagjá Gorge",
+        "Öxarárfoss Waterfall",
+        "Silfra Fissure",
+        "Geysir Geothermal Area",
+        "Strokkur Geyser",
+        "Gullfoss Waterfall",
+        "Kerið Crater",
+        "Friðheimar Greenhouse",
+        "Secret Lagoon",
+        "Skálholt Cathedral",
+        "Laugarvatn Fontana",
+        "Brúarfoss Waterfall",
+        "Faxi Waterfall",
+        "Efstidalur Farm",
+        "Laugarvatn",
+        "Flúðir",
+        "Reykholt in South Iceland",
+        "Sólheimar Ecovillage"
+    ],
+
+    "Waterfalls and Natural Attractions": [
+        "Seljalandsfoss Waterfall",
+        "Gljúfrabúi Waterfall",
+        "Skógafoss Waterfall",
+        "Kvernufoss Waterfall",
+        "Svartifoss Waterfall",
+        "Svínafellsjökull Glacier",
+        "Skaftafell",
+        "Jökulsárlón Glacier Lagoon",
+        "Diamond Beach",
+        "Fjaðrárgljúfur Canyon",
+        "Reynisfjara Black Sand Beach",
+        "Dyrhólaey",
+        "Kirkjufell Mountain",
+        "Kirkjufellsfoss Waterfall",
+        "Hraunfossar Waterfalls",
+        "Barnafoss Waterfall",
+        "Deildartunguhver Hot Spring",
+        "Grábrók Crater",
+        "Hrauneyjar",
+        "Hjálparfoss Waterfall",
+        "Háifoss Waterfall",
+        "Gjáin Valley",
+        "Landmannalaugar",
+        "Þjórsárdalur Valley",
+        "Eldhraun Lava Field",
+        "Sólheimasandur Plane Wreck",
+        "DC-3 Plane Wreck"
+    ],
+
+    "Hot Springs and Swimming Pools": [
+        "Blue Lagoon",
+        "Sky Lagoon",
+        "Hvammsvík Hot Springs",
+        "Laugarvatn Fontana",
+        "Secret Lagoon",
+        "Reykjadalur Hot Spring River",
+        "Hrunalaug Hot Spring",
+        "Krauma Geothermal Baths",
+        "Mývatn Nature Baths",
+        "Forest Lagoon",
+        "GeoSea Geothermal Sea Baths",
+        "Vök Baths",
+        "Lýsuhóll Swimming Pool",
+        "Sundhöll Reykjavíkur",
+        "Laugardalslaug",
+        "Vesturbæjarlaug",
+        "Árbæjarlaug",
+        "Kópavogslaug",
+        "Seltjarnarneslaug"
+    ],
+
+    "National Parks and Nature Areas": [
+        "Þingvellir National Park",
+        "Vatnajökull National Park",
+        "Snæfellsjökull National Park",
+        "Reykjanes Peninsula",
+        "Mývatn Nature Area",
+        "Dimmuborgir Lava Fields",
+        "Hverir Geothermal Area",
+        "Námaskarð",
+        "Ásbyrgi Canyon",
+        "Dettifoss Waterfall",
+        "Goðafoss Waterfall",
+        "Hljóðaklettar",
+        "Westman Islands",
+        "Heimaey",
+        "Eldfell Volcano",
+        "Snæfellsnes Peninsula",
+        "Arnarstapi",
+        "Hellnar",
+        "Búðir",
+        "Djúpalónssandur Beach"
+    ],
+
+    "Reykjavík Hotels": [
+        "The Reykjavík EDITION",
+        "Hotel Borg",
+        "Apótek Hotel",
+        "Sand Hotel",
+        "Canopy by Hilton Reykjavík City Centre",
+        "Center Hotels Plaza",
+        "Center Hotels Arnarhvoll",
+        "Center Hotels Laugavegur",
+        "Center Hotels Midgardur",
+        "Hotel Reykjavík Grand",
+        "Fosshotel Reykjavík",
+        "Hilton Reykjavík Nordica",
+        "Hotel Ísland",
+        "Hotel Klettur",
+        "Hotel Frón",
+        "Hotel Óðinsvé",
+        "Alda Hotel Reykjavík",
+        "Exeter Hotel",
+        "Reykjavik Marina Hotel",
+        "KEX Hostel",
+        "Grandi by Center Hotels",
+        "Storm Hotel",
+        "Skuggi Hotel",
+        "Hotel Cabin",
+        "101 Hotel",
+        "Hotel Holt",
+        "Thingholt by Center Hotels",
+        "Reykjavik Lights Hotel"
+    ],
+
+    "Hotels near Keflavík": [
+        "Hotel Keflavik",
+        "Courtyard by Marriott Reykjavik Keflavik Airport",
+        "Aurora Hotel at Keflavik Airport",
+        "Park Inn by Radisson Reykjavik Keflavik Airport",
+        "Hotel Duus",
+        "Hótel Berg",
+        "Konvin Hotel",
+        "Lighthouse Inn",
+        "Hotel Jazz",
+        "Diamond Suites",
+        "Base Hotel"
+    ],
+
+    "Hotels in South Iceland": [
+        "Hotel Ranga",
+        "Hotel Selfoss",
+        "Hotel Örk",
+        "ION Adventure Hotel",
+        "Hotel Grimsborgir",
+        "The Greenhouse Hotel",
+        "Hotel Geysir",
+        "Litli Geysir Hotel",
+        "Hotel Gullfoss",
+        "Highland Base Kerlingarfjöll",
+        "Landhotel",
+        "Hotel Vík í Mýrdal",
+        "Hotel Kría",
+        "Black Beach Suites",
+        "Hotel Katla",
+        "Hotel Skógafoss",
+        "Umi Hotel",
+        "Hotel Dyrhólaey",
+        "Fosshotel Glacier Lagoon",
+        "Hotel Skaftafell",
+        "Hótel Höfn",
+        "Milk Factory"
+    ],
+
+    "Hotels in West and North Iceland": [
+        "Hotel Húsafell",
+        "Hotel Búðir",
+        "Hotel Egilsen",
+        "Hotel Stykkishólmur",
+        "Fosshotel Stykkishólmur",
+        "Hotel Akureyri",
+        "Hotel Kea",
+        "Hotel Kjarnalundur",
+        "Icelandair Hotel Akureyri",
+        "Sigló Hotel",
+        "Hotel Laugarbakki",
+        "Hotel Varmahlíð",
+        "Fosshotel Mývatn",
+        "Berjaya Mývatn Hotel",
+        "Hotel Laxá",
+        "Hótel Húsavík"
+    ],
+
+    "Other Popular Places": [
+        "Viking World Museum",
+        "Perlan Museum",
+        "Hallgrímskirkja",
+        "Harpa Concert Hall",
+        "Sun Voyager",
+        "Laugavegur Shopping Street",
+        "Árbær Open Air Museum",
+        "Whales of Iceland",
+        "FlyOver Iceland",
+        "Lava Show Reykjavík",
+        "Lava Centre",
+        "The Settlement Exhibition",
+        "Reykjanes Lighthouse",
+        "Gunnuhver Hot Springs",
+        "Bridge Between Continents",
+        "Krýsuvík Geothermal Area",
+        "Kleifarvatn Lake",
+        "Hafnarberg Sea Cliffs",
+        "Hvalfjörður",
+        "Akranes Lighthouse"
+    ],
+
+    "Camping and Other Accommodation": [
+        "Reykjavík Campsite",
+        "Skaftafell Camping",
+        "Þingvellir Camping",
+        "Geysir Camping",
+        "Laugarvatn Camping",
+        "Selfoss Camping",
+        "Vík Camping",
+        "Skógar Camping",
+        "Hella Camping",
+        "Hveragerði Camping",
+        "Mývatn Camping",
+        "Akureyri Camping",
+        "Grundarfjörður Camping",
+        "Arnarstapi Camping",
+        "Landmannalaugar Camping",
+        "Ásbyrgi Camping"
+    ]
+};
+
+/* Normalize Icelandic letters for searching */
+
+function normalizeLocation(value) {
+    return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/ð/g, "d")
+        .replace(/þ/g, "th")
+        .replace(/æ/g, "ae")
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+/* Add locations to the original hidden dropdowns */
+
+function addLocationOptions(selectId) {
+    const select = document.getElementById(selectId);
+    const existing = new Set(
+        Array.from(select.options).map(option => option.value)
+    );
+
+    Object.values(locationGroups).flat().forEach(location => {
+        if (!existing.has(location)) {
+            const option = document.createElement("option");
+            option.value = location;
+            option.textContent = location;
+            select.appendChild(option);
+            existing.add(location);
+        }
+    });
+}
+
+addLocationOptions("pickupLocation");
+addLocationOptions("destination");
+
+/* Search and display location results */
+
+function setupLocationSearch(type) {
+    const isPickup = type === "pickup";
+
+    const searchInput = document.getElementById(
+        isPickup ? "pickupSearch" : "destinationSearch"
+    );
+
+    const resultsBox = document.getElementById(
+        isPickup ? "pickupResults" : "destinationResults"
+    );
+
+    const select = document.getElementById(
+        isPickup ? "pickupLocation" : "destination"
+    );
+
+    const selectedText = document.getElementById(
+        isPickup ? "pickupSelected" : "destinationSelected"
+    );
+
+    const otherValue = isPickup
+        ? "Other pickup location"
+        : "Other Golden Circle location";
+
+    function selectLocation(value, label) {
+        select.value = value;
+        select.dispatchEvent(new Event("change", { bubbles:true }));
+
+        searchInput.value = label;
+        selectedText.textContent = "Selected: " + label;
+
+        resultsBox.hidden = true;
+    }
+
+    function renderResults(query) {
+        resultsBox.innerHTML = "";
+
+        const normalizedQuery = normalizeLocation(query);
+
+        if (normalizedQuery.length < 2) {
+            resultsBox.hidden = false;
+
+            const message = document.createElement("div");
+            message.className = "location-empty";
+            message.textContent = "Please type at least 2 letters to search.";
+            resultsBox.appendChild(message);
+
+            return;
+        }
+
+        let totalResults = 0;
+
+        Object.entries(locationGroups).forEach(([category, locations]) => {
+            const matches = locations.filter(location =>
+                normalizeLocation(location).includes(normalizedQuery)
+            );
+
+            if (!matches.length) return;
+
+            const title = document.createElement("div");
+            title.className = "location-category-title";
+            title.textContent = category;
+
+            resultsBox.appendChild(title);
+
+            matches.forEach(location => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "location-result";
+                button.textContent = location;
+
+                button.addEventListener("click", () => {
+                    selectLocation(location, location);
+                });
+
+                resultsBox.appendChild(button);
+                totalResults++;
+            });
+        });
+
+        const otherButton = document.createElement("button");
+        otherButton.type = "button";
+        otherButton.className = "location-result";
+        otherButton.textContent = "＋ Other location (enter manually)";
+
+        otherButton.addEventListener("click", () => {
+            selectLocation(otherValue, "Other location");
+        });
+
+        resultsBox.appendChild(otherButton);
+
+        if (totalResults === 0) {
+            const message = document.createElement("div");
+            message.className = "location-empty";
+            message.textContent =
+                "No matching locations found. You can enter your location manually below.";
+
+            resultsBox.insertBefore(message, otherButton);
+        }
+
+        resultsBox.hidden = false;
+    }
+
+    searchInput.addEventListener("input", () => {
+        const query = searchInput.value.trim();
+
+        if (select.value && searchInput.value !== select.value) {
+            select.value = "";
+            select.dispatchEvent(new Event("change", { bubbles:true }));
+            selectedText.textContent = "Choose a location from the results.";
+        }
+
+        renderResults(query);
+    });
+
+    searchInput.addEventListener("focus", () => {
+        if (searchInput.value.trim().length >= 2) {
+            renderResults(searchInput.value);
+        }
+    });
+
+    searchInput.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            resultsBox.hidden = true;
+        }
+    });
+
+    document.addEventListener("click", event => {
+        if (
+            !searchInput.contains(event.target) &&
+            !resultsBox.contains(event.target)
+        ) {
+            resultsBox.hidden = true;
+        }
+    });
+
+    select.addEventListener("change", () => {
+        if (!select.value) {
+            selectedText.textContent = "No location selected.";
+            return;
+        }
+
+        if (select.value === otherValue) {
+            selectedText.textContent = "Enter your location manually below.";
+        } else {
+            selectedText.textContent = "Selected: " + select.value;
+        }
+    });
+}
+
+setupLocationSearch("pickup");
+setupLocationSearch("destination");
 
 /* Iceland date and time */
 
@@ -814,22 +1407,38 @@ function formatISK(amount) {
     return Math.round(amount).toLocaleString("en-US") + " ISK";
 }
 
-function updateEstimate() {
+let quoteRequestNumber = 0;
+async function updateEstimate() {
     const vehicle = VEHICLES[vehicleSelect.value];
     const estimateBox = document.getElementById("priceEstimate");
-
-    if (!vehicle) {
-        estimateBox.hidden = true;
-        return;
-    }
-
-    document.getElementById("estimateVehicle").textContent =
-        vehicle.name;
-
-    document.getElementById("estimateTotal").textContent =
-        formatISK(vehicle.price);
-
+    if (!vehicle) { estimateBox.hidden = true; return; }
+    const requestNumber = ++quoteRequestNumber;
+    document.getElementById("estimateVehicle").textContent = vehicle.name;
+    document.getElementById("estimateTotal").textContent = "Calculating current server price…";
     estimateBox.hidden = false;
+    try {
+        const response = await fetch(API_BASE + "/api/quote", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                booking_kind: "tour",
+                tour_code: "classic-golden-circle",
+                vehicle_code: vehicleSelect.value,
+                passengers: Number(passengersSelect.value) || 1,
+                large_bags: Number(document.getElementById("luggage").value) || 0,
+                hand_bags: 0
+            })
+        });
+        const quote = await response.json();
+        if (requestNumber !== quoteRequestNumber) return;
+        if (!response.ok) throw new Error(quote.error || "Quote unavailable");
+        document.getElementById("estimateTotal").textContent =
+            formatISK(quote.total.isk) + " (" + quote.total.eur + " EUR) per vehicle";
+    } catch (error) {
+        if (requestNumber !== quoteRequestNumber) return;
+        document.getElementById("estimateTotal").textContent =
+            error.message || "Price will be confirmed by the server";
+    }
 }
 
 passengersSelect.addEventListener("change", updateEstimate);
@@ -1174,14 +1783,6 @@ async function loadAvailability() {
             "available"
         ]);
 
-        /*
-         * If the server provides only available times,
-         * use that list directly.
-         *
-         * If it provides booked times, use those.
-         *
-         * If it provides neither, check each hour individually.
-         */
         if (bookedTimes === null && availableTimes === null) {
             const checks = [];
 
@@ -1253,9 +1854,6 @@ async function loadAvailability() {
 }
 
 dateInput.addEventListener("change", loadAvailability);
-
-/* Keep date minimum updated */
-
 dateInput.addEventListener("focus", setMinimumDate);
 
 /* Server request */
@@ -1391,6 +1989,39 @@ form.addEventListener("submit", async function(event) {
             ? document.getElementById("otherDestination").value.trim()
             : destinationSelect.value;
 
+    if (!pickupLocation || !destination) {
+        showNotice(
+            "formNotice",
+            "Please select both pickup location and destination.",
+            "error"
+        );
+        return;
+    }
+
+    if (
+        pickupSelect.value === "Other pickup location" &&
+        !pickupLocation
+    ) {
+        showNotice(
+            "formNotice",
+            "Please enter your pickup location.",
+            "error"
+        );
+        return;
+    }
+
+    if (
+        destinationSelect.value === "Other Golden Circle location" &&
+        !destination
+    ) {
+        showNotice(
+            "formNotice",
+            "Please enter your destination.",
+            "error"
+        );
+        return;
+    }
+
     const payload = {
         full_name:document.getElementById("fullName").value.trim(),
         email:document.getElementById("email").value.trim(),
@@ -1458,11 +2089,13 @@ form.addEventListener("submit", async function(event) {
         cancellationToken =
             result.cancellation_token ||
             returnedBooking.cancellation_token ||
+            returnedBooking.cancellationToken ||
             null;
 
         cancellationUrl =
             result.cancellation_url ||
             returnedBooking.cancellation_url ||
+            returnedBooking.cancellationUrl ||
             null;
 
         displayInvoice(latestBooking);
@@ -1471,7 +2104,7 @@ form.addEventListener("submit", async function(event) {
 
         showNotice(
             "formNotice",
-            "Your booking request was submitted successfully.",
+            "Your booking request was received. It is pending payment/confirmation and is not a paid ticket.",
             "success"
         );
 
@@ -1508,18 +2141,20 @@ function setInvoiceValue(id, value) {
 
 function displayInvoice(booking) {
     const serverPrice =
+        booking.price?.amount ??
+        booking.price?.isk ??
         booking.total_price ??
         booking.total_amount ??
-        booking.price ??
-        booking.booking?.total_price ??
-        booking.booking?.total_amount;
+        booking.booking?.price?.amount ??
+        booking.booking?.price?.isk ??
+        booking.booking?.total_price;
 
     const totalPrice =
         serverPrice !== undefined &&
         serverPrice !== null &&
         Number.isFinite(Number(serverPrice))
             ? Number(serverPrice)
-            : VEHICLES[booking.vehicle_type]?.price || 0;
+            : null;
 
     const reference =
         booking.booking_reference ||
@@ -1573,7 +2208,7 @@ function displayInvoice(booking) {
             : "None"
     );
 
-    setInvoiceValue("invTotal", formatISK(totalPrice));
+    setInvoiceValue("invTotal", totalPrice === null ? "Price confirmed by server" : formatISK(totalPrice));
     setInvoiceValue("invFlight", booking.flight_number);
     setInvoiceValue("invRequests", booking.special_requests);
 
@@ -1634,48 +2269,21 @@ cancelButton.addEventListener("click", async function() {
     try {
         let result;
 
-        if (cancellationUrl) {
-            const parsedUrl = new URL(cancellationUrl);
-
-            if (parsedUrl.origin !== new URL(API_BASE).origin) {
-                throw new Error(
-                    "The cancellation URL does not match the booking server."
-                );
-            }
-
-            const response = await fetch(parsedUrl.href, {
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({
-                    cancellation_token:cancellationToken
-                })
-            });
-
-            try {
-                result = await response.json();
-            } catch {
-                result = {};
-            }
-
-            if (!response.ok) {
-                throw new Error(
-                    result.error ||
-                    result.message ||
-                    "The server rejected the cancellation request."
-                );
-            }
-
-        } else {
+        if (cancellationToken) {
             result = await serverRequest(
                 "/api/bookings/cancel",
                 {
-                    method:"POST",
-                    body:JSON.stringify({
-                        booking_id:reference,
-                        cancellation_token:cancellationToken
+                    method: "POST",
+                    body: JSON.stringify({
+                        cancellation_token: cancellationToken
                     })
                 }
             );
+        } else if (cancellationUrl) {
+            window.open(cancellationUrl, "_blank", "noopener");
+            throw new Error("Open the cancellation page to complete cancellation.");
+        } else {
+            throw new Error("No cancellation token was returned by the server.");
         }
 
         latestBooking.status = "cancelled";

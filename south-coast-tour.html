@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>South Coast Tour | Iceland Transfer</title>
+
+<style>
+:root {
+    --green:#465b45;
+    --deep-green:#293c2e;
+    --beige:#f5f1e8;
+    --gold:#b99b61;
+    --white:#fffdf9;
+    --text:#333b33;
+    --muted:#777;
+    --border:#e7e1d5;
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html {
+    scroll-behavior:smooth;
+}
+
+body {
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--white);
+    color:var(--text);
+    line-height:1.6;
+}
+
+a {
+    text-decoration:none;
+    color:inherit;
+}
+
+header {
+    background:var(--white);
+    padding:17px 7%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+
+.logo {
+    color:var(--deep-green);
+    font-size:23px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+
+.logo span {
+    display:block;
+    color:var(--gold);
+    font-size:10px;
+    letter-spacing:3px;
+    font-weight:500;
+}
+
+nav {
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+nav a {
+    font-size:13px;
+    color:var(--deep-green);
+    font-weight:600;
+}
+
+nav a:hover {
+    color:var(--gold);
+}
+
+.nav-book {
+    background:var(--green);
+    color:white;
+    padding:11px 19px;
+    border-radius:30px;
+}
+
+/* HERO */
+
+.hero {
+    min-height:460px;
+    background:
+        linear-gradient(rgba(20,35,25,.40),rgba(20,35,25,.55)),
+        url("images2/south-coast-black-beach.jpg") center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+    padding:60px 20px;
+}
+
+.hero-content {
+    max-width:750px;
+}
+
+.hero .eyebrow {
+    color:#e5d2a7;
+    letter-spacing:4px;
+    font-size:12px;
+    margin-bottom:18px;
+    text-transform:uppercase;
+}
+
+.hero h1 {
+    font-size:clamp(36px,6vw,62px);
+    line-height:1.15;
+    margin-bottom:20px;
+}
+
+.hero p {
+    font-size:16px;
+    max-width:600px;
+    margin:auto;
+    color:#f3f0e9;
+}
+
+.hero-info {
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    margin-top:28px;
+    flex-wrap:wrap;
+    font-size:13px;
+}
+
+.hero-info span {
+    border:1px solid rgba(255,255,255,.4);
+    padding:9px 17px;
+    border-radius:30px;
+}
+
+.container {
+    width:min(1100px,90%);
+    margin:auto;
+}
+
+/* INTRO */
+
+.intro {
+    padding:65px 0 35px;
+    text-align:center;
+}
+
+.section-label {
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:11px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.intro h2,
+.section-heading h2 {
+    color:var(--deep-green);
+    font-size:32px;
+    margin-bottom:15px;
+}
+
+.intro p {
+    max-width:760px;
+    margin:auto;
+    color:#777;
+    font-size:15px;
+}
+
+/* HIGHLIGHTS */
+
+.highlights {
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:15px;
+    padding:25px 0 55px;
+}
+
+.highlight {
+    background:var(--beige);
+    border-radius:13px;
+    padding:20px 13px;
+    text-align:center;
+}
+
+.highlight strong {
+    display:block;
+    color:var(--deep-green);
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.highlight small {
+    color:#777;
+    font-size:11px;
+}
+
+/* PHOTO GALLERY */
+
+.gallery-section {
+    padding:55px 0 75px;
+    background:#faf9f5;
+}
+
+.gallery-heading {
+    text-align:center;
+    margin-bottom:32px;
+}
+
+.gallery-heading h2 {
+    color:var(--deep-green);
+    font-size:32px;
+    margin-bottom:12px;
+}
+
+.gallery-heading p {
+    color:#777;
+    font-size:14px;
+    max-width:650px;
+    margin:auto;
+}
+
+.gallery-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.gallery-item {
+    position:relative;
+    height:250px;
+    overflow:hidden;
+    border-radius:14px;
+    background:#e9e6de;
+}
+
+.gallery-item img {
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    transition:transform .5s ease;
+}
+
+.gallery-item:hover img {
+    transform:scale(1.06);
+}
+
+.gallery-caption {
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    padding:40px 16px 15px;
+    color:white;
+    font-size:14px;
+    font-weight:bold;
+    background:linear-gradient(
+        transparent,
+        rgba(0,0,0,.72)
+    );
+}
+
+/* BOOKING */
+
+.booking-section {
+    background:#f8f6f0;
+    padding:65px 0;
+}
+
+.section-heading {
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.section-heading p {
+    color:#777;
+    font-size:14px;
+}
+
+.booking-layout {
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:25px;
+    align-items:start;
+}
+
+.form-card,
+.price-card,
+.invoice-card {
+    background:white;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:28px;
+    box-shadow:0 7px 25px rgba(40,50,35,.04);
+}
+
+.form-card h3 {
+    color:var(--deep-green);
+    font-size:20px;
+    margin-bottom:22px;
+}
+
+.form-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:17px;
+}
+
+.field {
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.field.full {
+    grid-column:1/-1;
+}
+
+label {
+    font-size:12px;
+    color:var(--deep-green);
+    font-weight:700;
+}
+
+input,
+select,
+textarea {
+    width:100%;
+    border:1px solid #dedbd2;
+    border-radius:8px;
+    padding:12px;
+    background:#fff;
+    font-family:inherit;
+    font-size:13px;
+    color:var(--text);
+    outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color:var(--green);
+    box-shadow:0 0 0 2px rgba(70,91,69,.1);
+}
+
+textarea {
+    min-height:90px;
+    resize:vertical;
+}
+
+.field-note {
+    font-size:11px;
+    color:#888;
+}
+
+.form-divider {
+    border:0;
+    border-top:1px solid var(--border);
+    margin:25px 0;
+}
+
+/* PRICE CARD */
+
+.price-card {
+    position:sticky;
+    top:100px;
+}
+
+.price-card h3 {
+    color:var(--deep-green);
+    font-size:19px;
+    margin-bottom:15px;
+}
+
+.price-option {
+    padding:16px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.price-option:last-of-type {
+    border-bottom:0;
+}
+
+.price-option strong {
+    display:block;
+    color:var(--deep-green);
+    font-size:14px;
+}
+
+.price-option .isk {
+    color:var(--green);
+    font-weight:800;
+    font-size:19px;
+    margin-top:5px;
+}
+
+.price-option small {
+    color:#888;
+    font-size:12px;
+}
+
+.current-estimate {
+    background:var(--beige);
+    border-radius:10px;
+    padding:17px;
+    margin-top:18px;
+}
+
+.current-estimate span {
+    display:block;
+    color:#777;
+    font-size:12px;
+}
+
+.current-estimate strong {
+    display:block;
+    color:var(--deep-green);
+    font-size:22px;
+    margin-top:4px;
+}
+
+.current-estimate small {
+    color:#777;
+}
+
+.notice {
+    padding:13px 15px;
+    border-radius:8px;
+    margin:15px 0;
+    font-size:13px;
+    display:none;
+}
+
+.notice.success {
+    display:block;
+    background:#eaf4e9;
+    color:#285b31;
+}
+
+.notice.error {
+    display:block;
+    background:#faeaea;
+    color:#9b3030;
+}
+
+.submit-btn,
+.action-btn {
+    border:0;
+    background:var(--green);
+    color:white;
+    padding:15px 22px;
+    border-radius:30px;
+    cursor:pointer;
+    font-size:13px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.submit-btn {
+    width:100%;
+    margin-top:23px;
+}
+
+.submit-btn:hover,
+.action-btn:hover {
+    background:var(--deep-green);
+}
+
+.submit-btn:disabled,
+.action-btn:disabled {
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.price-note {
+    font-size:11px;
+    color:#888;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+.safety-note {
+    background:#fff9ed;
+    border-left:3px solid var(--gold);
+    padding:14px 16px;
+    margin-top:20px;
+    font-size:12px;
+    color:#6d5b39;
+}
+
+/* INVOICE */
+
+.invoice-section {
+    padding:60px 0;
+    display:none;
+}
+
+.invoice-card {
+    max-width:760px;
+    margin:auto;
+}
+
+.invoice-header {
+    text-align:center;
+    border-bottom:1px solid var(--border);
+    padding-bottom:22px;
+    margin-bottom:22px;
+}
+
+.invoice-header h2 {
+    color:var(--deep-green);
+    letter-spacing:2px;
+}
+
+.invoice-header p {
+    color:#888;
+    font-size:12px;
+}
+
+.invoice-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.invoice-item {
+    border-bottom:1px solid #eee;
+    padding:8px 0;
+}
+
+.invoice-item small {
+    display:block;
+    color:#888;
+    font-size:11px;
+}
+
+.invoice-item strong {
+    color:var(--deep-green);
+    font-size:13px;
+    overflow-wrap:anywhere;
+}
+
+.invoice-total {
+    margin-top:25px;
+    background:var(--beige);
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.invoice-total span {
+    display:block;
+    color:#777;
+    font-size:12px;
+}
+
+.invoice-total strong {
+    display:block;
+    font-size:25px;
+    color:var(--deep-green);
+}
+
+.invoice-actions {
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:25px;
+}
+
+.cancel-btn {
+    background:#9b4741;
+}
+
+.cancel-btn:hover {
+    background:#78332e;
+}
+
+.invoice-message {
+    color:#777;
+    font-size:12px;
+    margin-top:18px;
+    text-align:center;
+}
+
+/* FOOTER */
+
+footer {
+    background:var(--deep-green);
+    color:white;
+    text-align:center;
+    padding:35px 20px;
+}
+
+footer .footer-logo {
+    font-size:20px;
+    letter-spacing:2px;
+    font-weight:bold;
+}
+
+footer p {
+    color:#d8dfd5;
+    font-size:12px;
+    margin-top:8px;
+}
+
+footer a {
+    color:#e2c995;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px) {
+    .booking-layout {
+        grid-template-columns:1fr;
+    }
+
+    .price-card {
+        position:static;
+    }
+
+    .highlights {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .gallery-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:600px) {
+    header {
+        padding:14px 5%;
+        flex-wrap:wrap;
+    }
+
+    nav {
+        width:100%;
+        justify-content:center;
+        gap:14px;
+        flex-wrap:wrap;
+    }
+
+    nav a {
+        font-size:11px;
+    }
+
+    .logo {
+        font-size:19px;
+    }
+
+    .hero {
+        min-height:360px;
+    }
+
+    .form-grid,
+    .invoice-grid {
+        grid-template-columns:1fr;
+    }
+
+    .form-card,
+    .price-card,
+    .invoice-card {
+        padding:20px;
+    }
+
+    .intro h2,
+    .section-heading h2,
+    .gallery-heading h2 {
+        font-size:26px;
+    }
+
+    .gallery-grid {
+        grid-template-columns:1fr;
+        gap:14px;
+    }
+
+    .gallery-item {
+        height:230px;
+    }
+}
+
+@media print {
+    body * {
+        visibility:hidden;
+    }
+
+    #invoiceSection,
+    #invoiceSection * {
+        visibility:visible;
+    }
+
+    #invoiceSection {
+        display:block !important;
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        padding:0;
+    }
+
+    .invoice-card {
+        box-shadow:none;
+        border:0;
+        max-width:100%;
+    }
+
+    .invoice-actions,
+    #invoiceNotice {
+        display:none !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <a href="index.html" class="logo">
+        ICELAND TRANSFER
+        <span>YOUR JOURNEY, OUR DRIVE</span>
+    </a>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="transfers.html">Transfers</a>
+        <a href="contact.html">Contact</a>
+        <a href="#booking" class="nav-book">Book a Tour</a>
+    </nav>
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="eyebrow">Explore the beauty of Iceland</div>
+
+        <h1>South Coast Tour</h1>
+
+        <p>
+            Discover dramatic waterfalls, black sand beaches,
+            glaciers and breathtaking landscapes along Iceland's
+            spectacular South Coast.
+        </p>
+
+        <div class="hero-info">
+            <span>Approximately 12 Hours</span>
+            <span>Private Experience</span>
+            <span>1–8 Passengers</span>
+        </div>
+    </div>
+</section>
+
+<!-- INTRODUCTION -->
+
+<section class="container">
+
+    <div class="intro">
+        <div class="section-label">A journey to remember</div>
+
+        <h2>Discover Iceland's South Coast</h2>
+
+        <p>
+            Travel along Iceland's beautiful southern landscapes
+            and experience some of the country's most remarkable
+            natural attractions. Enjoy a private journey with
+            comfortable transportation and the flexibility to
+            explore along the way.
+        </p>
+    </div>
+
+    <div class="highlights">
+
+        <div class="highlight">
+            <strong>Seljalandsfoss</strong>
+            <small>Waterfall</small>
+        </div>
+
+        <div class="highlight">
+            <strong>Skógafoss</strong>
+            <small>Waterfall</small>
+        </div>
+
+        <div class="highlight">
+            <strong>Reynisfjara</strong>
+            <small>Black Sand Beach</small>
+        </div>
+
+        <div class="highlight">
+            <strong>Dyrhólaey</strong>
+            <small>Coastal Views</small>
+        </div>
+
+        <div class="highlight">
+            <strong>Sólheimajökull</strong>
+            <small>Glacier</small>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- SOUTH COAST PHOTO GALLERY -->
+
+<section class="gallery-section">
+
+    <div class="container">
+
+        <div class="gallery-heading">
+
+            <div class="section-label">Explore the landscapes</div>
+
+            <h2>South Coast Highlights</h2>
+
+            <p>
+                From beautiful waterfalls and dramatic black sand beaches
+                to glaciers and breathtaking coastal views.
+                Discover the natural beauty of Iceland's South Coast.
+            </p>
+
+        </div>
+
+        <div class="gallery-grid">
+
+            <div class="gallery-item">
+                <img
+                    src="images2/south-coast-black-beach.jpg"
+                    alt="Reynisfjara Black Sand Beach"
+                    loading="lazy"
+                >
+                <div class="gallery-caption">
+                    Reynisfjara Black Sand Beach
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="images2/south-coast-basalt.jpg"
+                    alt="Iceland Basalt Columns"
+                    loading="lazy"
+                >
+                <div class="gallery-caption">
+                    Basalt Columns
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="images2/south-coast-sea-stacks.jpg"
+                    alt="Reynisdrangar Sea Stacks"
+                    loading="lazy"
+                >
+                <div class="gallery-caption">
+                    Reynisdrangar Sea Stacks
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="images2/south-coast-seljalandsfoss.jpg"
+                    alt="Seljalandsfoss Waterfall"
+                    loading="lazy"
+                >
+                <div class="gallery-caption">
+                    Seljalandsfoss Waterfall
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="images2/south-coast-skogafoss.jpg"
+                    alt="Skógafoss Waterfall"
+                    loading="lazy"
+                >
+                <div class="gallery-caption">
+                    Skógafoss Waterfall
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="images2/south-coast-dyrholaey.jpg"
+                    alt="Dyrhólaey Coastal View"
+                    loading="lazy"
+                >
+                <div class="gallery-caption">
+                    Dyrhólaey
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img
+                    src="images2/south-coast-glacier.jpg"
+                    alt="Sólheimajökull Glacier"
+                    loading="lazy"
+                >
+                <div class="gallery-caption">
+                    Sólheimajökull Glacier
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- BOOKING SECTION -->
+
+<section class="booking-section" id="booking">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div class="section-label">Plan your experience</div>
+
+            <h2>Book Your South Coast Tour</h2>
+
+            <p>
+                Complete the details below to reserve your private journey.
+            </p>
+
+        </div>
+
+        <div class="booking-layout">
+
+            <div class="form-card">
+
+                <form id="bookingForm">
+
+                    <h3>Personal Information</h3>
+
+                    <div class="form-grid">
+
+                        <div class="field">
+                            <label for="fullName">Full Name *</label>
+                            <input id="fullName" required maxlength="150">
+                        </div>
+
+                        <div class="field">
+                            <label for="email">Email Address *</label>
+                            <input id="email" type="email" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="phone">Phone Number *</label>
+                            <input id="phone" type="tel" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="countryOfOrigin">Country of Origin</label>
+                            <input id="countryOfOrigin">
+                        </div>
+
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <h3>Tour Details</h3>
+
+                    <div class="form-grid">
+
+                        <div class="field">
+
+                            <label for="vehicle">Choose Your Vehicle *</label>
+
+                            <select id="vehicle" required>
+
+                                <option value="">Select a vehicle</option>
+
+                                <option value="comfort">Private Comfort — Up to 4 passengers</option>
+                                <option value="suv">Private SUV — Up to 4 passengers</option>
+                                <option value="van">Private Van — Up to 8 passengers</option>
+
+                            </select>
+
+                            <small class="field-note" id="vehicleHint">
+                                Select a vehicle to see its passenger capacity.
+                            </small>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="passengers">Number of Passengers *</label>
+
+                            <select id="passengers" required>
+                                <option value="">Select passengers</option>
+                            </select>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="pickupLocation">Pickup Location *</label>
+
+                            <input
+                                id="pickupLocation"
+                                list="pickupLocations"
+                                placeholder="Search or enter pickup location"
+                                required
+                            >
+
+                            <datalist id="pickupLocations">
+                                <option value="Reykjavík">
+                                <option value="Keflavík International Airport">
+                                <option value="Kópavogur">
+                                <option value="Hafnarfjörður">
+                                <option value="Garðabær">
+                                <option value="Mosfellsbær">
+                                <option value="Selfoss">
+                                <option value="Hveragerði">
+                                <option value="Other location">
+                            </datalist>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="destination">Destination *</label>
+
+                            <input
+                                id="destination"
+                                list="destinations"
+                                placeholder="Select or enter destination"
+                                required
+                            >
+
+                            <datalist id="destinations">
+                                <option value="South Coast, Iceland">
+                                <option value="Reynisfjara Black Sand Beach">
+                                <option value="Vík">
+                                <option value="Other location">
+                            </datalist>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="tourDate">Tour Date *</label>
+
+                            <input type="date" id="tourDate" required>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="pickupTime">Pickup Time *</label>
+
+                            <select id="pickupTime" required>
+                                <option value="">Choose a time</option>
+                            </select>
+
+                            <small class="field-note">
+                                Service is available 24/7 in Iceland local time.
+                            </small>
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="luggage">Number of Bags</label>
+
+                            <input
+                                type="number"
+                                id="luggage"
+                                min="0"
+                                max="20"
+                                value="0"
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="flightNumber">Flight Number</label>
+
+                            <input
+                                id="flightNumber"
+                                placeholder="If applicable"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <h3>Travelling with Children?</h3>
+
+                    <div class="form-grid">
+
+                        <div class="field">
+
+                            <label for="childrenTravel">
+                                Travelling with children?
+                            </label>
+
+                            <select id="childrenTravel">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+
+                        </div>
+
+                        <div
+                            class="field"
+                            id="childrenCountField"
+                            style="display:none;"
+                        >
+
+                            <label for="childrenCount">
+                                Number of Children
+                            </label>
+
+                            <select id="childrenCount"></select>
+
+                        </div>
+
+                        <div class="field full" id="childrenAgesContainer"></div>
+
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <div class="field">
+
+                        <label for="specialRequests">
+                            Special Requests
+                        </label>
+
+                        <textarea
+                            id="specialRequests"
+                            placeholder="Any additional information..."
+                        ></textarea>
+
+                    </div>
+
+                    <div id="formNotice" class="notice"></div>
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                        id="submitButton"
+                    >
+                        Check Availability & Book
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- PRICE CARD -->
+
+            <aside class="price-card">
+
+                <h3>Tour Pricing</h3>
+
+                <div class="price-option">
+
+                    <strong>Private Comfort / Private SUV</strong>
+
+                    <div class="isk">Price shown after vehicle selection</div>
+
+                    <small>Per vehicle</small>
+
+                </div>
+
+                <div class="price-option">
+
+                    <strong>Private Van</strong>
+
+                    <div class="isk">Price shown after vehicle selection</div>
+
+                    <small>Per vehicle</small>
+
+                </div>
+
+                <div class="current-estimate">
+
+                    <span>Your estimated tour price</span>
+
+                    <strong id="estimatedPrice">—</strong>
+
+                    <small id="estimatedEuro">
+                        Choose your passengers
+                    </small>
+
+                </div>
+
+                <p class="price-note">
+                    Prices are per vehicle and depend on the selected vehicle. ISK is the primary displayed currency.
+                    EUR is shown as an alternative reference.
+                </p>
+
+                <div class="safety-note">
+
+                    <strong>Beach safety:</strong>
+
+                    Reynisfjara is known for dangerous sneaker waves.
+                    Always stay well back from the water and follow
+                    warning signs and your driver's instructions.
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- TOUR INFORMATION -->
+
+<section class="container" style="padding:40px 0;">
+
+    <div class="safety-note">
+
+        <strong>Important tour information:</strong>
+
+        The route and stops may vary depending on weather,
+        road conditions and accessibility on the day of travel.
+        The listed attractions are popular South Coast highlights
+        and are not guaranteed stops.
+
+    </div>
+
+</section>
+
+<!-- INVOICE -->
+
+<section class="invoice-section" id="invoiceSection">
+
+    <div class="container">
+
+        <div class="invoice-card">
+
+            <div class="invoice-header">
+
+                <h2>ICELAND TRANSFER</h2>
+
+                <p>YOUR JOURNEY, OUR DRIVE</p>
+
+                <br>
+
+                <h3>BOOKING CONFIRMATION</h3>
+
+                <p>South Coast Tour</p>
+
+            </div>
+
+            <div id="invoiceNotice" class="notice"></div>
+
+            <div class="invoice-grid">
+
+                <div class="invoice-item">
+                    <small>Booking Reference</small>
+                    <strong id="invReference">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Booking Status</small>
+                    <strong id="invStatus">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Full Name</small>
+                    <strong id="invName">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Email</small>
+                    <strong id="invEmail">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Phone</small>
+                    <strong id="invPhone">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Country</small>
+                    <strong id="invCountry">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Pickup Location</small>
+                    <strong id="invPickup">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Destination</small>
+                    <strong id="invDestination">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Date</small>
+                    <strong id="invDate">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Pickup Time</small>
+                    <strong id="invTime">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Passengers</small>
+                    <strong id="invPassengers">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Luggage</small>
+                    <strong id="invLuggage">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Vehicle</small>
+                    <strong id="invVehicle">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Children</small>
+                    <strong id="invChildren">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Children's Ages</small>
+                    <strong id="invChildrenAges">—</strong>
+                </div>
+
+                <div class="invoice-item">
+                    <small>Flight Number</small>
+                    <strong id="invFlight">—</strong>
+                </div>
+
+                <div class="invoice-item" style="grid-column:1/-1;">
+                    <small>Special Requests</small>
+                    <strong id="invRequests">—</strong>
+                </div>
+
+            </div>
+
+            <div class="invoice-total">
+
+                <span>Total Price</span>
+
+                <strong id="invTotal">—</strong>
+
+                <small id="invEuro"></small>
+
+            </div>
+
+            <p class="invoice-message" id="invoiceMessage">
+                Please keep this booking confirmation for your records.
+            </p>
+
+            <div class="invoice-actions">
+
+                <button class="action-btn" onclick="saveInvoicePDF()">
+                    Save Invoice as PDF
+                </button>
+
+                <button
+                    class="action-btn cancel-btn"
+                    id="cancelButton"
+                >
+                    Cancel Booking
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-logo">ICELAND TRANSFER</div>
+
+    <p>YOUR JOURNEY, OUR DRIVE</p>
+
+    <p>Phone: +354 833 3707</p>
+
+    <p>
+        WhatsApp:
+        <a href="https://wa.me/3548333707" target="_blank">
+            Contact us
+        </a>
+    </p>
+
+    <p style="margin-top:18px;">
+        © 2026 Iceland Transfer. All rights reserved.
+    </p>
+
+</footer>
+
+<script>
+"use strict";
+
+const API_BASE = "https://iceland-transfer-server.onrender.com";
+
+/*
+    South Coast tour prices.
+    Reference exchange rate: 1 EUR = 137.20 ISK.
+    These are display estimates until the server is updated.
+*/
+
+const EUR_TO_ISK = 137.20;
+
+const TOUR_PRICES = {
+    comfort: { euro:990, isk:Math.round(990 * 137.20) },
+    suv: { euro:1135, isk:Math.round(1135 * 137.20) },
+    van: { euro:1235, isk:Math.round(1235 * 137.20) }
+};
+
+const VEHICLES = {
+    comfort:{ name:"Private Comfort", capacity:4 },
+    suv:{ name:"Private SUV", capacity:4 },
+    van:{ name:"Private Van", capacity:8 }
+};
+
+const form = document.getElementById("bookingForm");
+
+const vehicleSelect = document.getElementById("vehicle");
+
+const passengersSelect = document.getElementById("passengers");
+
+const dateInput = document.getElementById("tourDate");
+
+const timeSelect = document.getElementById("pickupTime");
+
+const childrenTravelSelect =
+    document.getElementById("childrenTravel");
+
+const childrenCountSelect =
+    document.getElementById("childrenCount");
+
+const childrenCountField =
+    document.getElementById("childrenCountField");
+
+const childrenAgesContainer =
+    document.getElementById("childrenAgesContainer");
+
+const submitButton =
+    document.getElementById("submitButton");
+
+const cancelButton =
+    document.getElementById("cancelButton");
+
+let latestBooking = null;
+
+let cancellationToken = null;
+
+let cancellationUrl = null;
+
+// ========================================
+// GENERAL HELPERS
+// ========================================
+
+function showNotice(id, message, type) {
+
+    const element = document.getElementById(id);
+
+    element.textContent = message;
+
+    element.className = "notice " + type;
+
+}
+
+function clearNotice(id) {
+
+    const element = document.getElementById(id);
+
+    element.textContent = "";
+
+    element.className = "notice";
+
+}
+
+function formatISK(amount) {
+
+    return new Intl.NumberFormat("en-US", {
+        maximumFractionDigits:0
+    }).format(amount) + " ISK";
+
+}
+
+function formatEUR(amount) {
+
+    return "€" + new Intl.NumberFormat("en-US", {
+        maximumFractionDigits:0
+    }).format(amount);
+
+}
+
+function getSelectedPrice() {
+
+    const passengers = Number(passengersSelect.value);
+
+    if (!passengers) return null;
+
+    return TOUR_PRICES[vehicleSelect.value] || null;
+
+}
+
+// ========================================
+// VEHICLE AND PASSENGER OPTIONS
+// ========================================
+
+function updatePassengerOptions() {
+
+    const vehicle = VEHICLES[vehicleSelect.value];
+
+    const previous = passengersSelect.value;
+
+    passengersSelect.innerHTML =
+        '<option value="">Select passengers</option>';
+
+    if (!vehicle) {
+
+        document.getElementById("vehicleHint").textContent =
+            "Select a vehicle to see its passenger capacity.";
+
+        updateEstimate();
+
+        return;
+
+    }
+
+    for (let i = 1; i <= vehicle.capacity; i++) {
+
+        const option = document.createElement("option");
+
+        option.value = i;
+
+        option.textContent =
+            i + (i === 1 ? " Passenger" : " Passengers");
+
+        passengersSelect.appendChild(option);
+
+    }
+
+    if (previous && Number(previous) <= vehicle.capacity) {
+
+        passengersSelect.value = previous;
+
+    }
+
+    document.getElementById("vehicleHint").textContent =
+        vehicle.name + " can carry up to " +
+        vehicle.capacity + " passengers.";
+
+    updateEstimate();
+
+}
+
+let southCoastQuoteRequest = 0;
+async function updateEstimate() {
+    const requestNumber = ++southCoastQuoteRequest;
+    const vehicleCode = vehicleSelect.value;
+    document.getElementById("estimatedPrice").textContent = "Calculating…";
+    document.getElementById("estimatedEuro").textContent = "Checking the booking server";
+    try {
+        const response = await fetch(API_BASE + "/api/quote", {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({
+                booking_kind: "tour",
+                tour_code: "south-coast",
+                vehicle_code: vehicleCode,
+                passengers: Number(passengersSelect.value) || 1,
+                large_bags: Number(document.getElementById("luggage").value) || 0,
+                hand_bags: 0
+            })
+        });
+        const quote = await response.json();
+        if (requestNumber !== southCoastQuoteRequest) return;
+        if (!response.ok) throw new Error(quote.error || "Quote unavailable");
+        document.getElementById("estimatedPrice").textContent = formatISK(quote.total.isk);
+        document.getElementById("estimatedEuro").textContent = formatEUR(quote.total.eur) + " per vehicle";
+    } catch (error) {
+        if (requestNumber !== southCoastQuoteRequest) return;
+        document.getElementById("estimatedPrice").textContent = "Price unavailable";
+        document.getElementById("estimatedEuro").textContent = error.message || "Contact us for a confirmed quote";
+    }
+}
+
+vehicleSelect.addEventListener(
+    "change",
+    updatePassengerOptions
+);
+
+passengersSelect.addEventListener(
+    "change",
+    updateEstimate
+);
+
+// ========================================
+// ICELAND DATE AND TIME
+// ========================================
+
+function getIcelandDateParts() {
+
+    const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone:"Atlantic/Reykjavik",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit"
+    }).formatToParts(new Date());
+
+    const result = {};
+
+    parts.forEach(part => {
+        result[part.type] = part.value;
+    });
+
+    return result;
+
+}
+
+function getTodayIcelandDate() {
+
+    const p = getIcelandDateParts();
+
+    return p.year + "-" + p.month + "-" + p.day;
+
+}
+
+function getIcelandHour() {
+
+    return Number(
+        new Intl.DateTimeFormat("en-GB", {
+            timeZone:"Atlantic/Reykjavik",
+            hour:"2-digit",
+            hourCycle:"h23"
+        }).format(new Date())
+    );
+
+}
+
+function isPastIcelandTime(date, time) {
+
+    if (date > getTodayIcelandDate()) return false;
+
+    if (date < getTodayIcelandDate()) return true;
+
+    const selectedHour = Number(time.split(":")[0]);
+
+    return selectedHour <= getIcelandHour();
+
+}
+
+function setMinimumDate() {
+
+    dateInput.min = getTodayIcelandDate();
+
+}
+
+function createTimeOptions() {
+
+    timeSelect.innerHTML =
+        '<option value="">Choose a time</option>';
+
+    for (let hour = 6; hour <= 21; hour++) {
+
+        const value = String(hour).padStart(2,"0") + ":00";
+
+        const option = document.createElement("option");
+
+        option.value = value;
+
+        option.textContent = value;
+
+        timeSelect.appendChild(option);
+
+    }
+
+}
+
+// ========================================
+// CHILDREN FIELDS
+// ========================================
+
+function updateChildrenFields() {
+
+    const isYes = childrenTravelSelect.value === "yes";
+
+    childrenCountField.style.display = isYes ? "flex" : "none";
+
+    childrenCountSelect.innerHTML = "";
+
+    childrenAgesContainer.innerHTML = "";
+
+    if (!isYes) return;
+
+    const passengers = Number(passengersSelect.value) || 1;
+
+    for (let i = 1; i <= passengers; i++) {
+
+        const option = document.createElement("option");
+
+        option.value = i;
+
+        option.textContent = i;
+
+        childrenCountSelect.appendChild(option);
+
+    }
+
+    createChildrenAgeFields();
+
+}
+
+function createChildrenAgeFields() {
+
+    childrenAgesContainer.innerHTML = "";
+
+    const count = Number(childrenCountSelect.value) || 0;
+
+    if (!count) return;
+
+    const title = document.createElement("label");
+
+    title.textContent = "Children's Ages";
+
+    childrenAgesContainer.appendChild(title);
+
+    for (let i = 1; i <= count; i++) {
+
+        const select = document.createElement("select");
+
+        select.required = true;
+
+        const first = document.createElement("option");
+
+        first.value = "";
+
+        first.textContent = "Child " + i + " age";
+
+        select.appendChild(first);
+
+        for (let age = 0; age <= 17; age++) {
+
+            const option = document.createElement("option");
+
+            option.value = age;
+
+            option.textContent =
+                age === 0 ? "Under 1 year" : age + " years";
+
+            select.appendChild(option);
+
+        }
+
+        childrenAgesContainer.appendChild(select);
+
+    }
+
+}
+
+childrenTravelSelect.addEventListener(
+    "change",
+    updateChildrenFields
+);
+
+childrenCountSelect.addEventListener(
+    "change",
+    createChildrenAgeFields
+);
+
+passengersSelect.addEventListener(
+    "change",
+    updateChildrenFields
+);
+
+// ========================================
+// SERVER REQUEST
+// ========================================
+
+async function serverRequest(path, options = {}) {
+
+    const response = await fetch(API_BASE + path, {
+
+        ...options,
+
+        headers:{
+            "Content-Type":"application/json",
+            ...(options.headers || {})
+        }
+
+    });
+
+    let result;
+
+    try {
+
+        result = await response.json();
+
+    } catch {
+
+        result = {};
+
+    }
+
+    if (!response.ok) {
+
+        throw new Error(
+            result.message ||
+            result.error ||
+            "Server error: " + response.status
+        );
+
+    }
+
+    return result;
+
+}
+
+// ========================================
+// AVAILABILITY
+// ========================================
+
+function normalizeTime(value) {
+
+    return String(value || "").slice(0,5);
+
+}
+
+async function loadAvailability() {
+
+    const date = dateInput.value;
+
+    if (!date) return;
+
+    const options = Array.from(timeSelect.options);
+
+    options.forEach(option => {
+
+        if (!option.value) return;
+
+        option.disabled = false;
+
+        option.textContent = option.value;
+
+    });
+
+    try {
+
+        const result = await serverRequest(
+            "/api/availability?date=" + encodeURIComponent(date)
+        );
+
+        const available = result.availableTimes ||
+            result.available_times ||
+            result.times ||
+            result.availableSlots ||
+            [];
+
+        const booked = result.bookedTimes ||
+            result.booked_times ||
+            [];
+
+        options.forEach(option => {
+
+            if (!option.value) return;
+
+            const time = normalizeTime(option.value);
+
+            if (booked.map(normalizeTime).includes(time)) {
+
+                option.disabled = true;
+
+                option.textContent = time + " — Booked";
+
+            } else if (
+                !available.map(normalizeTime).includes(time)
+            ) {
+
+                option.disabled = true;
+
+                option.textContent = time + " — Unavailable";
+
+            }
+
+            if (isPastIcelandTime(date, time)) {
+
+                option.disabled = true;
+
+                option.textContent = time + " — Unavailable";
+
+            }
+
+        });
+
+    } catch (error) {
+
+        console.error("Availability error:", error);
+
+        showNotice(
+            "formNotice",
+            "Could not refresh availability. The server will check your selected time when you submit.",
+            "error"
+        );
+
+    }
+
+}
+
+dateInput.addEventListener(
+    "change",
+    loadAvailability
+);
+
+// ========================================
+// BOOKING SUBMISSION
+// ========================================
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    clearNotice("formNotice");
+
+    clearNotice("invoiceNotice");
+
+    if (!form.reportValidity()) return;
+
+    const vehicle = VEHICLES[vehicleSelect.value];
+
+    const passengers = Number(passengersSelect.value);
+
+    if (!vehicle || !passengers) {
+
+        showNotice(
+            "formNotice",
+            "Please select a vehicle and passenger count.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (passengers > vehicle.capacity) {
+
+        showNotice(
+            "formNotice",
+            "The selected vehicle cannot carry this number of passengers.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (dateInput.value < getTodayIcelandDate()) {
+
+        showNotice(
+            "formNotice",
+            "Please select today or a future date.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (!timeSelect.value) {
+
+        showNotice(
+            "formNotice",
+            "Please select a pickup time.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    const selectedTimeOption =
+        timeSelect.options[timeSelect.selectedIndex];
+
+    if (selectedTimeOption.disabled) {
+
+        showNotice(
+            "formNotice",
+            "This time is unavailable. Please choose another time.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (isPastIcelandTime(dateInput.value, timeSelect.value)) {
+
+        showNotice(
+            "formNotice",
+            "Please select a future pickup time in Iceland.",
+            "error"
+        );
+
+        loadAvailability();
+
+        return;
+
+    }
+
+    const pickupLocation =
+        document.getElementById("pickupLocation").value.trim();
+
+    const destination =
+        document.getElementById("destination").value.trim();
+
+    if (!pickupLocation || !destination) {
+
+        showNotice(
+            "formNotice",
+            "Please enter both pickup location and destination.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    let childAges = [];
+
+    if (childrenTravelSelect.value === "yes") {
+
+        childAges = Array.from(
+            childrenAgesContainer.querySelectorAll("select")
+        ).map(select => Number(select.value));
+
+        if (
+            childAges.length !== Number(childrenCountSelect.value) ||
+            childAges.some(age => !Number.isInteger(age))
+        ) {
+
+            showNotice(
+                "formNotice",
+                "Please select the age of every child.",
+                "error"
+            );
+
+            return;
+
+        }
+
+        if (childAges.length > passengers) {
+
+            showNotice(
+                "formNotice",
+                "Children cannot exceed the total number of passengers.",
+                "error"
+            );
+
+            return;
+
+        }
+
+    }
+
+    const payload = {
+
+        full_name:
+            document.getElementById("fullName").value.trim(),
+
+        email:
+            document.getElementById("email").value.trim(),
+
+        phone:
+            document.getElementById("phone").value.trim(),
+
+        country_of_origin:
+            document.getElementById("countryOfOrigin").value.trim(),
+
+        pickup_location:pickupLocation,
+
+        destination:destination,
+
+        pickup_date:dateInput.value,
+
+        pickup_time:timeSelect.value,
+
+        passengers:passengers,
+
+        luggage:
+            Number(document.getElementById("luggage").value) || 0,
+
+        flight_number:
+            document.getElementById("flightNumber").value.trim(),
+
+        special_requests:
+            document.getElementById("specialRequests").value.trim(),
+
+        service_type:"south_coast_tour",
+
+        package_type:"south_coast",
+
+        vehicle_type:vehicleSelect.value,
+
+        vehicle_name:vehicle.name,
+
+        travelling_with_children:
+            childrenTravelSelect.value === "yes",
+
+        children_count:childAges.length,
+
+        child_ages:childAges,
+
+        addons:[],
+
+        selected_stops:[]
+
+    };
+
+    submitButton.disabled = true;
+
+    submitButton.textContent = "Submitting Booking...";
+
+    try {
+
+        const result = await serverRequest(
+            "/api/bookings",
+            {
+                method:"POST",
+                body:JSON.stringify(payload)
+            }
+        );
+
+        const returnedBooking =
+            result.booking &&
+            typeof result.booking === "object"
+                ? result.booking
+                : {};
+
+        latestBooking = {
+            ...payload,
+            ...returnedBooking
+        };
+
+        cancellationToken =
+            result.cancellation_token ||
+            returnedBooking.cancellation_token ||
+            returnedBooking.cancellationToken ||
+            null;
+
+        cancellationUrl =
+            result.cancellation_url ||
+            returnedBooking.cancellation_url ||
+            returnedBooking.cancellationUrl ||
+            null;
+
+        displayInvoice(latestBooking);
+
+        document.getElementById("invoiceSection").style.display =
+            "block";
+
+        showNotice(
+            "formNotice",
+            "Your booking request was received. It is pending payment/confirmation and is not a paid ticket.",
+            "success"
+        );
+
+        document.getElementById("invoiceSection").scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+        loadAvailability();
+
+    } catch (error) {
+
+        showNotice(
+            "formNotice",
+            "Booking could not be completed: " + error.message,
+            "error"
+        );
+
+        loadAvailability();
+
+    } finally {
+
+        submitButton.disabled = false;
+
+        submitButton.textContent = "Check Availability & Book";
+
+    }
+
+});
+
+// ========================================
+// INVOICE
+// ========================================
+
+function setInvoiceValue(id, value) {
+
+    document.getElementById(id).textContent =
+        value === null ||
+        value === undefined ||
+        value === ""
+            ? "—"
+            : String(value);
+
+}
+
+function displayInvoice(booking) {
+
+    const reference =
+        booking.booking_reference ||
+        booking.reference ||
+        booking.booking_id ||
+        booking.id ||
+        "Submitted by server";
+
+    const serverPrice =
+        booking.price?.amount ??
+        booking.price?.isk ??
+        booking.total_price ??
+        booking.total ??
+        booking.booking?.price?.amount ??
+        booking.booking?.price?.isk ??
+        booking.booking?.total_price;
+
+    const price = Number.isFinite(Number(serverPrice))
+        ? Number(serverPrice)
+        : null;
+
+    setInvoiceValue("invReference", reference);
+
+    setInvoiceValue(
+        "invStatus",
+        booking.status || "Confirmed"
+    );
+
+    setInvoiceValue("invName", booking.full_name);
+
+    setInvoiceValue("invEmail", booking.email);
+
+    setInvoiceValue("invPhone", booking.phone);
+
+    setInvoiceValue("invCountry", booking.country_of_origin);
+
+    setInvoiceValue("invPickup", booking.pickup_location);
+
+    setInvoiceValue("invDestination", booking.destination);
+
+    setInvoiceValue("invDate", booking.pickup_date);
+
+    setInvoiceValue("invTime", booking.pickup_time);
+
+    setInvoiceValue("invPassengers", booking.passengers);
+
+    setInvoiceValue("invLuggage", booking.luggage);
+
+    setInvoiceValue(
+        "invVehicle",
+        booking.vehicle_name ||
+        VEHICLES[booking.vehicle_type]?.name ||
+        booking.vehicle_type
+    );
+
+    setInvoiceValue(
+        "invChildren",
+        booking.travelling_with_children
+            ? "Yes (" + booking.children_count + ")"
+            : "No"
+    );
+
+    setInvoiceValue(
+        "invChildrenAges",
+        Array.isArray(booking.child_ages) &&
+        booking.child_ages.length
+            ? booking.child_ages.map(age =>
+                Number(age) === 0
+                    ? "Under 1 year"
+                    : age + " years"
+              ).join(", ")
+            : "None"
+    );
+
+    setInvoiceValue("invFlight", booking.flight_number);
+
+    setInvoiceValue("invRequests", booking.special_requests);
+
+    document.getElementById("invTotal").textContent =
+        formatISK(price);
+
+    const euroEquivalent =
+        getSelectedPrice()?.euro;
+
+    document.getElementById("invEuro").textContent =
+        euroEquivalent
+            ? formatEUR(euroEquivalent) + " reference"
+            : "";
+
+    document.getElementById("invoiceMessage").textContent =
+        "Please keep your booking reference. Your booking and final price are subject to server confirmation.";
+
+    cancelButton.style.display = "inline-block";
+
+}
+
+// ========================================
+// SAVE INVOICE
+// ========================================
+
+function saveInvoicePDF() {
+
+    if (!latestBooking) {
+
+        alert("There is no booking invoice to save yet.");
+
+        return;
+
+    }
+
+    window.print();
+
+}
+
+// ========================================
+// CANCEL BOOKING
+// ========================================
+
+cancelButton.addEventListener("click", async function() {
+
+    if (!latestBooking) {
+
+        showNotice(
+            "invoiceNotice",
+            "No booking is available to cancel.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (!cancellationToken && !cancellationUrl) {
+
+        showNotice(
+            "invoiceNotice",
+            "The server did not return a cancellation token. Please contact the driver.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (!window.confirm(
+        "Are you sure you want to cancel this booking?"
+    )) {
+
+        return;
+
+    }
+
+    cancelButton.disabled = true;
+
+    cancelButton.textContent = "Cancelling...";
+
+    try {
+
+        let result;
+
+        if (cancellationToken) {
+            result = await serverRequest(
+                "/api/bookings/cancel",
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        cancellation_token: cancellationToken
+                    })
+                }
+            );
+        } else if (cancellationUrl) {
+            window.open(cancellationUrl, "_blank", "noopener");
+            throw new Error("Open the cancellation page to complete cancellation.");
+        } else {
+            throw new Error("No cancellation token was returned by the server.");
+        }
+
+        latestBooking.status = "cancelled";
+
+        setInvoiceValue("invStatus", "Cancelled");
+
+        cancelButton.style.display = "none";
+
+        showNotice(
+            "invoiceNotice",
+            result.message || "Booking cancelled successfully.",
+            "success"
+        );
+
+        loadAvailability();
+
+    } catch (error) {
+
+        showNotice(
+            "invoiceNotice",
+            "Cancellation failed: " + error.message,
+            "error"
+        );
+
+    } finally {
+
+        cancelButton.disabled = false;
+
+        cancelButton.textContent = "Cancel Booking";
+
+    }
+
+});
+
+// ========================================
+// INITIAL SETUP
+// ========================================
+
+setMinimumDate();
+
+createTimeOptions();
+
+updatePassengerOptions();
+
+updateChildrenFields();
+
+</script>
+
+</body>
+</html>
