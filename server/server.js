@@ -1,6 +1,6 @@
 /**
  * ICELAND TRANSFER — Booking API
- * Version 2.1.0
+ * Version 2.2.1
  * Node.js 18+ / CommonJS
  *
  * Required:
@@ -48,8 +48,8 @@ const EUR_TO_ISK_RATE = Number(
 const MAX_BODY_BYTES = 1024 * 1024;
 
 const TIME_ZONE = "Atlantic/Reykjavik";
-const OPENING_HOUR = 6;
-const CLOSING_HOUR = 22;
+const OPENING_HOUR = 0;
+const CLOSING_HOUR = 24;
 
 const MAX_BOOKINGS_PER_HOUR = 5;
 const CANCELLATION_HOURS = 24;
@@ -130,79 +130,433 @@ const VEHICLES = [
 const ROUTES = [
   {
     code: "keflavik-airport-blue-lagoon",
+    origin: "Keflavík Airport",
+    destination: "Blue Lagoon",
     name: "Keflavík Airport → Blue Lagoon",
+    aliases: ["Blue Lagoon"],
     distanceKm: 22,
     estimatedMinutes: 19,
-    prices: {
-      comfort: 90,
-      suv: 105,
-      van: 115
-    }
-  },
-  {
-    code: "blue-lagoon-reykjavik",
-    name: "Blue Lagoon → Reykjavík",
-    distanceKm: 49,
-    estimatedMinutes: 44,
-    prices: {
-      standard: 110,
-      comfort: 136,
-      suv: 150,
-      van: 191
-    }
-  },
-  {
-    code: "airport-blue-lagoon-reykjavik",
-    name: "Keflavík Airport → Blue Lagoon → Reykjavík",
-    distanceKm: null,
-    estimatedMinutes: null,
-    durationLabel: "About 4 hours",
-    prices: {
-      comfort: 387,
-      suv: 421,
-      van: 456
-    }
-  },
-  {
-    code: "reykjavik-blue-lagoon-airport",
-    name: "Reykjavík → Blue Lagoon → Keflavík Airport",
-    distanceKm: null,
-    estimatedMinutes: null,
-    durationLabel: "About 4 hours",
-    prices: {
-      comfort: 387,
-      suv: 421,
-      van: 456
-    }
-  },
-
-  // Starting-price estimates, not fixed route tariffs.
-  {
-    code: "keflavik-airport-reykjavik",
-    name: "Keflavík Airport → Reykjavík",
-    distanceKm: null,
-    estimatedMinutes: null,
-    pricingType: "starting_estimate",
-    prices: {
-      standard: 110,
-      comfort: 136,
-      suv: 150,
-      van: 191
-    }
+    prices: {"comfort": 90, "suv": 105, "van": 115}
   },
   {
     code: "reykjavik-keflavik-airport",
+    origin: "Reykjavík",
+    originAliases: ["Reykjavik", "Reykjavík city centre", "Reykjavik city center"],
+    destination: "Keflavík Airport",
     name: "Reykjavík → Keflavík Airport",
-    distanceKm: null,
-    estimatedMinutes: null,
-    pricingType: "starting_estimate",
-    prices: {
-      standard: 110,
-      comfort: 136,
-      suv: 150,
-      van: 191
-    }
-  }
+    aliases: ["Keflavik Airport", "Keflavík International Airport", "Keflavik International Airport", "KEF", "KEF Airport"],
+    distanceKm: 51,
+    estimatedMinutes: 47,
+    prices: {"standard": 110, "comfort": 136, "suv": 150, "van": 191}
+  },
+  {
+    code: "blue-lagoon-reykjavik",
+    origin: "Blue Lagoon",
+    originAliases: ["Blue Lagoon"],
+    destination: "Reykjavík",
+    name: "Blue Lagoon → Reykjavík",
+    aliases: ["Reykjavik"],
+    distanceKm: 49,
+    estimatedMinutes: 44,
+    prices: {"standard": 110, "comfort": 136, "suv": 150, "van": 191}
+  },
+  {
+    code: "keflavik-airport-hafnarfjorur",
+    origin: "Keflavík Airport",
+    destination: "Hafnarfjörður",
+    name: "Keflavík Airport → Hafnarfjörður",
+    aliases: ["Hafnarfjordur"],
+    distanceKm: 39,
+    estimatedMinutes: 31,
+    prices: {"standard": 110, "comfort": 136, "suv": 150, "van": 191}
+  },
+  {
+    code: "keflavik-airport-garabr",
+    origin: "Keflavík Airport",
+    destination: "Garðabær",
+    name: "Keflavík Airport → Garðabær",
+    aliases: ["Gardabaer"],
+    distanceKm: 42,
+    estimatedMinutes: 35,
+    prices: {"standard": 110, "comfort": 136, "suv": 150, "van": 191}
+  },
+  {
+    code: "keflavik-airport-sky-lagoon",
+    origin: "Keflavík Airport",
+    destination: "Sky Lagoon",
+    name: "Keflavík Airport → Sky Lagoon",
+    aliases: [],
+    distanceKm: 48,
+    estimatedMinutes: 43,
+    prices: {"standard": 110, "comfort": 136, "suv": 150, "van": 191}
+  },
+  {
+    code: "keflavik-airport-reykjavik",
+    origin: "Keflavík Airport",
+    destination: "Reykjavík",
+    name: "Keflavík Airport → Reykjavík",
+    aliases: ["Reykjavik", "Reykjavík Downtown"],
+    distanceKm: 51,
+    estimatedMinutes: 47,
+    prices: {"standard": 110, "comfort": 136, "suv": 150, "van": 191}
+  },
+  {
+    code: "keflavik-airport-skarfabakki-harbour",
+    origin: "Keflavík Airport",
+    destination: "Skarfabakki Harbour",
+    name: "Keflavík Airport → Skarfabakki Harbour",
+    aliases: ["Skarfabakki", "Cruise Port"],
+    distanceKm: 53,
+    estimatedMinutes: 46,
+    prices: {"standard": 110, "comfort": 136, "suv": 150, "van": 191}
+  },
+  {
+    code: "keflavik-airport-mosfellsbr",
+    origin: "Keflavík Airport",
+    destination: "Mosfellsbær",
+    name: "Keflavík Airport → Mosfellsbær",
+    aliases: ["Mosfellsbaer"],
+    distanceKm: 59,
+    estimatedMinutes: 49,
+    prices: {"comfort": 147, "suv": 162, "van": 206}
+  },
+  {
+    code: "keflavik-airport-ingvellir",
+    origin: "Keflavík Airport",
+    destination: "Þingvellir",
+    name: "Keflavík Airport → Þingvellir",
+    aliases: ["Thingvellir", "Thingvellir National Park"],
+    distanceKm: 86,
+    estimatedMinutes: 70,
+    prices: {"comfort": 219, "suv": 243, "van": 305}
+  },
+  {
+    code: "keflavik-airport-hverageri",
+    origin: "Keflavík Airport",
+    destination: "Hveragerði",
+    name: "Keflavík Airport → Hveragerði",
+    aliases: ["Hveragerdi"],
+    distanceKm: 86,
+    estimatedMinutes: 68,
+    prices: {"comfort": 219, "suv": 243, "van": 305}
+  },
+  {
+    code: "keflavik-airport-akranes",
+    origin: "Keflavík Airport",
+    destination: "Akranes",
+    name: "Keflavík Airport → Akranes",
+    aliases: [],
+    distanceKm: 91,
+    estimatedMinutes: 74,
+    prices: {"comfort": 232, "suv": 258, "van": 323}
+  },
+  {
+    code: "keflavik-airport-hvammsvik",
+    origin: "Keflavík Airport",
+    destination: "Hvammsvík",
+    name: "Keflavík Airport → Hvammsvík",
+    aliases: ["Hvammsvik"],
+    distanceKm: 96,
+    estimatedMinutes: 77,
+    prices: {"comfort": 245, "suv": 273, "van": 341}
+  },
+  {
+    code: "keflavik-airport-selfoss",
+    origin: "Keflavík Airport",
+    destination: "Selfoss",
+    name: "Keflavík Airport → Selfoss",
+    aliases: [],
+    distanceKm: 96,
+    estimatedMinutes: 60,
+    prices: {"comfort": 245, "suv": 273, "van": 341}
+  },
+  {
+    code: "keflavik-airport-glymur-waterfall",
+    origin: "Keflavík Airport",
+    destination: "Glymur Waterfall",
+    name: "Keflavík Airport → Glymur Waterfall",
+    aliases: ["Glymur"],
+    distanceKm: 113,
+    estimatedMinutes: 94,
+    prices: {"comfort": 290, "suv": 324, "van": 403}
+  },
+  {
+    code: "keflavik-airport-borgarnes",
+    origin: "Keflavík Airport",
+    destination: "Borgarnes",
+    name: "Keflavík Airport → Borgarnes",
+    aliases: [],
+    distanceKm: 117,
+    estimatedMinutes: 91,
+    prices: {"comfort": 301, "suv": 336, "van": 418}
+  },
+  {
+    code: "keflavik-airport-hella",
+    origin: "Keflavík Airport",
+    destination: "Hella",
+    name: "Keflavík Airport → Hella",
+    aliases: [],
+    distanceKm: 134,
+    estimatedMinutes: 107,
+    prices: {"comfort": 346, "suv": 387, "van": 480}
+  },
+  {
+    code: "keflavik-airport-fluir",
+    origin: "Keflavík Airport",
+    destination: "Flúðir",
+    name: "Keflavík Airport → Flúðir",
+    aliases: ["Fludir"],
+    distanceKm: 143,
+    estimatedMinutes: 113,
+    prices: {"comfort": 370, "suv": 414, "van": 513}
+  },
+  {
+    code: "keflavik-airport-secret-lagoon",
+    origin: "Keflavík Airport",
+    destination: "Secret Lagoon",
+    name: "Keflavík Airport → Secret Lagoon",
+    aliases: ["Gamla Laugin"],
+    distanceKm: 144,
+    estimatedMinutes: 115,
+    prices: {"comfort": 372, "suv": 417, "van": 516}
+  },
+  {
+    code: "keflavik-airport-reykholt",
+    origin: "Keflavík Airport",
+    destination: "Reykholt",
+    name: "Keflavík Airport → Reykholt",
+    aliases: [],
+    distanceKm: 151,
+    estimatedMinutes: 118,
+    prices: {"comfort": 391, "suv": 438, "van": 542}
+  },
+  {
+    code: "keflavik-airport-gullfoss",
+    origin: "Keflavík Airport",
+    destination: "Gullfoss",
+    name: "Keflavík Airport → Gullfoss",
+    aliases: ["Gullfoss Waterfall"],
+    distanceKm: 158,
+    estimatedMinutes: 133,
+    prices: {"comfort": 409, "suv": 459, "van": 567}
+  },
+  {
+    code: "keflavik-airport-husafell",
+    origin: "Keflavík Airport",
+    destination: "Húsafell",
+    name: "Keflavík Airport → Húsafell",
+    aliases: ["Husafell"],
+    distanceKm: 174,
+    estimatedMinutes: 134,
+    prices: {"comfort": 452, "suv": 507, "van": 626}
+  },
+  {
+    code: "keflavik-airport-landeyjahofn",
+    origin: "Keflavík Airport",
+    destination: "Landeyjahöfn",
+    name: "Keflavík Airport → Landeyjahöfn",
+    aliases: ["Landeyjahofn"],
+    distanceKm: 177,
+    estimatedMinutes: 140,
+    prices: {"comfort": 460, "suv": 516, "van": 637}
+  },
+  {
+    code: "keflavik-airport-grundarfjorur",
+    origin: "Keflavík Airport",
+    destination: "Grundarfjörður",
+    name: "Keflavík Airport → Grundarfjörður",
+    aliases: ["Grundarfjordur"],
+    distanceKm: 219,
+    estimatedMinutes: 168,
+    prices: {"comfort": 571, "suv": 642, "van": 790}
+  },
+  {
+    code: "keflavik-airport-landmannalaugar",
+    origin: "Keflavík Airport",
+    destination: "Landmannalaugar",
+    aliases: [],
+    distanceKm: 220,
+    estimatedMinutes: 215,
+    prices: {"comfort": 574, "suv": 645, "van": 794}
+  },
+  {
+    code: "keflavik-airport-reynisfjara-beach",
+    origin: "Keflavík Airport",
+    destination: "Reynisfjara Beach",
+    name: "Keflavík Airport → Reynisfjara Beach",
+    aliases: ["Reynisfjara"],
+    distanceKm: 227,
+    estimatedMinutes: 176,
+    prices: {"comfort": 592, "suv": 666, "van": 819}
+  },
+  {
+    code: "keflavik-airport-vik-i-myrdal",
+    origin: "Keflavík Airport",
+    destination: "Vík í Mýrdal",
+    name: "Keflavík Airport → Vík í Mýrdal",
+    aliases: ["Vik", "Vik i Myrdal"],
+    distanceKm: 227,
+    estimatedMinutes: 175,
+    prices: {"comfort": 592, "suv": 666, "van": 819}
+  },
+  {
+    code: "keflavik-airport-olafsvik",
+    origin: "Keflavík Airport",
+    destination: "Ólafsvík",
+    name: "Keflavík Airport → Ólafsvík",
+    aliases: ["Olafsvik"],
+    distanceKm: 236,
+    estimatedMinutes: 180,
+    prices: {"comfort": 616, "suv": 693, "van": 852}
+  },
+  {
+    code: "keflavik-airport-blonduos",
+    origin: "Keflavík Airport",
+    destination: "Blönduós",
+    name: "Keflavík Airport → Blönduós",
+    aliases: ["Blonduos"],
+    distanceKm: 286,
+    estimatedMinutes: 208,
+    prices: {"comfort": 749, "suv": 843, "van": 1035}
+  },
+  {
+    code: "keflavik-airport-fjarargljufur-canyon",
+    origin: "Keflavík Airport",
+    destination: "Fjaðrárgljúfur Canyon",
+    name: "Keflavík Airport → Fjaðrárgljúfur Canyon",
+    aliases: ["Fjadrargljufur"],
+    distanceKm: 295,
+    estimatedMinutes: 223,
+    prices: {"comfort": 772, "suv": 870, "van": 1067}
+  },
+  {
+    code: "keflavik-airport-jokulsarlon",
+    origin: "Keflavík Airport",
+    destination: "Jökulsárlón",
+    name: "Keflavík Airport → Jökulsárlón",
+    aliases: ["Jokulsarlon", "Glacier Lagoon"],
+    distanceKm: 416,
+    estimatedMinutes: 309,
+    prices: {"comfort": 1093, "suv": 1233, "van": 1509}
+  },
+  {
+    code: "keflavik-airport-akureyri",
+    origin: "Keflavík Airport",
+    destination: "Akureyri",
+    aliases: [],
+    distanceKm: 430,
+    estimatedMinutes: 311,
+    prices: {"comfort": 1130, "suv": 1275, "van": 1560}
+  },
+  {
+    code: "keflavik-airport-isafjorur",
+    origin: "Keflavík Airport",
+    destination: "Ísafjörður",
+    aliases: ["Isafjordur"],
+    distanceKm: 451,
+    estimatedMinutes: 344,
+    prices: {"comfort": 1186, "suv": 1338, "van": 1637}
+  },
+  {
+    code: "keflavik-airport-goafoss-waterfall",
+    origin: "Keflavík Airport",
+    destination: "Goðafoss Waterfall",
+    aliases: ["Godafoss"],
+    distanceKm: 465,
+    estimatedMinutes: 341,
+    prices: {"comfort": 1223, "suv": 1380, "van": 1688}
+  },
+  {
+    code: "keflavik-airport-hofn",
+    origin: "Keflavík Airport",
+    destination: "Höfn",
+    aliases: ["Hofn"],
+    distanceKm: 497,
+    estimatedMinutes: 369,
+    prices: {"comfort": 1308, "suv": 1476, "van": 1805}
+  },
+  {
+    code: "keflavik-airport-lake-myvatn",
+    origin: "Keflavík Airport",
+    destination: "Lake Mývatn",
+    aliases: ["Lake Myvatn", "Myvatn"],
+    distanceKm: 504,
+    estimatedMinutes: 371,
+    prices: {"comfort": 1326, "suv": 1497, "van": 1830}
+  },
+  {
+    code: "keflavik-airport-vestrahorn",
+    origin: "Keflavík Airport",
+    destination: "Vestrahorn",
+    aliases: [],
+    distanceKm: 505,
+    estimatedMinutes: 382,
+    prices: {"comfort": 1329, "suv": 1500, "van": 1834}
+  },
+  {
+    code: "keflavik-airport-husavik",
+    origin: "Keflavík Airport",
+    destination: "Húsavík",
+    aliases: ["Husavik"],
+    distanceKm: 505,
+    estimatedMinutes: 371,
+    prices: {"comfort": 1329, "suv": 1500, "van": 1834}
+  },
+  {
+    code: "keflavik-airport-dettifoss-waterfall",
+    origin: "Keflavík Airport",
+    destination: "Dettifoss Waterfall",
+    aliases: ["Dettifoss"],
+    distanceKm: 562,
+    estimatedMinutes: 417,
+    prices: {"comfort": 1480, "suv": 1671, "van": 2042}
+  },
+  {
+    code: "keflavik-airport-asbyrgi",
+    origin: "Keflavík Airport",
+    destination: "Ásbyrgi",
+    name: "Keflavík Airport → Ásbyrgi",
+    aliases: ["Asbyrgi"],
+    distanceKm: 567,
+    estimatedMinutes: 417,
+    prices: {"comfort": 1493, "suv": 1686, "van": 2060}
+  },
+  {
+    code: "keflavik-airport-breidalsvik",
+    origin: "Keflavík Airport",
+    destination: "Breiðdalsvík",
+    aliases: ["Breiddalsvik"],
+    distanceKm: 636,
+    estimatedMinutes: 481,
+    prices: {"comfort": 1676, "suv": 1893, "van": 2312}
+  },
+  {
+    code: "keflavik-airport-stulagil-canyon",
+    origin: "Keflavík Airport",
+    destination: "Stuðlagil Canyon",
+    aliases: ["Studlagil"],
+    distanceKm: 643,
+    estimatedMinutes: 476,
+    prices: {"comfort": 1695, "suv": 1914, "van": 2338}
+  },
+  {
+    code: "keflavik-airport-egilsstair",
+    origin: "Keflavík Airport",
+    destination: "Egilsstaðir",
+    aliases: ["Egilsstadir"],
+    distanceKm: 677,
+    estimatedMinutes: 495,
+    prices: {"comfort": 1785, "suv": 2016, "van": 2462}
+  },
+  {
+    code: "keflavik-airport-fjarabygg",
+    origin: "Keflavík Airport",
+    destination: "Fjarðabyggð",
+    aliases: ["Fjardabyggd"],
+    distanceKm: 699,
+    estimatedMinutes: 521,
+    prices: {"comfort": 1843, "suv": 2082, "van": 2542}
+  },
 ];
 
 // ==========================================
@@ -240,6 +594,7 @@ const TOURS = [
     }
   },
   {
+    code: "golden-circle-hidden-gems",
     code: "golden-circle-hidden-gems",
     name: "The Ultimate Golden Circle & Hidden Gems Full Day Tour",
     durationHours: 9,
@@ -366,6 +721,19 @@ function isEmail(value) {
   );
 }
 
+function getIcelandDateString(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(date);
+  const values = Object.fromEntries(
+    parts.filter(part => part.type !== "literal").map(part => [part.type, part.value])
+  );
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
 function validDate(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) {
     return false;
@@ -428,7 +796,7 @@ function validateFutureDateTime(date, time, label = "Pickup") {
 
   if (!isOperatingTime(time)) {
     const error = new Error(
-      `${label} must be between 06:00 and 22:00 Iceland time.`
+      `${label} must be within the 24-hour service window (Iceland time).`
     );
 
     error.status = 400;
@@ -552,6 +920,47 @@ function escapeHtml(value) {
   );
 }
 
+
+function normalizePlaceName(value) {
+  return cleanText(value, 300)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function resolveTransferRoute(input) {
+  const routeCode = cleanText(input.route_code, 120);
+  if (routeCode) {
+    return ROUTES.find(route => route.code === routeCode) || null;
+  }
+
+  const pickup = normalizePlaceName(
+    input.pickup_location || input.pickup || input.origin
+  );
+  const destination = normalizePlaceName(
+    input.destination || input.dropoff_location || input.dropoff
+  );
+
+  if (!pickup || !destination) return null;
+
+  const matches = (value, names) => names
+    .filter(Boolean)
+    .map(normalizePlaceName)
+    .some(name => value === name || value.includes(name) || name.includes(value));
+
+  return ROUTES.find(route => {
+    const routeOrigin = normalizePlaceName(route.origin || "Keflavík Airport");
+    const isKeflavikRoute = routeOrigin.includes("keflavik airport");
+    const originMatches = isKeflavikRoute
+      ? pickup.includes("keflavik") && pickup.includes("airport")
+      : matches(pickup, [route.origin, ...(route.originAliases || [])]);
+    const destinations = [route.destination, ...(route.aliases || [])];
+    return originMatches && matches(destination, destinations);
+  }) || null;
+}
+
 // ==========================================
 // PRICE CALCULATION
 // ==========================================
@@ -564,11 +973,7 @@ function calculateQuote(input) {
     50
   ).toLowerCase();
 
-  const itemType = kind.includes("tour")
-    ? "tour"
-    : input.route_code
-      ? "route"
-      : "transfer";
+  const itemType = kind.includes("tour") ? "tour" : "route";
 
   const vehicle = findVehicle(
     input.vehicle_code ||
@@ -632,13 +1037,29 @@ function calculateQuote(input) {
   let eur = null;
 
   if (itemType === "tour") {
-    item = getCatalogItem(
-      "tour",
-      cleanText(
-        input.tour_code || input.package_type,
-        100
-      )
-    );
+    const requestedTourCode = cleanText(
+      input.tour_code || input.package_type || kind,
+      100
+    ).toLowerCase();
+
+    const tourAliases = {
+      classic: "classic-golden-circle",
+      classic_golden_circle: "classic-golden-circle",
+      golden_circle_tour: "classic-golden-circle",
+      south_coast: "south-coast",
+      south_coast_tour: "south-coast",
+      northern_lights_tour: "northern-lights",
+      magical_northern_lights_tour: "northern-lights",
+      glacier_lagoon: "glacier-lagoon-diamond-beach",
+      snaefellsnes_peninsula: "snaefellsnes",
+      silver_circle: "sliver-circle-fjord-fire",
+      silver_circle_fjord_fire: "sliver-circle-fjord-fire"
+    };
+
+    const normalizedTourCode =
+      tourAliases[requestedTourCode] || requestedTourCode.replace(/_/g, "-");
+
+    item = getCatalogItem("tour", normalizedTourCode);
 
     if (!item) {
       throw new Error(
@@ -649,21 +1070,16 @@ function calculateQuote(input) {
     eur = item.prices[vehicle.code];
 
   } else if (itemType === "route") {
-    item = getCatalogItem(
-      "route",
-      cleanText(input.route_code, 100)
-    );
+    item = resolveTransferRoute(input);
 
     if (!item) {
       throw new Error(
-        "The selected route is not in the approved route list."
+        "A fixed fare is not available for this pickup and destination. The published fare table currently covers Keflavík Airport departures only. Please select a listed destination or contact us for a quote."
       );
     }
 
     eur = item.prices[vehicle.code];
 
-  } else {
-    eur = vehicle.fromEur;
   }
 
   if (eur === undefined || eur === null) {
@@ -727,20 +1143,9 @@ function calculateQuote(input) {
   }
 
   if (transferType === "return") {
-    if (
-      !validDate(input.return_date) ||
-      !validTime(input.return_time)
-    ) {
-      throw new Error(
-        "A valid return date and time are required."
-      );
-    }
-
-    if (!isOperatingTime(input.return_time)) {
-      throw new Error(
-        "Return time must be between 06:00 and 22:00 Iceland time."
-      );
-    }
+    throw new Error(
+      "Return-trip pricing is not enabled until both journey legs have verified fares. Please book each leg separately or contact us for a confirmed return quote."
+    );
   }
 
   const discountCode = cleanText(
@@ -788,7 +1193,7 @@ async function getAvailability(date) {
     throw error;
   }
 
-  if (date < new Date().toISOString().slice(0, 10)) {
+  if (date < getIcelandDateString()) {
     const error = new Error(
       "Availability cannot be checked for a past date."
     );
@@ -851,8 +1256,8 @@ async function getAvailability(date) {
   return {
     date,
     timeZone: TIME_ZONE,
-    openingTime: "06:00",
-    closingTime: "22:00",
+    openingTime: "00:00",
+    closingTime: "24:00",
     maxBookingsPerHour: MAX_BOOKINGS_PER_HOUR,
     slots
   };
@@ -1231,7 +1636,8 @@ async function createBooking(input) {
         rate: EUR_TO_ISK_RATE
       },
 
-      cancellationUrl
+      cancellationUrl,
+      cancellationToken
     },
 
     email: emailResult,
@@ -1280,7 +1686,7 @@ async function cancelBooking(token) {
       cancelled: true,
       message: "This booking is already cancelled."
     };
-  }
+    }
 
   const pickupAt = parsePickup(
     booking.pickup_date,
@@ -1637,7 +2043,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, {
         name: "ICELAND TRANSFER API",
         status: "running",
-        version: "2.1.0"
+        version: "2.2.1"
       });
     }
 
@@ -1659,7 +2065,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, error ? 503 : 200, {
         ok: !error,
         database: error ? "error" : "connected",
-        version: "2.1.0"
+        version: "2.2.1"
       });
     }
 
@@ -1681,6 +2087,10 @@ const server = http.createServer(async (req, res) => {
           : "2026-11-24 reference rate",
 
         paymentEnabled: false,
+        serviceAvailability: "24/7",
+        routeFareCoverage: "Published Keflavík Airport departure fares only; unlisted directions are not guessed.",
+        routeCount: ROUTES.length,
+        tourCount: TOURS.length,
 
         vehicles: VEHICLES.map(vehicle => ({
           ...vehicle,
@@ -1725,8 +2135,8 @@ const server = http.createServer(async (req, res) => {
         policies: {
           cancellationHours: CANCELLATION_HOURS,
           maxBookingsPerHour: MAX_BOOKINGS_PER_HOUR,
-          openingTime: "06:00",
-          closingTime: "22:00",
+          openingTime: "00:00",
+          closingTime: "24:00",
           timeZone: TIME_ZONE,
           childSeatsFree: true
         }
@@ -1785,11 +2195,18 @@ const server = http.createServer(async (req, res) => {
           isk: quote.totalIsk,
           eur: quote.totalEur
         },
+        price_isk: quote.totalIsk,
+        price_eur: quote.totalEur,
+        quote: {
+          price_isk: quote.totalIsk,
+          price_eur: quote.totalEur,
+          currency: "ISK"
+        },
 
         eurToIskRate: EUR_TO_ISK_RATE,
 
         note:
-          "For unspecified transfer routes, the amount is a fleet starting-price estimate, not a route-confirmed fixed quote."
+          "Transfer prices are fixed only for routes present in the published fare catalogue. Unlisted routes and reverse directions are not assigned an estimated fare."
       });
     }
 
@@ -1910,13 +2327,18 @@ const server = http.createServer(async (req, res) => {
     }
 
     // ======================================
-    // CUSTOMER CANCELLATION PAGE
-    // GET /cancel/TOKEN
+    // CUSTOMER CANCELLATION PAGE / ACTION
+    // GET shows the page; POST performs the cancellation.
     // ======================================
 
     const publicCancelMatch = url.pathname.match(
       /^\/cancel\/([a-f0-9]{64})$/i
     );
+
+    if (req.method === "POST" && publicCancelMatch) {
+      const result = await cancelBooking(publicCancelMatch[1]);
+      return json(res, 200, result);
+    }
 
     if (
       req.method === "GET" &&
@@ -1985,11 +2407,11 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(
-    `ICELAND TRANSFER API v2.1.0 running on port ${PORT}`
+    `ICELAND TRANSFER API v2.2.1 running on port ${PORT}`
   );
 
   console.log(
-    `Operating hours: ${OPENING_HOUR}:00–${CLOSING_HOUR}:00 Iceland time`
+    `Operating hours: 24/7 Iceland time`
   );
 
   console.log(
